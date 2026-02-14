@@ -1,36 +1,65 @@
 "use client";
 import { motion } from "framer-motion";
-import { Rocket, Search, Code, ShieldCheck } from "lucide-react";
+import { Rocket, Code, ShieldCheck, Smartphone } from "lucide-react";
 
 const items = [
-  { text: "12+ Projects Delivered", icon: Rocket },
-  { text: "SEO Optimized Builds", icon: Search },
-  { text: "MERN Stack Expertise", icon: Code },
-  { text: "Trusted by Clients", icon: ShieldCheck },
+  {
+    text: "Complete Institute Website Delivered for Raretech, Ludhiana",
+    icon: Rocket,
+  },
+  {
+    text: "Custom Admin Panel with Student & Exam Management",
+    icon: Code,
+  },
+  {
+    text: "Secure Login System with Real-Time Result Processing",
+    icon: ShieldCheck,
+  },
+  {
+    text: "Fully Responsive & Optimized for All Devices",
+    icon: Smartphone,
+  },
 ];
 
 export default function ProofStrip() {
   return (
-    <section className="py-12 border-t border-b border-slate-200 bg-white">
-      <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 px-6 text-center">
-        {items.map((item, i) => {
-          const Icon = item.icon;
-          return (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="flex flex-col items-center gap-3"
-            >
-              <Icon className="w-7 h-7 text-blue-600" />
-              <span className="text-slate-800 font-medium text-sm md:text-base">
-                {item.text}
-              </span>
-            </motion.div>
-          );
-        })}
+    <section className="py-16 bg-white border-t border-b border-slate-200">
+      <div className="max-w-6xl mx-auto px-6">
+
+        {/* Section Label */}
+        <motion.h3
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center text-sm uppercase tracking-widest text-slate-500 mb-12"
+        >
+          Proven Results from Real Client Work
+        </motion.h3>
+
+        {/* Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 text-center">
+          {items.map((item, i) => {
+            const Icon = item.icon;
+            return (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15 }}
+                className="flex flex-col items-center gap-4"
+              >
+                <div className="w-14 h-14 flex items-center justify-center rounded-full bg-blue-50">
+                  <Icon className="w-7 h-7 text-blue-600" />
+                </div>
+
+                <p className="text-slate-800 font-medium text-sm md:text-base leading-relaxed">
+                  {item.text}
+                </p>
+              </motion.div>
+            );
+          })}
+        </div>
       </div>
     </section>
   );
