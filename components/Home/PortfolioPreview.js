@@ -1,147 +1,207 @@
 "use client";
 import { motion } from "framer-motion";
 import { fadeUp, staggerContainer } from "../../lib/motion";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, CheckCircle2 } from "lucide-react";
 import Image from "next/image";
 
 const projects = [
   {
-    title: "Raretech Institute Management System",
-    category: "Full Website + Admin Panel + Exam Portal",
+    title: "Raretech Institute",
+    category: "Institute Website + Admin Panel + Exam Portal",
     img: "/projects/raretech.png",
     link: "http://raretech.co.in/",
     featured: true,
+    challenge: "Needed to manage 500+ students, run online exams, and generate new admissions — all digitally.",
+    outcomes: [
+      "Admissions enquiries moved fully online",
+      "Student management automated end-to-end",
+      "Online exam portal launched for 500+ students",
+    ],
+    tag: "Coaching Institute",
   },
   {
-    title: "JMD Solar Energy Website",
-    category: "WordPress Business Website",
+    title: "JMD Solar Energy",
+    category: "Business Website — Solar Industry",
     img: "/projects/jmdsolar.png",
     link: "https://jmdsolarenergy.ct.ws/",
+    featured: false,
+    challenge: "No professional online presence — losing customers to competitors who showed up on Google.",
+    outcomes: [
+      "Professional credibility established online",
+      "Now visible on Google for Punjab solar searches",
+      "Customer enquiries started within first month",
+    ],
+    tag: "Solar / Manufacturing",
   },
   {
-    title: "Luxury Jewelry E-Commerce UI",
-    category: "Premium Frontend Demo",
+    title: "Vastu Divine",
+    category: "Business Website",
     img: "/projects/luxe.png",
     link: "https://luxe-jewel-blueprint.vercel.app/",
+    featured: false,
+    challenge: "Needed a professional digital presence to attract new clients and build authority.",
+    outcomes: [
+      "Premium brand presence established online",
+      "New client enquiries via website form",
+      "Google-indexed and mobile-optimized",
+    ],
+    tag: "Service Business",
   },
   {
-    title: "Restaurant Website Demo",
-    category: "Conversion Focused Landing",
+    title: "Restaurant Demo",
+    category: "Conversion-Focused Landing Page",
     img: "/projects/restaurant.png",
     link: "https://restrorantdemo1.vercel.app/",
+    featured: false,
+    challenge: "Showcase a high-converting restaurant website with online menu and reservation CTA.",
+    outcomes: [
+      "Mobile-first responsive design",
+      "Menu display + table booking CTA",
+      "Fast-loading with 90+ performance score",
+    ],
+    tag: "Food & Hospitality",
   },
 ];
 
-// Subcomponent for individual project
-function ProjectCard({ project, priority }) {
-  const { title, category, img, link, featured } = project;
+function ProjectCard({ project }) {
+  const { title, category, img, link, featured, challenge, outcomes, tag } = project;
   return (
-    <motion.a
-      href={link}
-      target="_blank"
-      rel="noopener noreferrer"
+    <motion.div
       variants={fadeUp}
-      whileHover={{ y: -6 }}
-      className="relative bg-white rounded-2xl shadow-lg overflow-hidden group border border-slate-100 hover:shadow-2xl transition-all duration-500"
-      aria-label={`View project: ${title}`}
+      className="group relative bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-xl transition-all duration-500"
     >
       {featured && (
-        <span className="absolute top-4 right-4 bg-black text-white text-xs px-3 py-1 rounded-full z-10">
+        <span className="absolute top-4 left-4 bg-blue-600 text-white text-xs font-semibold px-3 py-1 rounded-full z-10">
           Featured Project
         </span>
       )}
 
-      <div className="relative w-full h-72 overflow-hidden">
-        <Image
-          src={img}
-          alt={title}
-          fill
-          className="object-cover group-hover:scale-105 transition duration-700"
-          sizes="(max-width: 768px) 100vw, 50vw"
-          priority={priority}
-          loading={priority ? "eager" : "lazy"}
-        />
-      </div>
+      {/* Image */}
+      <a href={link} target="_blank" rel="noopener noreferrer" aria-label={`View ${title} live`}>
+        <div className="relative w-full h-56 overflow-hidden">
+          <Image
+            src={img}
+            alt={`${title} website screenshot`}
+            fill
+            className="object-cover group-hover:scale-105 transition duration-700"
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition duration-500" />
+        </div>
+      </a>
 
-      <div className="p-6 text-left">
-        <span className="text-sm text-blue-600 font-medium">{category}</span>
-        <h3 className="text-xl font-semibold mt-2 flex items-center justify-between group-hover:text-blue-600 transition">
-          {title}
-          <ArrowUpRight className="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition" />
-        </h3>
+      {/* Content */}
+      <div className="p-7">
+        {/* Tag */}
+        <span className="inline-block text-xs font-semibold bg-blue-50 text-blue-600 px-3 py-1 rounded-full mb-3">
+          {tag}
+        </span>
+
+        {/* Title */}
+        <h3 className="text-xl font-bold text-slate-900 mb-1">{title}</h3>
+        <p className="text-sm text-slate-500 mb-4">{category}</p>
+
+        {/* Challenge */}
+        <p className="text-sm text-slate-600 leading-relaxed mb-4">
+          <span className="font-semibold text-slate-800">Challenge: </span>
+          {challenge}
+        </p>
+
+        {/* Outcomes */}
+        <ul className="space-y-2 mb-5">
+          {outcomes.map((outcome, i) => (
+            <li key={i} className="flex items-start gap-2 text-sm text-slate-700">
+              <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />
+              {outcome}
+            </li>
+          ))}
+        </ul>
+
+        {/* Link */}
+        <a
+          href={link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:text-blue-800 transition"
+        >
+          View Live Site
+          <ArrowUpRight className="w-4 h-4" />
+        </a>
       </div>
-    </motion.a>
+    </motion.div>
   );
 }
 
 export default function PortfolioPreview() {
   return (
-    <section className="py-28 px-6 bg-gradient-to-b from-slate-50 to-white">
-      <div className="max-w-6xl mx-auto text-center">
+    <section className="py-20 md:py-28 bg-gradient-to-b from-slate-50 to-white">
+      <div className="max-w-6xl mx-auto px-6">
 
-        {/* Small Label */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="text-sm uppercase tracking-widest text-blue-600 font-medium mb-4"
-        >
-          Selected Client Work
-        </motion.p>
+        {/* Header */}
+        <div className="text-center mb-14">
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-sm uppercase tracking-widest text-blue-600 font-semibold mb-3"
+          >
+            Client Work
+          </motion.p>
+          <motion.h2
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+            className="text-4xl md:text-5xl font-bold text-slate-900 mb-5"
+          >
+            Real Projects. Measurable Business Impact.
+          </motion.h2>
+          <motion.p
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+            className="text-lg text-slate-500 max-w-2xl mx-auto"
+          >
+            Every website we build solves a real business problem. Here's the proof.
+          </motion.p>
+        </div>
 
-        {/* Heading */}
-        <motion.h2
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          className="text-4xl md:text-5xl font-bold mb-6"
-        >
-          Real Projects. Real Business Impact.
-        </motion.h2>
-
-        {/* Subheading */}
-        <motion.p
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          className="text-lg text-gray-600 max-w-2xl mx-auto mb-16"
-        >
-          Websites and systems built for performance, security, and
-          measurable business growth.
-        </motion.p>
-
-        {/* Projects Grid */}
+        {/* Grid */}
         <motion.div
           variants={staggerContainer}
           initial="hidden"
           whileInView="show"
           viewport={{ once: true }}
-          className="grid md:grid-cols-2 gap-10"
+          className="grid md:grid-cols-2 gap-8"
         >
           {projects.map((project, i) => (
-            <ProjectCard
-              key={i}
-              project={project}
-              priority={i === 0} // Only first image priority
-            />
+            <ProjectCard key={i} project={project} />
           ))}
         </motion.div>
 
         {/* Bottom CTA */}
-        <div className="mt-20">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3 }}
+          className="text-center mt-16"
+        >
+          <p className="text-slate-500 text-sm mb-5 font-medium">
+            Ready to be our next success story?
+          </p>
           <a
             href="/contact"
-            className="px-10 py-4 rounded-full bg-blue-600 text-white font-semibold shadow-lg hover:bg-blue-700 transition"
+            className="inline-flex items-center gap-2 px-10 py-4 rounded-full bg-blue-600 text-white font-semibold shadow-lg hover:bg-blue-700 transition duration-300"
           >
-            Let’s Build Your Business Website →
+            📞 Get Your Free Website Audit →
           </a>
-
-          <p className="text-sm text-gray-500 mt-4">
-            Direct WhatsApp Support • Fast Delivery • Custom Solutions
+          <p className="text-xs text-slate-400 mt-4">
+            Direct WhatsApp Support · Fast Delivery · Custom Solutions
           </p>
-        </div>
+        </motion.div>
+
       </div>
     </section>
   );

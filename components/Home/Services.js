@@ -1,130 +1,166 @@
 "use client";
-
 import { motion } from "framer-motion";
-import { Globe, Settings, TrendingUp } from "lucide-react";
+import { fadeUp, staggerContainer } from "../../lib/motion";
+import { Globe, Settings, TrendingUp, Wrench } from "lucide-react";
 
 const services = [
   {
     title: "Business Website Development",
-    desc: "Modern, mobile-first websites designed to attract customers and generate real business inquiries.",
-    points: ["Mobile Optimized", "Conversion Focused", "Fast Loading"],
-    icon: <Globe className="w-10 h-10 text-blue-600" />,
+    tagline: "Your website will make your phone ring.",
+    desc: "We design professional, fast-loading business websites for clinics, coaching institutes, manufacturers, and service businesses across Ludhiana and Punjab. Every site is mobile-optimized, SEO-ready, and built to convert visitors into paying customers.",
+    outcomes: [
+      "More Google enquiries every week",
+      "Professional credibility with new customers",
+      "Outrank local competitors on search",
+    ],
+    icon: <Globe className="w-8 h-8 text-blue-600" />,
+    accent: "blue",
   },
   {
-    title: "Custom Admin Panels & Portals",
-    desc: "Secure dashboards, student portals, exam systems, and custom business tools tailored to your workflow.",
-    points: ["Secure Access", "Role Based System", "Custom Workflow"],
-    icon: <Settings className="w-10 h-10 text-emerald-600" />,
+    title: "Custom Admin Panels & Business Portals",
+    tagline: "Run your business smarter, not harder.",
+    desc: "From student management systems for institutes to inventory dashboards for manufacturers — we build custom backend tools that replace manual work, reduce errors, and save hours every single week.",
+    outcomes: [
+      "Paperwork and manual tasks reduced",
+      "Staff efficiency and accuracy improved",
+      "Real-time data access from any device",
+    ],
+    icon: <Settings className="w-8 h-8 text-emerald-600" />,
+    accent: "emerald",
   },
   {
-    title: "SEO & Performance Optimization",
-    desc: "Speed optimization, on-page SEO, and technical improvements to help your website rank and convert better.",
-    points: ["90+ Lighthouse Score", "Technical SEO", "Core Web Vitals"],
-    icon: <TrendingUp className="w-10 h-10 text-purple-600" />,
+    title: "SEO & Google Rankings",
+    tagline: "Get found. Get calls. Get customers.",
+    desc: "We optimize your website to rank for the searches your customers are already making — 'clinic in Ludhiana,' 'coaching institute near me,' 'solar panel dealer Punjab.' Technical SEO, Google Maps optimization, and page speed included in every project.",
+    outcomes: [
+      "First-page Google rankings for local searches",
+      "More organic traffic without paid ads",
+      "Customers who are already looking for you",
+    ],
+    icon: <TrendingUp className="w-8 h-8 text-purple-600" />,
+    accent: "purple",
+  },
+  {
+    title: "Website Maintenance & Support",
+    tagline: "Never worry about your website again.",
+    desc: "Monthly maintenance plans that keep your website fast, secure, updated, and always online. One WhatsApp message and it's handled — no technical knowledge needed on your end.",
+    outcomes: [
+      "Website always online and secure",
+      "Updates and changes handled quickly",
+      "Direct WhatsApp access to your developer",
+    ],
+    icon: <Wrench className="w-8 h-8 text-orange-500" />,
+    accent: "orange",
   },
 ];
 
+const accentMap = {
+  blue: "bg-blue-50 group-hover:bg-blue-100",
+  emerald: "bg-emerald-50 group-hover:bg-emerald-100",
+  purple: "bg-purple-50 group-hover:bg-purple-100",
+  orange: "bg-orange-50 group-hover:bg-orange-100",
+};
+
 export default function Services() {
   return (
-    <section className="relative py-28 px-6 bg-gradient-to-b from-slate-50 to-white overflow-hidden">
-      <div className="max-w-6xl mx-auto text-center">
+    <section className="py-20 md:py-28 bg-white">
+      <div className="max-w-6xl mx-auto px-6">
 
-        {/* Small Label */}
-        <p className="text-sm uppercase tracking-widest text-blue-600 font-semibold mb-4">
-          What I Offer
-        </p>
-
-        {/* Heading */}
-        <motion.h2
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="text-4xl md:text-5xl font-bold mb-6 leading-tight"
-        >
-          Complete Website Solutions <br className="hidden md:block" />
-          for Growing Businesses
-        </motion.h2>
-
-        {/* Subheading */}
-        <motion.p
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
-          viewport={{ once: true }}
-          className="max-w-2xl mx-auto text-lg text-gray-600 mb-16"
-        >
-          From professional business websites to custom admin systems — 
-          I build digital solutions that help you scale faster and operate smarter.
-        </motion.p>
+        {/* Header */}
+        <div className="text-center mb-14">
+          <p className="text-sm uppercase tracking-widest text-blue-600 font-semibold mb-3">
+            What We Build
+          </p>
+          <motion.h2
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+            className="text-4xl md:text-5xl font-bold text-slate-900 mb-5 leading-tight"
+          >
+            Complete Digital Solutions <br className="hidden md:block" />
+            for Growing Businesses in Punjab
+          </motion.h2>
+          <motion.p
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+            className="text-lg text-slate-500 max-w-2xl mx-auto"
+          >
+            We don't just build websites — we build business growth engines. Every service is designed around one goal: more customers for your business.
+          </motion.p>
+        </div>
 
         {/* Services Grid */}
-        <div className="grid md:grid-cols-3 gap-10">
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+          className="grid md:grid-cols-2 gap-8"
+        >
           {services.map((service, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.2 }}
-              viewport={{ once: true }}
-              whileHover={{ y: -8 }}
-              className="group relative p-8 rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-2xl transition-all duration-500"
+              variants={fadeUp}
+              whileHover={{ y: -6 }}
+              className={`group relative p-8 rounded-2xl border border-slate-100 bg-slate-50 hover:bg-white hover:shadow-xl transition-all duration-500`}
             >
-              {/* Glow Effect */}
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-emerald-500/5 opacity-0 group-hover:opacity-100 transition duration-500" />
+              {/* Icon */}
+              <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-5 transition-colors duration-300 ${accentMap[service.accent]}`}>
+                {service.icon}
+              </div>
 
-              <div className="relative z-10">
-                <div className="flex justify-center mb-6">
-                  {service.icon}
-                </div>
+              {/* Title */}
+              <h3 className="text-xl font-bold text-slate-900 mb-1">{service.title}</h3>
+              <p className="text-sm font-semibold text-blue-600 mb-3 italic">{service.tagline}</p>
 
-                <h3 className="text-xl font-semibold mb-3 text-gray-900">
-                  {service.title}
-                </h3>
+              {/* Description */}
+              <p className="text-slate-600 leading-relaxed text-sm mb-5">{service.desc}</p>
 
-                <p className="text-gray-600 leading-relaxed mb-6">
-                  {service.desc}
-                </p>
-
-                {/* Feature Points */}
-                <ul className="space-y-2 text-sm text-gray-500">
-                  {service.points.map((point, idx) => (
-                    <li key={idx} className="flex items-center justify-center gap-2">
-                      <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
-                      {point}
-                    </li>
-                  ))}
-                </ul>
+              {/* Outcomes */}
+              <div className="space-y-2">
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">What you'll get:</p>
+                {service.outcomes.map((outcome, idx) => (
+                  <div key={idx} className="flex items-start gap-2 text-sm text-slate-700">
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 flex-shrink-0" />
+                    {outcome}
+                  </div>
+                ))}
               </div>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
 
-        {/* CTA Section */}
-        <div className="mt-20">
-          <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-
+        {/* CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3 }}
+          className="mt-16 text-center"
+        >
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
             <a
               href="/contact"
               className="px-10 py-4 rounded-full bg-blue-600 text-white font-semibold shadow-lg hover:bg-blue-700 hover:scale-105 transition duration-300"
             >
               Get a Free Project Consultation →
             </a>
-
             <a
-              href="https://wa.me/917589434135"
+              href="https://wa.me/917589434135?text=Hi%20Harshdeep%2C%20I%27d%20like%20to%20discuss%20a%20project."
               target="_blank"
-              className="px-8 py-4 rounded-full border border-gray-300 font-semibold hover:bg-gray-100 transition duration-300"
+              rel="noopener noreferrer"
+              className="px-8 py-4 rounded-full border border-slate-300 font-semibold hover:bg-slate-100 transition duration-300"
             >
-              Chat on WhatsApp
+              💬 Chat on WhatsApp
             </a>
-
           </div>
-
-          <p className="text-sm text-gray-500 mt-6">
-            ⚡ Fast Delivery • 👨‍💻 Direct Developer Support • 💰 Transparent Pricing
+          <p className="text-sm text-slate-400 mt-5">
+            ⚡ Fast Delivery &nbsp;·&nbsp; 👨‍💻 Direct Developer Support &nbsp;·&nbsp; 💰 Transparent Pricing
           </p>
-        </div>
+        </motion.div>
 
       </div>
     </section>
