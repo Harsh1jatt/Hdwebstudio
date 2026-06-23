@@ -1,7 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { fadeUp } from "../../lib/motion";
-import { ArrowRight, Phone, MessageCircle } from "lucide-react";
+import { ArrowRight, Phone, MessageCircle, PhoneForwardedIcon } from "lucide-react";
 
 export default function FinalCTA() {
   return (
@@ -63,7 +63,7 @@ export default function FinalCTA() {
               className="inline-flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-3 sm:px-8 sm:py-4 rounded-full shadow-lg transition text-base sm:text-lg w-full sm:w-auto"
             >
               Chat on WhatsApp
-              <MessageCircle className="w-5 h-5" />
+              <PhoneForwardedIcon className="w-4 h-4" />
             </motion.a>
 
           </div>

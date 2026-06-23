@@ -12,65 +12,70 @@ import {
 
 const benefits = [
   {
-    title: "Growth-Driven Strategy",
-    desc: "We don’t just design websites — we craft digital systems built to generate leads, sales, and measurable business growth.",
+    title: "Growth-Driven Website Strategy",
+    desc: "We design websites in Ludhiana with a clear business objective — generating leads, increasing sales, and building long-term brand authority.",
     icon: <TrendingUp className="w-7 h-7 text-blue-600" />,
   },
   {
-    title: "High-Performance Engineering",
-    desc: "Optimized architecture ensures lightning-fast load times, SEO strength, and seamless scalability.",
+    title: "High-Performance Web Development",
+    desc: "Our websites are optimized for fast loading speeds, technical SEO strength, and scalable architecture for future expansion.",
     icon: <Gauge className="w-7 h-7 text-emerald-600" />,
   },
   {
-    title: "Conversion-Focused Design",
-    desc: "Every layout, section, and CTA is strategically structured to turn visitors into paying clients.",
+    title: "Conversion-Focused UI/UX Design",
+    desc: "Strategic layouts, compelling CTAs, and user psychology ensure visitors turn into inquiries and paying customers.",
     icon: <Layers className="w-7 h-7 text-purple-600" />,
   },
   {
-    title: "Secure & Reliable Systems",
-    desc: "Modern infrastructure with advanced security practices to protect your business and users.",
+    title: "Secure & Reliable Infrastructure",
+    desc: "Advanced security practices and clean code standards protect your website and customer data.",
     icon: <ShieldCheck className="w-7 h-7 text-indigo-600" />,
   },
   {
-    title: "Collaborative Partnership",
-    desc: "We work as an extension of your team — transparent communication, clear timelines, real results.",
+    title: "Transparent Collaboration Process",
+    desc: "Clear timelines, structured communication, and milestone-based delivery keep your project efficient and stress-free.",
     icon: <Users className="w-7 h-7 text-orange-600" />,
   },
   {
-    title: "Future-Ready Technology",
-    desc: "Built with modern frameworks and scalable stacks to keep your brand ahead of the competition.",
+    title: "Modern & Future-Ready Tech Stack",
+    desc: "Built using scalable frameworks and modern web technologies to keep your business competitive in Ludhiana’s digital market.",
     icon: <Rocket className="w-7 h-7 text-pink-600" />,
   },
 ];
 
 export default function Benefits() {
   return (
-    <section className="py-28 bg-white">
+    <section className="py-20 md:py-28 bg-white">
       <div className="max-w-6xl mx-auto px-6 text-center">
 
+        {/* SEO Reinforced Label */}
         <p className="text-sm uppercase tracking-widest text-blue-600 font-medium mb-4">
-          Why Choose Our Agency
+          Why Businesses in Ludhiana Choose Us
         </p>
 
+        {/* Optimized Heading */}
         <motion.h2
           variants={fadeUp}
           initial="hidden"
           whileInView="show"
           viewport={{ once: true }}
-          className="text-4xl md:text-5xl font-bold mb-6"
+          className="text-3xl md:text-5xl font-bold mb-6"
         >
-          Digital Solutions Built for Long-Term Growth
+          Professional Website Development & SEO Services in Ludhiana
         </motion.h2>
 
+        {/* SEO Paragraph Boost */}
         <motion.p
           variants={fadeUp}
           initial="hidden"
           whileInView="show"
           viewport={{ once: true }}
-          className="text-lg text-gray-600 max-w-2xl mx-auto mb-16"
+          className="text-lg text-gray-600 max-w-3xl mx-auto mb-16"
         >
-          We combine strategy, design, and technology to create high-impact
-          digital experiences that drive measurable business results.
+          We combine strategy, performance-focused web design, and technical
+          SEO to create powerful digital platforms for businesses in Ludhiana,
+          Punjab. Our goal is simple — build websites that look premium,
+          rank higher on Google, and convert visitors into customers.
         </motion.p>
 
         <motion.ul

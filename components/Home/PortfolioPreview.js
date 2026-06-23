@@ -32,6 +32,48 @@ const projects = [
   },
 ];
 
+// Subcomponent for individual project
+function ProjectCard({ project, priority }) {
+  const { title, category, img, link, featured } = project;
+  return (
+    <motion.a
+      href={link}
+      target="_blank"
+      rel="noopener noreferrer"
+      variants={fadeUp}
+      whileHover={{ y: -6 }}
+      className="relative bg-white rounded-2xl shadow-lg overflow-hidden group border border-slate-100 hover:shadow-2xl transition-all duration-500"
+      aria-label={`View project: ${title}`}
+    >
+      {featured && (
+        <span className="absolute top-4 right-4 bg-black text-white text-xs px-3 py-1 rounded-full z-10">
+          Featured Project
+        </span>
+      )}
+
+      <div className="relative w-full h-72 overflow-hidden">
+        <Image
+          src={img}
+          alt={title}
+          fill
+          className="object-cover group-hover:scale-105 transition duration-700"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          priority={priority}
+          loading={priority ? "eager" : "lazy"}
+        />
+      </div>
+
+      <div className="p-6 text-left">
+        <span className="text-sm text-blue-600 font-medium">{category}</span>
+        <h3 className="text-xl font-semibold mt-2 flex items-center justify-between group-hover:text-blue-600 transition">
+          {title}
+          <ArrowUpRight className="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition" />
+        </h3>
+      </div>
+    </motion.a>
+  );
+}
+
 export default function PortfolioPreview() {
   return (
     <section className="py-28 px-6 bg-gradient-to-b from-slate-50 to-white">
@@ -78,47 +120,12 @@ export default function PortfolioPreview() {
           viewport={{ once: true }}
           className="grid md:grid-cols-2 gap-10"
         >
-          {projects.map((p, i) => (
-            <motion.a
+          {projects.map((project, i) => (
+            <ProjectCard
               key={i}
-              href={p.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              variants={fadeUp}
-              whileHover={{ y: -6 }}
-              className="relative bg-white rounded-2xl shadow-lg overflow-hidden group border border-slate-100 hover:shadow-2xl transition-all duration-500"
-            >
-              {/* Featured Badge */}
-              {p.featured && (
-                <span className="absolute top-4 right-4 bg-black text-white text-xs px-3 py-1 rounded-full z-10">
-                  Featured Project
-                </span>
-              )}
-
-              {/* Image */}
-              <div className="relative w-full h-72 overflow-hidden">
-                <Image
-                  src={p.img}
-                  alt={p.title}
-                  fill
-                  className="object-cover group-hover:scale-105 transition duration-700"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  priority={i === 0}
-                />
-              </div>
-
-              {/* Content */}
-              <div className="p-6 text-left">
-                <span className="text-sm text-blue-600 font-medium">
-                  {p.category}
-                </span>
-
-                <h3 className="text-xl font-semibold mt-2 flex items-center justify-between group-hover:text-blue-600 transition">
-                  {p.title}
-                  <ArrowUpRight className="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition" />
-                </h3>
-              </div>
-            </motion.a>
+              project={project}
+              priority={i === 0} // Only first image priority
+            />
           ))}
         </motion.div>
 

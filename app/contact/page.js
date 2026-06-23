@@ -1,11 +1,51 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { fadeUp, staggerContainer } from "../../lib/motion";
 import { Phone, Mail } from "lucide-react";
 import { SiWhatsapp } from "react-icons/si";
 
 export default function ContactPage() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+    const form = new FormData(e.target);
+    const payload = {
+      name: form.get('name')?.toString() || '',
+      business: form.get('business')?.toString() || '',
+      phone: form.get('phone')?.toString() || '',
+      email: form.get('email')?.toString() || '',
+      message: form.get('message')?.toString() || '',
+      honeypot: form.get('honeypot')?.toString() || '',
+      source: 'contact-page',
+    };
+
+    try {
+      const res = await fetch('/api/contacts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Submission failed');
+
+      // success -> redirect to thank-you
+      router.push('/thank-you');
+    } catch (err) {
+      console.error(err);
+      setError(err.message || 'Something went wrong');
+      setLoading(false);
+    }
+  }
+
   return (
     <section className="relative overflow-hidden bg-gray-50">
       {/* Background Gradients */}
@@ -105,41 +145,54 @@ export default function ContactPage() {
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 text-center">
             Share Your Project Details
           </h2>
-          <form className="grid grid-cols-1 gap-6">
+          <form className="grid grid-cols-1 gap-6" onSubmit={handleSubmit}>
             <input
+              name="name"
               type="text"
               placeholder="Your Name"
               className="w-full px-5 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-sm sm:text-base"
               required
             />
             <input
+              name="business"
               type="text"
               placeholder="Business / Brand Name"
               className="w-full px-5 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-sm sm:text-base"
             />
             <input
+              name="phone"
               type="text"
               placeholder="Phone Number"
               className="w-full px-5 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-sm sm:text-base"
               required
             />
             <input
+              name="email"
               type="email"
               placeholder="Email"
               className="w-full px-5 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-sm sm:text-base"
             />
             <textarea
+              name="message"
               placeholder="What type of website or digital solution do you need?"
               rows="5"
               className="w-full px-5 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-sm sm:text-base"
               required
             ></textarea>
-            <button
-              type="submit"
-              className="px-6 py-3 rounded-full bg-blue-600 text-white font-semibold shadow hover:bg-blue-700 transition text-sm sm:text-base"
-            >
-              Send Details
-            </button>
+
+            {/* honeypot field for bots */}
+            <input name="honeypot" type="text" className="hidden" autoComplete="off" />
+
+            <div className="flex flex-col items-center">
+              <button
+                type="submit"
+                disabled={loading}
+                className="px-6 py-3 rounded-full bg-blue-600 text-white font-semibold shadow hover:bg-blue-700 transition text-sm sm:text-base disabled:opacity-60 w-full sm:w-auto"
+              >
+                {loading ? 'Sending…' : 'Send Details'}
+              </button>
+              {error && <p className="text-red-600 mt-3">{error}</p>}
+            </div>
           </form>
         </motion.div>
       </div>

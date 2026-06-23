@@ -13,3 +13,24 @@
 .animate-slideDown {
   animation: slideDown 0.3s ease-out;
 }
+
+@keyframes blob {
+  0% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(30px, -20px) scale(1.05); }
+  66% { transform: translate(-20px, 20px) scale(0.95); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+.animate-blob { animation: blob 8s ease-in-out infinite; }
+.animation-delay-2000 { animation-delay: 2s; }
+
+/* subtle helpers used by admin UI */
+.bg-white\/2 { background-color: rgba(255,255,255,0.02); }
+.bg-white\/3 { background-color: rgba(255,255,255,0.03); }
+.bg-white\/4 { background-color: rgba(255,255,255,0.04); }
+.border-white\/6 { border-color: rgba(255,255,255,0.06); }
+.border-white\/8 { border-color: rgba(255,255,255,0.08); }
+.text-slate-300\/80 { color: rgba(148,163,184,0.8); }
+.text-slate-300\/70 { color: rgba(148,163,184,0.7); }
+.text-slate-400 { color: rgba(148,163,184,0.9); }
+
