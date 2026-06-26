@@ -23,13 +23,3 @@ export default function Page(){
     </main>
   )
 }
-import ServicePage from '../../../components/Services/ServicePage.server';
-export const metadata = { title: 'SEO Services — Harshdeep Web Studios | Ludhiana', description: 'SEO services for local and national growth in Ludhiana, Punjab.' }
-export default function Page(){
-  const schema = { "@context":"https://schema.org","@type":"Service","name":"SEO Services","areaServed":"Ludhiana, Punjab, India" };
-  return (
-    <ServicePage title="SEO Services" subtitle="Increase visibility with proven SEO strategies" schema={schema}>
-      <div><h3 className="text-2xl font-semibold">SEO</h3><p className="text-slate-600">Technical SEO, content strategy and local SEO.</p></div>
-    </ServicePage>
-  )
-}
