@@ -4,7 +4,7 @@ import Footer from "../components/common/Footer";
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className="bg-slate-50 text-slate-900 antialiased">
         <script
           type="application/ld+json"
