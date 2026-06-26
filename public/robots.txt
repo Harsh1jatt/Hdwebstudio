@@ -1,4 +1,10 @@
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
 User-agent: *
-Disallow:
+Allow: /
 
 Sitemap: /api/sitemap
