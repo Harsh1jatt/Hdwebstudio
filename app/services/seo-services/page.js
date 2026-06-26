@@ -1,10 +1,5 @@
 import ServiceContactForm from '../../../components/common/ServiceContactForm.client'
 
-export const metadata = {
-  title: 'SEO Services — Technical SEO & Content Strategy',
-  description: 'Technical SEO, on-page optimization, content strategy, and backlink growth to increase organic traffic and qualified leads.'
-}
-
 const jsonLd = { "@context": "https://schema.org", "@type": "Service", "serviceType": "SEO", "provider": { "@type": "Organization", "name": "Harshdeep Web Studios" }};
 
 export default function Page(){
