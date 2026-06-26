@@ -6,7 +6,7 @@ import Hero from "@/components/Home/Hero";
 import TrustBar from "@/components/Home/TrustBar";
 import PortfolioPreview from "@/components/Home/PortfolioPreview";
 import Services from "@/components/Home/Services";
-// import Founder from "@/components/Home/Founder";
+import Founder from "@/components/Home/Founder";
 import Benefits from "@/components/Home/Benefits";
 import Process from "@/components/Home/Process";
 import FreeAudit from "@/components/Home/FreeAudit";
@@ -152,7 +152,7 @@ export default function HomePage() {
       <Services />
 
       {/* 5. Founder — personal authority, no-outsourcing trust signal */}
-      {/* <Founder /> */}
+      <Founder />
 
       {/* 6. Benefits — plain business language, why choose us */}
       <Benefits />
