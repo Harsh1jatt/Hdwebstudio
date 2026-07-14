@@ -18,50 +18,68 @@ import WhatsAppFloat from "@/components/Home/WhatsAppFloat";
 // ─── SEO Metadata ─────────────────────────────────────────────────────────────
 export const metadata = {
   title:
-    "Website Designer in Ludhiana | Harshdeep Web Studios — Web Design & SEO Punjab",
+    "HD Web Studios | Website Development Company in Ludhiana | Next.js, MERN & SEO",
+
   description:
-    "Looking for a professional website designer in Ludhiana? Harshdeep Web Studios builds fast, SEO-optimized business websites for clinics, institutes & manufacturers in Punjab. ⭐ 5-Star Google Rating. Free website audit. Call 75894 34135.",
+    "HD Web Studios is a professional website development company in Ludhiana, Punjab. We build business websites, eCommerce stores, custom software, MERN Stack applications, Next.js websites, and SEO-optimized digital solutions for startups, local businesses, institutes, and manufacturers across India.",
+
   keywords: [
-    "Website Designer in Ludhiana",
-    "Website Developer in Ludhiana",
-    "Web Design Company in Ludhiana",
-    "Website Development Company in Ludhiana",
-    "Website Development Punjab",
-    "Business Website Development Ludhiana",
-    "MERN Stack Developer Ludhiana",
-    "Website Design Services Punjab",
-    "Custom Website Development Ludhiana",
+    "HD Web Studios",
+    "Website Development Company Ludhiana",
+    "Website Designer Ludhiana",
+    "Website Developer Ludhiana",
+    "Web Design Company Punjab",
+    "Next.js Development",
+    "React Development",
+    "MERN Stack Development",
+    "Custom Software Development",
+    "Business Website Development",
+    "eCommerce Website Development",
     "SEO Services Ludhiana",
+    "Website Development India",
   ],
+
+  alternates: {
+    canonical: "https://hdwebstudios.in",
+  },
+
   openGraph: {
     title:
-      "Harshdeep Web Studios — Website Designer in Ludhiana, Punjab",
+      "HD Web Studios | Website Development Company in Ludhiana",
+
     description:
-      "Professional website design & development for clinics, coaching institutes, manufacturers & local businesses across Ludhiana and Punjab. Fast delivery. 5-star rated.",
-    url: "https://hdwebstudio.vercel.app",
-    siteName: "Harshdeep Web Studios",
+      "Professional Website Development, Next.js, MERN Stack, eCommerce, SEO and Custom Software Solutions.",
+
+    url: "https://hdwebstudios.in",
+
+    siteName: "HD Web Studios",
+
     locale: "en_IN",
+
     type: "website",
+
     images: [
       {
-        url: "/og-image.png", // create a 1200×630 OG image and place in /public/
+        url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Harshdeep Web Studios — Website Designer in Ludhiana",
+        alt: "HD Web Studios",
       },
     ],
   },
+
   twitter: {
     card: "summary_large_image",
-    title: "Harshdeep Web Studios — Website Designer in Ludhiana",
+
+    title:
+      "HD Web Studios | Website Development Company",
+
     description:
-      "Fast, SEO-optimized business websites for Punjab businesses. Free website audit available.",
-  },
-  alternates: {
-    canonical: "https://hdwebstudio.vercel.app",
+      "Professional Website Development, Next.js, MERN Stack & SEO Services.",
+
+    images: ["/og-image.png"],
   },
 };
-
 // ─── JSON-LD Schemas (inject into <head> via layout.js or Script component) ───
 // PASTE THIS into your layout.js <head> section:
 //
@@ -139,40 +157,17 @@ export const metadata = {
 export default function HomePage() {
   return (
     <>
-      {/* 1. Hero — H1, Google rating badge, above-fold CTA */}
       <Hero />
-
-      {/* 2. Trust Bar — real project count, Google rating, delivery speed */}
       <TrustBar />
-
-      {/* 3. Portfolio — 3 real projects as mini case studies (show before tell) */}
       <PortfolioPreview />
-
-      {/* 4. Services — outcome-focused, 4 service cards */}
       <Services />
-
-      {/* 5. Founder — personal authority, no-outsourcing trust signal */}
       <Founder />
-
-      {/* 6. Benefits — plain business language, why choose us */}
       <Benefits />
-
-      {/* 7. Process — 3-step, removes buyer anxiety */}
       <Process />
-
-      {/* 8. Free Audit — lead magnet, WhatsApp form */}
       <FreeAudit />
-
-      {/* 9. Testimonials — real client quotes with stars */}
       <Testimonials />
-
-      {/* 10. FAQ — 10 SEO-optimized questions, accordion, FAQ schema */}
       <FAQ />
-
-      {/* 11. Final CTA — scarcity + strategy call + WhatsApp */}
       <FinalCTA />
-
-      {/* Sticky floating WhatsApp button — visible site-wide after scroll */}
       <WhatsAppFloat />
     </>
   );

@@ -1,6 +1,6 @@
 import ServiceContactForm from '../../../components/common/ServiceContactForm.client'
 
-const jsonLd = { "@context": "https://schema.org", "@type": "Service", "serviceType": "SEO", "provider": { "@type": "Organization", "name": "Harshdeep Web Studios" }};
+const jsonLd = { "@context": "https://schema.org", "@type": "Service", "serviceType": "SEO", "provider": { "@type": "Organization", "name": "HD Web Studios" }};
 
 export default function Page(){
   return (
