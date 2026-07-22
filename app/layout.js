@@ -1,8 +1,8 @@
 import "./globals.css";
-import Navbar from "../components/common/Navbar";
+import Navbar from "../components/navbar/Navbar";
 import Footer from "../components/common/Footer";
 import Script from "next/script";
-
+import { getServices } from "@/lib/getServices";
 const SITE_URL = "https://hdwebstudios.in";
 
 export const metadata = {
@@ -277,7 +277,7 @@ export default function RootLayout({ children }) {
           }}
         />
 
-        <Navbar />
+        <Navbar services={getServices()}/>
 
         <main>{children}</main>
 
