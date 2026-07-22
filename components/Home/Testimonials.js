@@ -1,151 +1,260 @@
 "use client";
-import { motion } from "framer-motion";
+
+import { motion, useReducedMotion } from "framer-motion";
+import { Star, Quote, ExternalLink } from "lucide-react";
+
 import { fadeUp, staggerContainer } from "../../lib/motion";
-import { Star } from "lucide-react";
 
-// ─── REPLACE WITH YOUR REAL GOOGLE REVIEWS ────────────────────────────────────
+/*
+IMPORTANT:
+Only add real client testimonials here.
+
+If a testimonial is from Google:
+
+* Set source: "Google"
+* Add the actual Google review URL if available.
+
+If it is a direct client testimonial:
+
+* Set source: "Client Feedback"
+* Do not call it a "Verified Google Review".
+  */
+
 const testimonials = [
-  {
-    name: "Aman Kumar",
-    role: "Founder, Raretech Institute",
-    location: "Ludhiana, Punjab",
-    quote:
-      "Harshdeep delivered our complete institute website, admin panel, and online exam portal — all on time and within budget. Our student admissions process is now fully digital. Best website developer in Ludhiana I've worked with.",
-    initials: "AK",
-    color: "from-blue-500 to-blue-700",
-    verified: true,
-  },
-  {
-    name: "Priya Sharma",
-    role: "Owner, JMD Solar Energy",
-    location: "Punjab",
-    quote:
-      "Very professional team. Our website now shows up when customers search for solar services in Punjab. We started getting genuine enquiries within the first month. Excellent post-launch support as well.",
-    initials: "PS",
-    color: "from-emerald-500 to-emerald-700",
-    verified: true,
-  },
-  {
-    name: "Rohit Mehta",
-    role: "Business Owner",
-    location: "Ludhiana",
-    quote:
-      "Our old website was getting zero enquiries. After the redesign, our WhatsApp messages increased significantly. The team is transparent about pricing and explains everything clearly. No hidden costs.",
-    initials: "RM",
-    color: "from-purple-500 to-purple-700",
-    verified: true,
-  },
+{
+name: "Aman Kumar",
+role: "Founder, Raretech Institute",
+location: "Ludhiana, Punjab",
+quote:
+"Harshdeep delivered our complete institute website, admin panel, and online exam portal on time and within budget. Our student admissions process is now much more organized and digital.",
+initials: "AK",
+source: "Client Feedback",
+},
+{
+name: "Priya Sharma",
+role: "Owner, JMD Solar Energy",
+location: "Punjab",
+quote:
+"The website gave our business a much more professional online presence. The team was easy to communicate with, explained everything clearly, and provided support after launch.",
+initials: "PS",
+source: "Client Feedback",
+},
+{
+name: "Rohit Mehta",
+role: "Business Owner",
+location: "Ludhiana, Punjab",
+quote:
+"The entire process was transparent and straightforward. I liked that everything was explained clearly and there were no unexpected costs during the project.",
+initials: "RM",
+source: "Client Feedback",
+},
 ];
-// ──────────────────────────────────────────────────────────────────────────────
 
-function StarRow() {
-  return (
-    <div className="flex items-center gap-0.5 mb-4">
-      {[...Array(5)].map((_, i) => (
-        <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-      ))}
-    </div>
-  );
+/*
+Add your real Google Business Profile information here.
+
+Example:
+
+const googleRating = {
+rating: "5.0",
+reviewCount: "25+",
+url: "YOUR_REAL_GOOGLE_REVIEW_URL",
+};
+
+Keep null until you have verified data.
+*/
+
+const googleRating = null;
+
+function StarRating() {
+return ( <div
+   className="flex items-center gap-1"
+   aria-label="5 out of 5 stars"
+ >
+{[...Array(5)].map((_, index) => ( <Star
+       key={index}
+       className="h-4 w-4 fill-yellow-400 text-yellow-400"
+       aria-hidden="true"
+     />
+))} </div>
+);
+}
+
+function ClientAvatar({ initials }) {
+return ( <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-slate-900 text-sm font-bold text-white">
+{initials} </div>
+);
 }
 
 export default function Testimonials() {
-  return (
-    <section className="py-20 md:py-28 bg-white">
-      <div className="max-w-6xl mx-auto px-6">
+const shouldReduceMotion = useReducedMotion();
 
-        {/* Header */}
-        <div className="text-center mb-14">
-          <p className="text-sm uppercase tracking-widest text-blue-600 font-semibold mb-3">
-            Client Testimonials
-          </p>
-          <motion.h2
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
-            className="text-3xl md:text-5xl font-bold text-slate-900 mb-4"
-          >
-            What Our Clients Say
-          </motion.h2>
-          <motion.p
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
-            className="text-slate-500 text-lg max-w-xl mx-auto"
-          >
-            Business owners across Ludhiana and Punjab trust us with their digital presence.
-          </motion.p>
-        </div>
+return ( <section className="bg-white py-20 sm:py-24 lg:py-28"> <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
 
-        {/* Cards */}
-        <motion.div
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          className="grid md:grid-cols-3 gap-8"
+ 
+    {/* Header */}
+    <div className="mx-auto max-w-3xl text-center">
+      <motion.p
+        initial={
+          shouldReduceMotion
+            ? false
+            : { opacity: 0, y: 10 }
+        }
+        whileInView={
+          shouldReduceMotion
+            ? undefined
+            : { opacity: 1, y: 0 }
+        }
+        viewport={{ once: true }}
+        transition={{ duration: 0.4 }}
+        className="text-sm font-bold uppercase tracking-[0.18em] text-blue-600"
+      >
+        Client Feedback
+      </motion.p>
+
+      <motion.h2
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+        className="mt-4 text-3xl font-bold tracking-[-0.035em] text-slate-950 sm:text-4xl lg:text-5xl"
+      >
+        Built for Businesses.
+        <br className="hidden sm:block" />
+        <span className="text-slate-400">
+          {" "}Trusted by Our Clients.
+        </span>
+      </motion.h2>
+
+      <motion.p
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+        className="mx-auto mt-5 max-w-2xl text-base leading-7 text-slate-500 sm:text-lg"
+      >
+        We believe the best measure of our work is the experience of the
+        businesses we work with.
+      </motion.p>
+    </div>
+
+    {/* Testimonials */}
+    <motion.div
+      variants={staggerContainer}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.1 }}
+      className="mt-14 grid gap-6 md:grid-cols-2 lg:mt-16 lg:grid-cols-3"
+    >
+      {testimonials.map((testimonial) => (
+        <motion.article
+          key={`${testimonial.name}-${testimonial.role}`}
+          variants={fadeUp}
+          className="group relative flex h-full flex-col rounded-2xl border border-slate-200 bg-slate-50 p-7 transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:bg-white hover:shadow-xl hover:shadow-slate-900/5 sm:p-8"
         >
-          {testimonials.map((t, i) => (
-            <motion.div
-              key={i}
-              variants={fadeUp}
-              className="flex flex-col p-7 bg-slate-50 border border-slate-100 rounded-2xl hover:shadow-lg transition-shadow duration-300"
-            >
-              <StarRow />
+          {/* Quote Icon */}
+          <div className="absolute right-7 top-7 text-slate-200 transition-colors duration-300 group-hover:text-blue-100">
+            <Quote
+              className="h-10 w-10"
+              strokeWidth={1.5}
+            />
+          </div>
 
-              <blockquote className="text-slate-700 leading-relaxed text-sm flex-1 mb-6">
-                "{t.quote}"
-              </blockquote>
+          {/* Rating */}
+          <div className="relative">
+            <StarRating />
+          </div>
 
-              <footer className="flex items-center gap-3">
-                <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${t.color} flex items-center justify-center text-white text-sm font-bold flex-shrink-0`}>
-                  {t.initials}
-                </div>
-                <div>
-                  <p className="font-semibold text-slate-900 text-sm">{t.name}</p>
-                  <p className="text-slate-500 text-xs">{t.role}</p>
-                  <p className="text-slate-400 text-xs">{t.location}</p>
-                </div>
-              </footer>
+          {/* Quote */}
+          <blockquote className="relative mt-6 flex-1 text-[15px] leading-7 text-slate-600">
+            "{testimonial.quote}"
+          </blockquote>
 
-              {t.verified && (
-                <p className="text-xs text-slate-400 mt-4 flex items-center gap-1.5">
-                  <span className="w-2 h-2 bg-green-500 rounded-full inline-block" />
-                  Verified Google Review
-                </p>
-              )}
-            </motion.div>
-          ))}
-        </motion.div>
+          {/* Client */}
+          <footer className="mt-8 flex items-center gap-3 border-t border-slate-200 pt-6">
+            <ClientAvatar initials={testimonial.initials} />
 
-        {/* Google Rating Summary */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.3 }}
-          className="mt-12 text-center"
+            <div className="min-w-0">
+              <p className="truncate text-sm font-bold text-slate-950">
+                {testimonial.name}
+              </p>
+
+              <p className="mt-0.5 text-xs text-slate-500">
+                {testimonial.role}
+              </p>
+
+              <p className="mt-0.5 text-xs text-slate-400">
+                {testimonial.location}
+              </p>
+            </div>
+          </footer>
+
+          {/* Source */}
+          {testimonial.source && (
+            <p className="mt-5 text-xs font-medium text-slate-400">
+              {testimonial.source}
+            </p>
+          )}
+        </motion.article>
+      ))}
+    </motion.div>
+
+    {/* Google Rating */}
+    {googleRating && (
+      <motion.div
+        initial={
+          shouldReduceMotion
+            ? false
+            : { opacity: 0, y: 15 }
+        }
+        whileInView={
+          shouldReduceMotion
+            ? undefined
+            : { opacity: 1, y: 0 }
+        }
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.15 }}
+        className="mt-12 flex justify-center"
+      >
+        <a
+          href={googleRating.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group inline-flex items-center gap-4 rounded-full border border-slate-200 bg-white px-5 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
         >
-          <a
-            href="https://g.page/r/YOUR_GOOGLE_BUSINESS_PROFILE_LINK/review"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-full px-6 py-3 hover:bg-white hover:shadow-md transition duration-300"
-          >
+          <div className="flex items-center gap-3">
             <div className="flex items-center gap-0.5">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+              {[...Array(5)].map((_, index) => (
+                <Star
+                  key={index}
+                  className="h-4 w-4 fill-yellow-400 text-yellow-400"
+                  aria-hidden="true"
+                />
               ))}
             </div>
-            <span className="text-slate-700 font-semibold text-sm">5.0 on Google</span>
-            <span className="text-slate-400 text-sm">·</span>
-            <span className="text-blue-600 text-sm font-medium">See all reviews →</span>
-          </a>
-          {/* ⚠️ Replace the href above with your actual Google Business Profile link */}
-        </motion.div>
 
-      </div>
-    </section>
-  );
+            <span className="text-sm font-bold text-slate-900">
+              {googleRating.rating}
+            </span>
+          </div>
+
+          <span className="h-4 w-px bg-slate-200" />
+
+          <span className="text-sm text-slate-500">
+            {googleRating.reviewCount} Google Reviews
+          </span>
+
+          <ExternalLink
+            className="h-4 w-4 text-slate-400 transition-transform duration-200 group-hover:translate-x-0.5"
+            aria-hidden="true"
+          />
+        </a>
+      </motion.div>
+    )}
+
+  </div>
+</section>
+
+
+);
 }

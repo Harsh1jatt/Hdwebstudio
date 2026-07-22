@@ -13,7 +13,7 @@ import FreeAudit from "@/components/Home/FreeAudit";
 import Testimonials from "@/components/Home/Testimonials";
 import FAQ from "@/components/Home/FAQ";
 import FinalCTA from "@/components/Home/FinalCTA";
-import WhatsAppFloat from "@/components/Home/WhatsAppFloat";
+import WhatsAppFloat from "@/components/common/WhatsAppFloat";
 
 // ─── SEO Metadata ─────────────────────────────────────────────────────────────
 export const metadata = {
@@ -168,7 +168,6 @@ export default function HomePage() {
       <Testimonials />
       <FAQ />
       <FinalCTA />
-      <WhatsAppFloat />
     </>
   );
 }

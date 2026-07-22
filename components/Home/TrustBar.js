@@ -1,67 +1,109 @@
 "use client";
-import { motion } from "framer-motion";
 
-const stats = [
+import { motion, useReducedMotion } from "framer-motion";
+import {
+  CheckCircle2,
+  Clock3,
+  Gauge,
+  ShieldCheck,
+} from "lucide-react";
+
+const trustItems = [
   {
-    value: "3",
-    label: "Real Client Projects",
-    sub: "Raretech · JMD Solar · Vastu Divine",
+    icon: CheckCircle2,
+    value: "3+",
+    label: "Projects Delivered",
+    description: "Real-world digital projects",
   },
   {
-    value: "⭐ 5.0",
-    label: "Google Rating",
-    sub: "Verified on Google Business Profile",
+    icon: Gauge,
+    value: "Fast",
+    label: "Performance Focused",
+    description: "Built for speed and usability",
   },
   {
-    value: "7 Days",
-    label: "Average Launch Time",
-    sub: "From brief to live website",
+    icon: Clock3,
+    value: "7–14 Days",
+    label: "Typical Launch",
+    description: "For standard business websites",
   },
   {
-    value: "₹0",
-    label: "Hidden Charges",
-    sub: "Clear quote before work begins",
+    icon: ShieldCheck,
+    value: "100%",
+    label: "Project Ownership",
+    description: "Your website, content and data",
   },
 ];
 
 export default function TrustBar() {
-  return (
-    <section
-      className="bg-slate-900 border-b border-slate-800 py-10 sm:py-12"
-      aria-label="Agency trust statistics"
-    >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
-          {stats.map((s, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1, duration: 0.5 }}
-              className="flex flex-col items-center text-center gap-1"
-            >
-              <span className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight leading-none">
-                {s.value}
-              </span>
-              <span className="text-sm sm:text-base font-semibold text-slate-300">
-                {s.label}
-              </span>
-              <span className="text-xs text-slate-500 leading-snug">{s.sub}</span>
-            </motion.div>
-          ))}
-        </div>
+  const shouldReduceMotion = useReducedMotion();
 
-        <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.5 }}
-          className="text-center text-slate-500 text-xs mt-8"
+  return (
+    <section className="relative border-y border-slate-200 bg-white">
+      <div className="mx-auto max-w-7xl px-5 py-8 sm:px-6 lg:px-8">
+        <motion.div
+          initial={
+            shouldReduceMotion
+              ? false
+              : {
+                  opacity: 0,
+                  y: 12,
+                }
+          }
+          whileInView={
+            shouldReduceMotion
+              ? undefined
+              : {
+                  opacity: 1,
+                  y: 0,
+                }
+          }
+          viewport={{
+            once: true,
+            amount: 0.3,
+          }}
+          transition={{
+            duration: shouldReduceMotion ? 0 : 0.5,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+          className="grid grid-cols-2 divide-x divide-y divide-slate-200 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50/50 md:grid-cols-4 md:divide-y-0"
         >
-          Trusted by clinics, coaching institutes, manufacturers &amp; local service businesses across Ludhiana and Punjab
-        </motion.p>
+          {trustItems.map((item, index) => {
+            const Icon = item.icon;
+
+            return (
+              <div
+                key={item.label}
+                className="group relative px-5 py-6 transition-colors duration-200 hover:bg-white sm:px-6"
+              >
+                {/* Subtle hover indicator */}
+                <div className="absolute inset-x-0 top-0 h-px origin-left scale-x-0 bg-blue-600 transition-transform duration-300 group-hover:scale-x-100" />
+
+                <div className="flex items-start gap-3">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-blue-100 bg-blue-50 text-blue-600 transition-colors duration-200 group-hover:border-blue-200 group-hover:bg-blue-100">
+                    <Icon size={18} strokeWidth={2} />
+                  </div>
+
+                  <div className="min-w-0">
+                    <p className="text-xl font-bold tracking-tight text-slate-950 sm:text-2xl">
+                      {item.value}
+                    </p>
+
+                    <p className="mt-1 text-sm font-semibold text-slate-800">
+                      {item.label}
+                    </p>
+
+                    <p className="mt-1 text-xs leading-5 text-slate-500">
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </motion.div>
       </div>
     </section>
   );
 }
+

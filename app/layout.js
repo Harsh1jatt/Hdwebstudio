@@ -3,6 +3,7 @@ import Navbar from "../components/navbar/Navbar";
 import Footer from "../components/common/Footer";
 import Script from "next/script";
 import { getServices } from "@/lib/getServices";
+import WhatsAppFloat from "@/components/common/WhatsAppFloat";
 const SITE_URL = "https://hdwebstudios.in";
 
 export const metadata = {
@@ -280,7 +281,7 @@ export default function RootLayout({ children }) {
         <Navbar services={getServices()}/>
 
         <main>{children}</main>
-
+<WhatsAppFloat/>
         <Footer />
       </body>
     </html>

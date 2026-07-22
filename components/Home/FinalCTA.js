@@ -1,94 +1,137 @@
 "use client";
-import { motion } from "framer-motion";
-import { fadeUp } from "../../lib/motion";
-import { ArrowRight, Phone, PhoneForwardedIcon, Clock } from "lucide-react";
+
+import { motion, useReducedMotion } from "framer-motion";
+import {
+  ArrowRight,
+  MessageCircle,
+  Sparkles,
+  CheckCircle2,
+} from "lucide-react";
 
 export default function FinalCTA() {
-  return (
-    <section className="relative py-20 md:py-28 text-center bg-gradient-to-r from-blue-700 via-sky-600 to-indigo-700 text-white overflow-hidden">
+  const shouldReduceMotion = useReducedMotion();
 
-      {/* Background Glow */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute -top-20 -left-20 w-72 h-72 md:w-[28rem] md:h-[28rem] bg-blue-400/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 -right-20 w-72 h-72 md:w-[28rem] md:h-[28rem] bg-indigo-400/20 rounded-full blur-3xl" />
+  return (
+    <section className="relative overflow-hidden bg-slate-950 py-20 text-white sm:py-24 lg:py-28">
+      {/* Subtle Background Elements */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
+      >
+        <div className="absolute left-1/2 top-0 h-[500px] w-[700px] -translate-x-1/2 rounded-full bg-blue-600/10 blur-3xl" />
+
+        <div className="absolute -left-32 bottom-0 h-72 w-72 rounded-full bg-cyan-500/5 blur-3xl" />
+
+        <div className="absolute -right-32 top-20 h-72 w-72 rounded-full bg-blue-500/5 blur-3xl" />
       </div>
 
-      <motion.div
-        variants={fadeUp}
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true }}
-        className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6"
-      >
-        {/* Glass Card */}
-        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 sm:p-12 shadow-2xl border border-white/15">
-
-          {/* Scarcity Banner */}
-          <div className="inline-flex items-center gap-2 bg-yellow-400/20 border border-yellow-400/30 text-yellow-200 text-xs font-semibold px-4 py-2 rounded-full mb-7">
-            <Clock className="w-3.5 h-3.5" />
-            We take on only 4 new projects per month — spots are limited
+      {/* Content */}
+      <div className="relative z-10 mx-auto max-w-5xl px-5 sm:px-6">
+        <motion.div
+          initial={
+            shouldReduceMotion
+              ? false
+              : { opacity: 0, y: 25 }
+          }
+          whileInView={
+            shouldReduceMotion
+              ? undefined
+              : { opacity: 1, y: 0 }
+          }
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.6 }}
+          className="text-center"
+        >
+          {/* Eyebrow */}
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-blue-300 backdrop-blur-sm">
+            <Sparkles className="h-4 w-4" />
+            Let's Build Something That Matters
           </div>
 
           {/* Heading */}
-          <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold mb-6 leading-tight">
-            Ready to Get More Customers
-            <span className="block bg-gradient-to-r from-yellow-300 to-emerald-300 bg-clip-text text-transparent mt-1">
-              From Your Website?
+          <h2 className="mx-auto max-w-4xl text-4xl font-bold leading-[1.1] tracking-[-0.04em] text-white sm:text-5xl lg:text-6xl">
+            Have a Business Goal?
+            <span className="mt-2 block text-blue-400">
+              Let's Turn It Into a Digital Solution.
             </span>
           </h2>
 
-          {/* Subtext */}
-          <p className="text-base sm:text-lg text-white/85 mb-10 max-w-xl mx-auto leading-relaxed">
-            Book a free 15-minute strategy call. We'll review your current online presence, identify your biggest opportunity, and give you a clear action plan — no selling, just strategy.
+          {/* Description */}
+          <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-slate-400 sm:text-lg">
+            Whether you need a professional online presence, more customer
+            enquiries, a better digital experience, or a custom solution for
+            your business — let's talk about what you're trying to achieve.
           </p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-            <motion.a
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+          <div className="mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <a
               href="/contact"
-              className="inline-flex items-center justify-center gap-2 bg-white text-blue-700 font-bold px-7 py-4 rounded-full shadow-xl hover:bg-slate-100 transition text-base w-full sm:w-auto"
+              className="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-7 py-4 text-sm font-bold text-white shadow-xl shadow-blue-600/20 transition-all duration-300 hover:-translate-y-1 hover:bg-blue-500 sm:w-auto"
             >
-              📞 Book Free 15-Min Strategy Call
-              <ArrowRight className="w-4 h-4" />
-            </motion.a>
+              Start a Conversation
+              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+            </a>
 
-            <motion.a
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              href="https://wa.me/917589434135?text=Hi%20Harshdeep%2C%20I%27d%20like%20to%20discuss%20my%20website%20project."
+            <a
+              href="https://wa.me/917589434135?text=Hi%20Harshdeep%2C%20I'd%20like%20to%20discuss%20a%20digital%20solution%20for%20my%20business."
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 bg-green-500 hover:bg-green-400 text-white font-bold px-7 py-4 rounded-full shadow-xl transition text-base w-full sm:w-auto"
+              className="group inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/5 px-7 py-4 text-sm font-bold text-white backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-white/25 hover:bg-white/10 sm:w-auto"
             >
-              💬 WhatsApp — Reply in Under 1 Hour
-              <PhoneForwardedIcon className="w-4 h-4" />
-            </motion.a>
-          </div>
-
-          {/* Phone Numbers */}
-          <div className="mt-8 text-sm text-white/70 flex flex-col sm:flex-row justify-center items-center gap-5">
-            <a href="tel:+917589434135" className="flex items-center gap-2 hover:text-white transition">
-              <Phone className="w-4 h-4" /> 75894 34135
-            </a>
-            <a href="tel:+916284004413" className="flex items-center gap-2 hover:text-white transition">
-              <Phone className="w-4 h-4" /> 62840 04413
+              <MessageCircle className="h-4 w-4 text-green-400" />
+              Talk to Us on WhatsApp
             </a>
           </div>
 
-          {/* Reassurance + Founder Signature */}
-          <div className="mt-8 pt-7 border-t border-white/15">
-            <p className="text-sm text-white/70 mb-2">
-              No contracts. No pressure. Just a clear, honest plan for your business.
-            </p>
-            <p className="text-xs text-white/50 italic">
-              — Harshdeep, Founder &amp; Lead Developer, Harshdeep Web Studios, Ludhiana
-            </p>
-          </div>
+          {/* Trust Points */}
+          <div className="mt-9 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-xs text-slate-500">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="h-4 w-4 text-blue-400" />
+              No obligation
+            </div>
 
-        </div>
-      </motion.div>
+            <div className="hidden h-1 w-1 rounded-full bg-slate-700 sm:block" />
+
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="h-4 w-4 text-blue-400" />
+              Clear recommendations
+            </div>
+
+            <div className="hidden h-1 w-1 rounded-full bg-slate-700 sm:block" />
+
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="h-4 w-4 text-blue-400" />
+              Transparent communication
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Bottom Statement */}
+        <motion.div
+          initial={
+            shouldReduceMotion
+              ? false
+              : { opacity: 0 }
+          }
+          whileInView={
+            shouldReduceMotion
+              ? undefined
+              : { opacity: 1 }
+          }
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="mx-auto mt-16 max-w-3xl border-t border-white/10 pt-8 text-center"
+        >
+          <p className="text-sm leading-6 text-slate-500">
+            You don't need to know what technology you need.
+            <span className="text-slate-300">
+              {" "}Tell us what you want to achieve — we'll help you figure out
+              the right solution.
+            </span>
+          </p>
+        </motion.div>
+      </div>
     </section>
   );
 }

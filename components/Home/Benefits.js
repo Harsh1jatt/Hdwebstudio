@@ -1,103 +1,192 @@
 "use client";
-import { motion } from "framer-motion";
+
+import { motion, useReducedMotion } from "framer-motion";
+import {
+Code2,
+Gauge,
+Smartphone,
+SearchCheck,
+KeyRound,
+MessageCircle,
+ArrowRight,
+} from "lucide-react";
+import Link from "next/link";
+
 import { fadeUp, staggerContainer } from "../../lib/motion";
-import { PhoneCall, Clock, Smartphone, Search, KeyRound, MessageCircle } from "lucide-react";
 
 const benefits = [
-  {
-    title: "Your Phone Will Ring More",
-    desc: "We build websites designed to generate leads, not just look good. Most of our clients in Ludhiana start receiving new enquiries within the first 30 days of launch.",
-    icon: <PhoneCall className="w-6 h-6 text-blue-600" />,
-    bg: "bg-blue-50",
-  },
-  {
-    title: "Live in 7 Days, Not 7 Months",
-    desc: "We follow a proven fast-delivery process. Your professional business website will be live in 7 to 14 days — no endless delays, no back-and-forth confusion.",
-    icon: <Clock className="w-6 h-6 text-emerald-600" />,
-    bg: "bg-emerald-50",
-  },
-  {
-    title: "Looks Perfect on Every Phone",
-    desc: "Over 80% of your customers will visit your website on their mobile. We design mobile-first so every visitor gets a smooth, fast, professional experience.",
-    icon: <Smartphone className="w-6 h-6 text-purple-600" />,
-    bg: "bg-purple-50",
-  },
-  {
-    title: "Google Will Find You",
-    desc: "Every website comes with on-page SEO, fast loading speeds, and correct technical structure — so Google can index and rank you above your local competitors.",
-    icon: <Search className="w-6 h-6 text-orange-500" />,
-    bg: "bg-orange-50",
-  },
-  {
-    title: "You Own Everything — No Lock-In",
-    desc: "Your domain, your hosting, your website files. We hand over 100% ownership at delivery. No monthly dependency, no held-hostage situations, ever.",
-    icon: <KeyRound className="w-6 h-6 text-indigo-600" />,
-    bg: "bg-indigo-50",
-  },
-  {
-    title: "WhatsApp Support After Launch",
-    desc: "We don't disappear after delivery. Direct WhatsApp access to your developer for updates, fixes, and questions — because your success is our reputation.",
-    icon: <MessageCircle className="w-6 h-6 text-green-600" />,
-    bg: "bg-green-50",
-  },
+{
+title: "Built by a Developer, Not a Sales Team",
+desc: "You communicate directly with the person working on your website or web application. Clear communication, fewer layers, and no unnecessary handoffs.",
+icon: Code2,
+bg: "bg-blue-50",
+iconColor: "text-blue-600",
+},
+{
+title: "Performance Comes First",
+desc: "We focus on clean code, optimized assets, responsive layouts, and efficient loading so your website feels fast and smooth across modern devices.",
+icon: Gauge,
+bg: "bg-emerald-50",
+iconColor: "text-emerald-600",
+},
+{
+title: "Designed for Every Screen",
+desc: "Your customers may discover you from a phone, tablet, or desktop. We build responsive experiences that remain easy to use across screen sizes.",
+icon: Smartphone,
+bg: "bg-purple-50",
+iconColor: "text-purple-600",
+},
+{
+title: "SEO-Ready From the Start",
+desc: "We build with important technical SEO fundamentals in mind, including semantic structure, metadata, performance, mobile usability, and crawlability.",
+icon: SearchCheck,
+bg: "bg-orange-50",
+iconColor: "text-orange-600",
+},
+{
+title: "You Own Your Digital Assets",
+desc: "Your domain and website belong to you. We believe in transparent project handover and building long-term relationships without unnecessary lock-in.",
+icon: KeyRound,
+bg: "bg-indigo-50",
+iconColor: "text-indigo-600",
+},
+{
+title: "Support Beyond Launch",
+desc: "Launching your website is not the end of the relationship. We remain available for updates, fixes, improvements, and ongoing technical support.",
+icon: MessageCircle,
+bg: "bg-green-50",
+iconColor: "text-green-600",
+},
 ];
 
 export default function Benefits() {
-  return (
-    <section className="py-20 md:py-28 bg-slate-50">
-      <div className="max-w-6xl mx-auto px-6">
+const shouldReduceMotion = useReducedMotion();
 
-        {/* Header */}
-        <div className="text-center mb-14">
-          <p className="text-sm uppercase tracking-widest text-blue-600 font-semibold mb-3">
-            Why 25+ Ludhiana Businesses Trust Us
-          </p>
-          <motion.h2
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
-            className="text-3xl md:text-5xl font-bold text-slate-900 mb-5"
-          >
-            We Don't Just Build Websites.
-            <span className="block text-blue-600 mt-1">We Build Business Growth Engines.</span>
-          </motion.h2>
-          <motion.p
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
-            className="text-lg text-slate-500 max-w-2xl mx-auto"
-          >
-            Here's what makes working with Harshdeep Web Studios different from hiring any generic developer or big-city agency.
-          </motion.p>
-        </div>
+return ( <section className="relative overflow-hidden bg-slate-50 py-20 sm:py-24 lg:py-28"> <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
 
-        {/* Benefits Grid */}
-        <motion.ul
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-7 list-none"
-        >
-          {benefits.map((b, i) => (
-            <motion.li
-              key={i}
-              variants={fadeUp}
-              whileHover={{ y: -5 }}
-              className="p-7 bg-white border border-slate-100 rounded-2xl hover:shadow-lg transition-all duration-400 text-left"
+```
+    {/* Header */}
+    <div className="mx-auto max-w-3xl text-center">
+      <motion.p
+        initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
+        whileInView={
+          shouldReduceMotion
+            ? undefined
+            : { opacity: 1, y: 0 }
+        }
+        viewport={{ once: true }}
+        transition={{ duration: 0.4 }}
+        className="text-sm font-bold uppercase tracking-[0.18em] text-blue-600"
+      >
+        Why HD Web Studios
+      </motion.p>
+
+      <motion.h2
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+        className="mt-4 text-3xl font-bold leading-tight tracking-[-0.035em] text-slate-950 sm:text-4xl lg:text-5xl"
+      >
+        A Better Way to Build
+        <br className="hidden md:block" />
+        <span className="text-slate-500">
+          {" "}Your Digital Presence.
+        </span>
+      </motion.h2>
+
+      <motion.p
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+        className="mx-auto mt-5 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg"
+      >
+        We combine thoughtful design, modern development, performance,
+        and SEO fundamentals to create digital experiences that are
+        built for your business — not from a one-size-fits-all template.
+      </motion.p>
+    </div>
+
+    {/* Benefits Grid */}
+    <motion.ul
+      variants={staggerContainer}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.1 }}
+      className="mt-14 grid list-none gap-5 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3"
+    >
+      {benefits.map((benefit) => {
+        const Icon = benefit.icon;
+
+        return (
+          <motion.li
+            key={benefit.title}
+            variants={fadeUp}
+            whileHover={
+              shouldReduceMotion
+                ? undefined
+                : { y: -4 }
+            }
+            className="group rounded-2xl border border-slate-200 bg-white p-7 shadow-sm transition-shadow duration-300 hover:shadow-xl hover:shadow-slate-900/5 sm:p-8"
+          >
+            {/* Icon */}
+            <div
+              className={`flex h-12 w-12 items-center justify-center rounded-xl ${benefit.bg}`}
             >
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 ${b.bg}`}>
-                {b.icon}
-              </div>
-              <h3 className="text-lg font-bold text-slate-900 mb-2">{b.title}</h3>
-              <p className="text-slate-500 leading-relaxed text-sm">{b.desc}</p>
-            </motion.li>
-          ))}
-        </motion.ul>
+              <Icon
+                className={`h-6 w-6 ${benefit.iconColor}`}
+                strokeWidth={1.8}
+              />
+            </div>
 
-      </div>
-    </section>
-  );
+            {/* Content */}
+            <h3 className="mt-6 text-lg font-bold tracking-tight text-slate-950">
+              {benefit.title}
+            </h3>
+
+            <p className="mt-3 text-sm leading-6 text-slate-600">
+              {benefit.desc}
+            </p>
+          </motion.li>
+        );
+      })}
+    </motion.ul>
+
+    {/* Bottom CTA */}
+    <motion.div
+      initial={
+        shouldReduceMotion
+          ? false
+          : { opacity: 0, y: 15 }
+      }
+      whileInView={
+        shouldReduceMotion
+          ? undefined
+          : { opacity: 1, y: 0 }
+      }
+      viewport={{ once: true }}
+      transition={{ delay: 0.15, duration: 0.5 }}
+      className="mt-14 text-center lg:mt-16"
+    >
+      <p className="text-sm text-slate-500">
+        Have a project in mind?
+      </p>
+
+      <Link
+        href="/contact"
+        className="group mt-4 inline-flex items-center gap-2 text-sm font-bold text-blue-600 transition-colors hover:text-blue-700"
+      >
+        Let&apos;s discuss what you need
+        <ArrowRight
+          size={17}
+          className="transition-transform duration-200 group-hover:translate-x-1"
+        />
+      </Link>
+    </motion.div>
+
+  </div>
+</section>
+
+);
 }

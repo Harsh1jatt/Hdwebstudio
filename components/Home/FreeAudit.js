@@ -1,165 +1,428 @@
 "use client";
-import { motion } from "framer-motion";
-import { fadeUp } from "../../lib/motion";
-import { CheckCircle2 } from "lucide-react";
+
+import { motion, useReducedMotion } from "framer-motion";
+import {
+CheckCircle2,
+Globe2,
+MessageCircle,
+ShieldCheck,
+ArrowRight,
+} from "lucide-react";
 import { useState } from "react";
 
+import { fadeUp } from "../../lib/motion";
+
 const auditPoints = [
-  "Why you're not ranking on Google right now",
-  "What's stopping visitors from calling you",
-  "What your local competitors are doing that you're not",
-  "The exact 3 changes that would bring you more enquiries immediately",
+"A review of your website's user experience and first impression",
+"Key technical and on-page SEO issues affecting discoverability",
+"Potential conversion problems that may be costing you enquiries",
+"Practical recommendations for improving your website",
 ];
 
+const businessTypes = [
+"Service Business",
+"Clinic / Healthcare",
+"Coaching / Education",
+"Manufacturing",
+"Restaurant / Hospitality",
+"E-commerce",
+"Professional Services",
+"Other",
+];
+
+const initialForm = {
+name: "",
+phone: "",
+business: "",
+website: "",
+};
+
 export default function FreeAudit() {
-  const [form, setForm] = useState({ name: "", phone: "", business: "" });
-  const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
+const shouldReduceMotion = useReducedMotion();
 
-  function handleChange(e) {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+const [form, setForm] = useState(initialForm);
+const [submitted, setSubmitted] = useState(false);
+const [loading, setLoading] = useState(false);
+const [error, setError] = useState("");
+
+function handleChange(e) {
+const { name, value } = e.target;
+
+ 
+setForm((prev) => ({
+  ...prev,
+  [name]: value,
+}));
+
+if (error) {
+  setError("");
+}
+ 
+
+}
+
+function validateForm() {
+const trimmedName = form.name.trim();
+const trimmedPhone = form.phone.trim();
+
+ 
+if (!trimmedName) {
+  return "Please enter your name.";
+}
+
+if (!trimmedPhone) {
+  return "Please enter your WhatsApp number.";
+}
+
+const phoneDigits = trimmedPhone.replace(/\D/g, "");
+
+if (phoneDigits.length < 10) {
+  return "Please enter a valid WhatsApp number.";
+}
+
+if (form.website.trim()) {
+  try {
+    const websiteUrl = form.website.startsWith("http")
+      ? form.website
+      : `https://${form.website}`;
+
+    new URL(websiteUrl);
+  } catch {
+    return "Please enter a valid website URL.";
   }
+}
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    if (!form.name || !form.phone) return;
-    setLoading(true);
+return "";
 
-    // Build WhatsApp message with form data
-    const msg = encodeURIComponent(
-      `Hi Harshdeep, I'd like a Free Website Audit.\n\nName: ${form.name}\nPhone: ${form.phone}\nBusiness: ${form.business || "Not specified"}`
-    );
-    // Open WhatsApp
-    window.open(`https://wa.me/917589434135?text=${msg}`, "_blank");
+}
 
-    setLoading(false);
-    setSubmitted(true);
-  }
+function handleSubmit(e) {
+e.preventDefault();
 
-  return (
-    <section className="py-20 md:py-28 bg-gradient-to-br from-blue-50 to-slate-50">
-      <div className="max-w-5xl mx-auto px-6">
+const validationError = validateForm();
 
-        <div className="grid md:grid-cols-2 gap-12 items-center">
+if (validationError) {
+  setError(validationError);
+  return;
+}
 
-          {/* Left — Offer */}
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
-          >
-            <span className="inline-block text-xs font-bold uppercase tracking-widest bg-blue-100 text-blue-700 px-3 py-1.5 rounded-full mb-4">
-              Free Offer — Worth ₹2,000
-            </span>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-5 leading-tight">
-              Get Your Free Website Audit
-              <span className="block text-blue-600 mt-1">Delivered in 24 Hours</span>
-            </h2>
-            <p className="text-slate-500 mb-7 leading-relaxed">
-              We'll review your current website (or your competitor's) and send you a clear, honest report showing:
+setLoading(true);
+setError("");
+
+const websiteUrl = form.website.trim()
+  ? form.website.startsWith("http")
+    ? form.website
+    : `https://${form.website}`
+  : "Not provided";
+
+const message = `Hi Harshdeep, I'd like to request a Free Website Audit.
+ 
+
+Name: ${form.name.trim()}
+WhatsApp: ${form.phone.trim()}
+Business Type: ${form.business || "Not specified"}
+Website: ${websiteUrl}
+
+I'd like to understand how my website can be improved.`;
+
+ 
+const whatsappUrl = `https://wa.me/917589434135?text=${encodeURIComponent(
+  message
+)}`;
+
+window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+
+setLoading(false);
+setSubmitted(true);
+ 
+
+}
+
+function resetForm() {
+setForm(initialForm);
+setSubmitted(false);
+setError("");
+}
+
+return ( <section className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-slate-50 py-20 sm:py-24 lg:py-28"> <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+
+ 
+    <div className="grid items-center gap-12 lg:grid-cols-[1fr_0.85fr] lg:gap-20">
+
+      {/* Left Content */}
+      <motion.div
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.2 }}
+      >
+        {/* Label */}
+        <div className="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-blue-700">
+          <ShieldCheck className="h-4 w-4" />
+          Free Website Audit
+        </div>
+
+        {/* Heading */}
+        <h2 className="mt-5 max-w-2xl text-3xl font-bold leading-tight tracking-[-0.035em] text-slate-950 sm:text-4xl lg:text-5xl">
+          Not Sure What's Holding Your Website Back?
+        </h2>
+
+        <p className="mt-5 max-w-xl text-base leading-7 text-slate-600 sm:text-lg">
+          Get a practical review of your website and discover where you
+          can improve its design, performance, SEO, and ability to turn
+          visitors into enquiries.
+        </p>
+
+        {/* Audit Points */}
+        <ul className="mt-8 space-y-4">
+          {auditPoints.map((point) => (
+            <li
+              key={point}
+              className="flex items-start gap-3 text-sm leading-6 text-slate-700 sm:text-base"
+            >
+              <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-blue-600" />
+              <span>{point}</span>
+            </li>
+          ))}
+        </ul>
+
+        {/* Trust Notes */}
+        <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-xs font-medium text-slate-500">
+          <span className="flex items-center gap-2">
+            <MessageCircle className="h-4 w-4 text-blue-600" />
+            Delivered via WhatsApp
+          </span>
+
+          <span className="flex items-center gap-2">
+            <Globe2 className="h-4 w-4 text-blue-600" />
+            Website review included
+          </span>
+        </div>
+
+        <p className="mt-5 max-w-lg text-xs leading-5 text-slate-400">
+          Most audit requests are reviewed within 24 hours. The audit is
+          intended to provide useful recommendations — there is no
+          obligation to work with us afterward.
+        </p>
+      </motion.div>
+
+      {/* Form */}
+      <motion.div
+        initial={
+          shouldReduceMotion
+            ? false
+            : { opacity: 0, x: 25 }
+        }
+        whileInView={
+          shouldReduceMotion
+            ? undefined
+            : { opacity: 1, x: 0 }
+        }
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.5 }}
+      >
+        {submitted ? (
+          /* Success State */
+          <div className="rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-xl shadow-slate-900/5 sm:p-10">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-50">
+              <CheckCircle2 className="h-8 w-8 text-emerald-500" />
+            </div>
+
+            <h3 className="mt-6 text-2xl font-bold tracking-tight text-slate-950">
+              Request Received
+            </h3>
+
+            <p className="mx-auto mt-3 max-w-sm text-sm leading-6 text-slate-500">
+              WhatsApp should have opened in a new tab. Send the pre-filled
+              message to complete your request.
             </p>
 
-            <ul className="space-y-3 mb-8">
-              {auditPoints.map((point, i) => (
-                <li key={i} className="flex items-start gap-3 text-slate-700 text-sm">
-                  <CheckCircle2 className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
-                  {point}
-                </li>
-              ))}
-            </ul>
+            <div className="mt-7 flex flex-col gap-3">
+              <a
+                href="https://wa.me/917589434135"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700"
+              >
+                Open WhatsApp
+                <ArrowRight size={16} />
+              </a>
 
-            <p className="text-xs text-slate-400">
-              Takes 2 minutes to request. Report delivered within 24 hours. No sales pressure, ever.
-            </p>
-          </motion.div>
-
-          {/* Right — Form */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+              <button
+                type="button"
+                onClick={resetForm}
+                className="text-sm font-semibold text-slate-500 transition-colors hover:text-slate-900"
+              >
+                Submit another request
+              </button>
+            </div>
+          </div>
+        ) : (
+          /* Form Card */
+          <form
+            onSubmit={handleSubmit}
+            className="rounded-3xl border border-slate-200 bg-white p-7 shadow-xl shadow-slate-900/5 sm:p-9"
           >
-            {submitted ? (
-              <div className="bg-white rounded-2xl p-10 shadow-lg border border-slate-100 text-center">
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-5">
-                  <CheckCircle2 className="w-8 h-8 text-green-500" />
-                </div>
-                <h3 className="text-xl font-bold text-slate-900 mb-2">Request Sent!</h3>
-                <p className="text-slate-500 text-sm">
-                  Your WhatsApp is opening now. Harshdeep will reply within a few hours with your free audit.
+            <div className="mb-7">
+              <h3 className="text-xl font-bold tracking-tight text-slate-950 sm:text-2xl">
+                Request Your Free Audit
+              </h3>
+
+              <p className="mt-2 text-sm leading-6 text-slate-500">
+                Share a few details and we'll connect with you on
+                WhatsApp.
+              </p>
+            </div>
+
+            <div className="space-y-5">
+
+              {/* Name */}
+              <div>
+                <label
+                  htmlFor="audit-name"
+                  className="mb-2 block text-sm font-semibold text-slate-700"
+                >
+                  Your Name
+                  <span className="ml-1 text-blue-600">*</span>
+                </label>
+
+                <input
+                  id="audit-name"
+                  type="text"
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                  placeholder="e.g. Rahul Sharma"
+                  autoComplete="name"
+                  required
+                  className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+                />
+              </div>
+
+              {/* Phone */}
+              <div>
+                <label
+                  htmlFor="audit-phone"
+                  className="mb-2 block text-sm font-semibold text-slate-700"
+                >
+                  WhatsApp Number
+                  <span className="ml-1 text-blue-600">*</span>
+                </label>
+
+                <input
+                  id="audit-phone"
+                  type="tel"
+                  name="phone"
+                  value={form.phone}
+                  onChange={handleChange}
+                  placeholder="e.g. 98765 43210"
+                  autoComplete="tel"
+                  inputMode="tel"
+                  required
+                  className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+                />
+              </div>
+
+              {/* Business Type */}
+              <div>
+                <label
+                  htmlFor="audit-business"
+                  className="mb-2 block text-sm font-semibold text-slate-700"
+                >
+                  Business Type
+                  <span className="ml-2 font-normal text-slate-400">
+                    Optional
+                  </span>
+                </label>
+
+                <select
+                  id="audit-business"
+                  name="business"
+                  value={form.business}
+                  onChange={handleChange}
+                  className="w-full appearance-none rounded-xl border border-slate-200 bg-white px-4 py-3.5 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+                >
+                  <option value="">Select your business type</option>
+
+                  {businessTypes.map((type) => (
+                    <option key={type} value={type}>
+                      {type}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Website */}
+              <div>
+                <label
+                  htmlFor="audit-website"
+                  className="mb-2 block text-sm font-semibold text-slate-700"
+                >
+                  Website URL
+                  <span className="ml-2 font-normal text-slate-400">
+                    Optional
+                  </span>
+                </label>
+
+                <input
+                  id="audit-website"
+                  type="url"
+                  name="website"
+                  value={form.website}
+                  onChange={handleChange}
+                  placeholder="e.g. https://yourwebsite.com"
+                  autoComplete="url"
+                  className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+                />
+
+                <p className="mt-2 text-xs text-slate-400">
+                  Share your website so we can review the actual experience.
                 </p>
               </div>
-            ) : (
-              <div className="bg-white rounded-2xl p-8 md:p-10 shadow-lg border border-slate-100">
-                <h3 className="text-xl font-bold text-slate-900 mb-1">Claim Your Free Audit</h3>
-                <p className="text-sm text-slate-400 mb-7">Fill in your details — we'll connect on WhatsApp</p>
 
-                <div className="space-y-4">
-                  <div>
-                    <label htmlFor="audit-name" className="block text-sm font-semibold text-slate-700 mb-1.5">
-                      Your Name *
-                    </label>
-                    <input
-                      id="audit-name"
-                      type="text"
-                      name="name"
-                      value={form.name}
-                      onChange={handleChange}
-                      placeholder="Eg. Rahul Sharma"
-                      className="w-full px-4 py-3 rounded-xl border border-slate-200 text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="audit-phone" className="block text-sm font-semibold text-slate-700 mb-1.5">
-                      WhatsApp Number *
-                    </label>
-                    <input
-                      id="audit-phone"
-                      type="tel"
-                      name="phone"
-                      value={form.phone}
-                      onChange={handleChange}
-                      placeholder="Eg. 98765 43210"
-                      className="w-full px-4 py-3 rounded-xl border border-slate-200 text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="audit-business" className="block text-sm font-semibold text-slate-700 mb-1.5">
-                      Business Type <span className="text-slate-400 font-normal">(optional)</span>
-                    </label>
-                    <input
-                      id="audit-business"
-                      type="text"
-                      name="business"
-                      value={form.business}
-                      onChange={handleChange}
-                      placeholder="Eg. Clinic, Institute, Manufacturer"
-                      className="w-full px-4 py-3 rounded-xl border border-slate-200 text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                    />
-                  </div>
-
-                  <button
-                    onClick={handleSubmit}
-                    disabled={loading || !form.name || !form.phone}
-                    className="w-full py-4 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-semibold text-sm transition duration-300 mt-2"
-                  >
-                    {loading ? "Opening WhatsApp..." : "📋 Send My Free Audit Request →"}
-                  </button>
-
-                  <p className="text-xs text-center text-slate-400">
-                    This opens WhatsApp. We reply within a few hours.
-                  </p>
+              {/* Error */}
+              {error && (
+                <div
+                  role="alert"
+                  className="rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-600"
+                >
+                  {error}
                 </div>
-              </div>
-            )}
-          </motion.div>
+              )}
 
-        </div>
-      </div>
-    </section>
-  );
+              {/* Submit */}
+              <button
+                type="submit"
+                disabled={loading}
+                className="group flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-4 text-sm font-bold text-white shadow-lg shadow-blue-600/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {loading
+                  ? "Opening WhatsApp..."
+                  : "Request My Free Website Audit"}
+
+                {!loading && (
+                  <ArrowRight
+                    size={17}
+                    className="transition-transform duration-200 group-hover:translate-x-1"
+                  />
+                )}
+              </button>
+
+              {/* Privacy */}
+              <p className="text-center text-xs leading-5 text-slate-400">
+                By submitting this form, you agree to be contacted about
+                your request. Your details will not be sold or shared for
+                unrelated marketing.
+              </p>
+
+            </div>
+          </form>
+        )}
+      </motion.div>
+
+    </div>
+  </div>
+</section>
+
+);
 }

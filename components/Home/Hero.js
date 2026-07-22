@@ -1,232 +1,369 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
-import { ChevronDown, Star, Phone, ClipboardCheck, MessageCircle } from "lucide-react";
 import Link from "next/link";
+import { motion, useReducedMotion } from "framer-motion";
+import {
+  ArrowRight,
+  CheckCircle2,
+  Code2,
+  LineChart,
+  MonitorSmartphone,
+  Sparkles,
+} from "lucide-react";
 
-const TRUST_SIGNALS = [
-  "3 Real Client Projects Delivered",
-  "7-Day Fast Launch",
-  "Mobile-First Design",
-  "Zero Hidden Charges",
-  "Direct WhatsApp Support",
+const services = [
+  {
+    icon: MonitorSmartphone,
+    label: "Websites",
+  },
+  {
+    icon: Code2,
+    label: "Software",
+  },
+  {
+    icon: LineChart,
+    label: "Growth",
+  },
 ];
 
 export default function Hero() {
   const shouldReduceMotion = useReducedMotion();
 
   const fadeUp = {
-    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 24 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+    hidden: {
+      opacity: 0,
+      y: shouldReduceMotion ? 0 : 20,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: shouldReduceMotion ? 0 : 0.6,
+        ease: [0.22, 1, 0.36, 1],
+      },
+    },
   };
 
   const stagger = {
     hidden: {},
-    show: { transition: { staggerChildren: shouldReduceMotion ? 0 : 0.12 } },
-  };
-
-  const scrollToNext = () => {
-    window.scrollBy({ top: window.innerHeight * 0.92, behavior: "smooth" });
+    visible: {
+      transition: {
+        staggerChildren: shouldReduceMotion ? 0 : 0.08,
+      },
+    },
   };
 
   return (
-    <section
-      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-slate-50 px-4 py-24 text-center text-slate-900 sm:px-6"
-      aria-label="Hero section"
-    >
-      {/* ================= DECORATIVE BACKGROUND (CSS-only, no image request) ================= */}
-      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-        {/* Drifting gradient blobs — transform/opacity only, GPU-composited */}
-        <div className="blob-one absolute -left-24 top-0 h-[28rem] w-[28rem] rounded-full bg-cyan-300/40 blur-3xl motion-reduce:animate-none" />
-        <div className="blob-two absolute -right-24 top-1/4 h-[26rem] w-[26rem] rounded-full bg-blue-300/40 blur-3xl motion-reduce:animate-none" />
-        <div className="blob-three absolute bottom-0 left-1/3 hidden h-[30rem] w-[30rem] rounded-full bg-indigo-200/40 blur-3xl motion-reduce:animate-none sm:block" />
+    <section className="relative isolate overflow-hidden bg-white">
+      {/* Background */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10"
+      >
+        <div className="absolute left-1/2 top-[-180px] h-[500px] w-[700px] -translate-x-1/2 rounded-full bg-blue-100/60 blur-3xl" />
 
-        {/* Subtle dot-grid texture, faded top and bottom */}
-        <div className="absolute inset-0 opacity-60 [background-image:radial-gradient(rgba(15,23,42,0.08)_1px,transparent_1px)] [background-size:26px_26px] [mask-image:linear-gradient(to_bottom,transparent,black_20%,black_80%,transparent)] [-webkit-mask-image:linear-gradient(to_bottom,transparent,black_20%,black_80%,transparent)]" />
-
-        {/* Soft white wash so text stays crisp over the color blobs */}
-        <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-white/60 to-slate-50" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#f1f5f9_1px,transparent_1px),linear-gradient(to_bottom,#f1f5f9_1px,transparent_1px)] bg-[size:64px_64px] opacity-40 [mask-image:linear-gradient(to_bottom,black,transparent_75%)]" />
       </div>
 
-      {/* ================= MAIN CONTENT ================= */}
-      <motion.div
-        variants={stagger}
-        initial="hidden"
-        animate="show"
-        className="relative z-10 mx-auto w-full max-w-4xl"
-      >
-        {/* Google Rating Badge */}
-        <motion.div variants={fadeUp} className="mb-5 flex justify-center">
-          <div className="relative inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm shadow-sm">
-            <span className="absolute inset-0 -z-10 rounded-full bg-cyan-400/10 motion-safe:animate-pulse motion-reduce:hidden" />
-            <span className="flex items-center gap-0.5">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
-              ))}
-            </span>
-            <span className="font-medium text-slate-800">5.0 on Google</span>
-            <span className="text-slate-300">·</span>
-            <span className="text-slate-500">Ludhiana, Punjab</span>
-          </div>
-        </motion.div>
-
-        {/* H1 — Primary SEO Keyword */}
-        <motion.h1
-          variants={fadeUp}
-          className="mb-4 text-3xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-4xl md:text-5xl lg:text-6xl"
-        >
-          Website Designer in Ludhiana
-          <span className="mt-2 block bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-500 bg-clip-text text-2xl font-bold text-transparent sm:text-3xl md:text-4xl lg:text-5xl">
-            Websites That Get Your Business More Calls, Clients &amp; Revenue
-          </span>
-        </motion.h1>
-
-        {/* H2 — Supporting SEO */}
-        <motion.h2
-          variants={fadeUp}
-          className="mx-auto mb-5 max-w-2xl text-base font-medium text-slate-600 sm:text-lg md:text-xl"
-        >
-          Professional Web Design &amp; SEO Services for Clinics, Coaching Institutes,
-          Manufacturers &amp; Local Businesses in Ludhiana &amp; Punjab
-        </motion.h2>
-
-        {/* Body */}
-        <motion.p
-          variants={fadeUp}
-          className="mx-auto mb-8 max-w-xl text-sm leading-relaxed text-slate-500 sm:text-base"
-        >
-          If your website isn't bringing you enquiries every week, it isn't
-          working hard enough. I design and develop fast, mobile-first,
-          SEO-optimized websites — and get them live in as few as 7 days.
-        </motion.p>
-
-        {/* CTA Buttons */}
+      <div className="mx-auto max-w-7xl px-5 pb-20 pt-16 sm:px-6 sm:pb-24 sm:pt-20 lg:px-8 lg:pb-28 lg:pt-28">
         <motion.div
-          variants={fadeUp}
-          className="mb-6 flex flex-col justify-center gap-3 sm:flex-row sm:gap-4"
+          initial="hidden"
+          animate="visible"
+          variants={stagger}
+          className="grid items-center gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16"
         >
-          <Link
-            href="/contact"
-            className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-blue-600 px-7 py-3.5 text-sm font-bold text-white shadow-lg shadow-blue-600/25 transition-all duration-200 hover:-translate-y-0.5 hover:bg-blue-500 hover:shadow-xl hover:shadow-blue-600/40 active:translate-y-0 active:bg-blue-700 sm:text-base"
-          >
-            <span className="absolute inset-0 -translate-x-full skew-x-12 bg-white/25 transition-transform duration-700 group-hover:translate-x-full" />
-            <ClipboardCheck className="h-4 w-4" aria-hidden="true" />
-            <span className="relative">Get My Free Website Audit</span>
-          </Link>
-          <a
-            href="https://wa.me/917589434135?text=Hi%20Harshdeep%2C%20I%27d%20like%20a%20free%20website%20audit%20for%20my%20business."
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-green-500 px-7 py-3.5 text-sm font-bold text-white shadow-lg shadow-green-500/25 transition-all duration-200 hover:-translate-y-0.5 hover:bg-green-400 hover:shadow-xl hover:shadow-green-500/40 active:translate-y-0 active:bg-green-600 sm:text-base"
-          >
-            <span className="absolute inset-0 -translate-x-full skew-x-12 bg-white/25 transition-transform duration-700 group-hover:translate-x-full" />
-            <MessageCircle className="h-4 w-4" aria-hidden="true" />
-            <span className="relative">Chat on WhatsApp</span>
-          </a>
-        </motion.div>
+          {/* Left Content */}
+          <div className="max-w-3xl">
+            {/* Eyebrow */}
+            <motion.div variants={fadeUp}>
+              <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3.5 py-2 text-sm font-medium text-slate-700 shadow-sm backdrop-blur">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-blue-500 opacity-60" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-blue-600" />
+                </span>
 
-        {/* Micro-copy */}
-        <motion.p variants={fadeUp} className="mb-7 text-xs text-slate-400">
-          No commitment required. Just honest advice about your online presence.
-        </motion.p>
+                Digital Products & Growth Agency
+              </div>
+            </motion.div>
 
-        {/* Trust Signals Row */}
-        <motion.ul
-          variants={fadeUp}
-          className="flex flex-wrap justify-center gap-2 text-xs sm:text-sm"
-        >
-          {TRUST_SIGNALS.map((signal) => (
-            <li
-              key={signal}
-              className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-slate-600 shadow-sm transition-colors duration-200 hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700"
+            {/* Heading */}
+            <motion.h1
+              variants={fadeUp}
+              className="mt-7 text-4xl font-bold tracking-[-0.04em] text-slate-950 sm:text-5xl lg:text-6xl xl:text-7xl"
             >
-              {signal}
-            </li>
-          ))}
-        </motion.ul>
+              We Build Digital Experiences That{" "}
+              <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 bg-clip-text text-transparent">
+                Grow Businesses.
+              </span>
+            </motion.h1>
 
-        {/* Location */}
-        <motion.p variants={fadeUp} className="mt-4 text-xs text-slate-400">
-          Serving Ludhiana · Amritsar · Jalandhar · Chandigarh · Patiala &amp; all of Punjab
-        </motion.p>
+            {/* Description */}
+            <motion.p
+              variants={fadeUp}
+              className="mt-6 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg sm:leading-8"
+            >
+              We design and develop high-performance websites, custom software
+              and digital growth solutions that help ambitious businesses
+              attract customers, streamline operations and scale online.
+            </motion.p>
 
-        {/* Phone numbers */}
-        <motion.div
-          variants={fadeUp}
-          className="mt-5 flex flex-wrap justify-center gap-5 text-xs text-slate-500 sm:text-sm"
-        >
-          <a
-            href="tel:+917589434135"
-            className="flex items-center gap-1.5 transition-colors hover:text-blue-600"
+            {/* CTAs */}
+            <motion.div
+              variants={fadeUp}
+              className="mt-8 flex flex-col gap-3 sm:flex-row"
+            >
+              <Link
+                href="/contact"
+                className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-slate-950 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-950/10 transition-all duration-200 hover:-translate-y-0.5 hover:bg-blue-600 hover:shadow-blue-600/20 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
+              >
+                Start Your Project
+
+                <ArrowRight
+                  size={18}
+                  className="transition-transform duration-200 group-hover:translate-x-1"
+                />
+              </Link>
+
+              <Link
+                href="/work"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-800 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2"
+              >
+                Explore Our Work
+              </Link>
+            </motion.div>
+
+            {/* Trust Points */}
+            <motion.div
+              variants={fadeUp}
+              className="mt-9 flex flex-wrap gap-x-5 gap-y-3 text-sm text-slate-600"
+            >
+              <div className="flex items-center gap-2">
+                <CheckCircle2 size={17} className="text-blue-600" />
+                Performance-focused
+              </div>
+
+              <div className="flex items-center gap-2">
+                <CheckCircle2 size={17} className="text-blue-600" />
+                Mobile-first
+              </div>
+
+              <div className="flex items-center gap-2">
+                <CheckCircle2 size={17} className="text-blue-600" />
+                Built for growth
+              </div>
+            </motion.div>
+
+            {/* SEO Supporting Copy */}
+            <motion.p
+              variants={fadeUp}
+              className="mt-6 max-w-2xl text-sm leading-6 text-slate-500"
+            >
+              Web development, custom software and SEO solutions for businesses
+              in Ludhiana, Punjab and across India.
+            </motion.p>
+          </div>
+
+          {/* Right Visual */}
+          <motion.div
+            variants={fadeUp}
+            className="relative mx-auto w-full max-w-xl lg:ml-auto"
           >
-            <Phone className="h-3.5 w-3.5" /> 75894 34135
-          </a>
-          <a
-            href="tel:+916284004413"
-            className="flex items-center gap-1.5 transition-colors hover:text-blue-600"
-          >
-            <Phone className="h-3.5 w-3.5" /> 62840 04413
-          </a>
+            {/* Main Card */}
+            <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-4 shadow-2xl shadow-slate-900/10 sm:p-5">
+              {/* Top Bar */}
+              <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+                <div className="flex items-center gap-2">
+                  <div className="flex gap-1.5">
+                    <span className="h-2.5 w-2.5 rounded-full bg-slate-200" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-slate-200" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-slate-200" />
+                  </div>
+
+                  <span className="ml-2 text-xs font-medium text-slate-400">
+                    hdwebstudios.in
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-1.5 text-xs font-medium text-emerald-600">
+                  <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                  Live
+                </div>
+              </div>
+
+              {/* Visual Content */}
+              <div className="relative mt-5 overflow-hidden rounded-2xl bg-slate-950 p-5 sm:p-7">
+                <div
+                  aria-hidden="true"
+                  className="absolute -right-20 -top-20 h-48 w-48 rounded-full bg-blue-600/30 blur-3xl"
+                />
+
+                <div
+                  aria-hidden="true"
+                  className="absolute -bottom-20 -left-20 h-48 w-48 rounded-full bg-violet-600/20 blur-3xl"
+                />
+
+                <div className="relative">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs font-medium text-slate-400">
+                        DIGITAL GROWTH SYSTEM
+                      </p>
+
+                      <h2 className="mt-2 text-xl font-semibold tracking-tight text-white sm:text-2xl">
+                        Build. Launch. Grow.
+                      </h2>
+                    </div>
+
+                    <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+                      <Sparkles
+                        size={20}
+                        className="text-blue-400"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Service Cards */}
+                  <div className="mt-7 grid grid-cols-3 gap-2.5 sm:gap-3">
+                    {services.map((service, index) => {
+                      const Icon = service.icon;
+
+                      return (
+                        <motion.div
+                          key={service.label}
+                          initial={
+                            shouldReduceMotion
+                              ? false
+                              : { opacity: 0, y: 12 }
+                          }
+                          animate={
+                            shouldReduceMotion
+                              ? {}
+                              : { opacity: 1, y: 0 }
+                          }
+                          transition={{
+                            delay: shouldReduceMotion
+                              ? 0
+                              : 0.5 + index * 0.1,
+                            duration: 0.5,
+                          }}
+                          className="rounded-xl border border-white/10 bg-white/[0.06] p-3 backdrop-blur-sm sm:p-4"
+                        >
+                          <Icon
+                            size={19}
+                            className="text-blue-400"
+                          />
+
+                          <p className="mt-3 text-xs font-medium text-slate-200 sm:text-sm">
+                            {service.label}
+                          </p>
+                        </motion.div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Growth Bar */}
+                  <div className="mt-5 rounded-xl border border-white/10 bg-white/[0.05] p-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-slate-400">
+                        Business Growth
+                      </span>
+
+                      <span className="text-xs font-semibold text-emerald-400">
+                        Optimized
+                      </span>
+                    </div>
+
+                    <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10">
+                      <motion.div
+                        initial={{
+                          width: shouldReduceMotion ? "82%" : "0%",
+                        }}
+                        animate={{
+                          width: "82%",
+                        }}
+                        transition={{
+                          delay: shouldReduceMotion ? 0 : 0.8,
+                          duration: shouldReduceMotion ? 0 : 1,
+                          ease: "easeOut",
+                        }}
+                        className="h-full rounded-full bg-gradient-to-r from-blue-500 to-violet-500"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Bottom Stats */}
+              <div className="grid grid-cols-3 divide-x divide-slate-100 pt-5">
+                <div className="px-3 text-center">
+                  <p className="text-lg font-bold text-slate-950">
+                    Fast
+                  </p>
+                  <p className="mt-1 text-[11px] text-slate-500 sm:text-xs">
+                    Performance
+                  </p>
+                </div>
+
+                <div className="px-3 text-center">
+                  <p className="text-lg font-bold text-slate-950">
+                    SEO
+                  </p>
+                  <p className="mt-1 text-[11px] text-slate-500 sm:text-xs">
+                    Ready
+                  </p>
+                </div>
+
+                <div className="px-3 text-center">
+                  <p className="text-lg font-bold text-slate-950">
+                    Scale
+                  </p>
+                  <p className="mt-1 text-[11px] text-slate-500 sm:text-xs">
+                    Focused
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Floating Badge */}
+            <motion.div
+              initial={
+                shouldReduceMotion
+                  ? false
+                  : { opacity: 0, scale: 0.9, y: 10 }
+              }
+              animate={
+                shouldReduceMotion
+                  ? {}
+                  : { opacity: 1, scale: 1, y: 0 }
+              }
+              transition={{
+                delay: shouldReduceMotion ? 0 : 1,
+                duration: 0.5,
+              }}
+              className="absolute -bottom-5 -left-3 hidden rounded-2xl border border-slate-200 bg-white p-3 shadow-xl shadow-slate-900/10 sm:block sm:-left-6"
+            >
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50">
+                  <CheckCircle2
+                    size={20}
+                    className="text-blue-600"
+                  />
+                </div>
+
+                <div>
+                  <p className="text-xs font-semibold text-slate-900">
+                    Built for business
+                  </p>
+
+                  <p className="mt-0.5 text-[11px] text-slate-500">
+                    Not just another website
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
         </motion.div>
-      </motion.div>
-
-      {/* Scroll indicator — a real interactive control */}
-      <button
-        type="button"
-        onClick={scrollToNext}
-        aria-label="Scroll to next section"
-        className="group absolute bottom-8 z-10 flex flex-col items-center gap-1 rounded-full p-2 text-slate-400 transition-colors duration-200 hover:text-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
-      >
-        <span className="text-xs">Scroll to explore</span>
-        <ChevronDown className="h-5 w-5 motion-safe:animate-bounce motion-reduce:animate-none" />
-      </button>
-
-      {/* Scoped keyframes for the drifting background blobs */}
-      <style jsx>{`
-        @keyframes drift-one {
-          0%,
-          100% {
-            transform: translate(0, 0);
-          }
-          50% {
-            transform: translate(40px, 30px);
-          }
-        }
-        @keyframes drift-two {
-          0%,
-          100% {
-            transform: translate(0, 0);
-          }
-          50% {
-            transform: translate(-30px, 40px);
-          }
-        }
-        @keyframes drift-three {
-          0%,
-          100% {
-            transform: translate(0, 0);
-          }
-          50% {
-            transform: translate(20px, -30px);
-          }
-        }
-        .blob-one {
-          animation: drift-one 14s ease-in-out infinite;
-        }
-        .blob-two {
-          animation: drift-two 16s ease-in-out infinite;
-        }
-        .blob-three {
-          animation: drift-three 18s ease-in-out infinite;
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .blob-one,
-          .blob-two,
-          .blob-three {
-            animation: none;
-          }
-        }
-      `}</style>
+      </div>
     </section>
   );
 }
