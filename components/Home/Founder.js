@@ -9,7 +9,7 @@ SearchCheck,
 Zap,
 } from "lucide-react";
 import Link from "next/link";
-
+import Image from "next/image";
 import { fadeUp, staggerContainer } from "../../lib/motion";
 
 const principles = [
@@ -60,36 +60,16 @@ return ( <section className="relative overflow-hidden bg-slate-950 py-20 text-wh
       >
         {/* Image Container */}
         <div className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-white/10 bg-slate-900 shadow-2xl">
-          {/* 
-            Replace this with your actual founder image.
-
-            Example:
-            <Image
-              src="/images/harshdeep-founder.jpg"
-              alt="Harshdeep - Founder of HD Web Studios"
-              fill
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 40vw"
-            />
-          */}
-
-          <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-blue-600/20 via-slate-900 to-slate-950">
-            <div className="text-center">
-              <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full border border-white/10 bg-white/5">
-                <span className="text-3xl font-bold text-white">
-                  HD
-                </span>
-              </div>
-
-              <p className="mt-5 text-sm font-medium text-slate-400">
-                Founder & Full-Stack Developer
-              </p>
-
-              <p className="mt-1 text-lg font-semibold text-white">
-                Harshdeep
-              </p>
-            </div>
-          </div>
+<div className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-white/10 bg-slate-900 shadow-2xl">
+  <Image
+    src="/images/founder.png"
+    alt="Harshdeep, Founder of HD Web Studios"
+    fill
+    priority
+    className="object-cover"
+    sizes="(max-width: 1024px) 100vw, 40vw"
+  />
+</div>
         </div>
 
         {/* Floating Badge */}
