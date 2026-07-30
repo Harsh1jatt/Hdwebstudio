@@ -1,8 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import SetupAdminForm from "@/components/admin/auth/SetupAdminForm";
-
+import SetupAdminForm from "@/components/Admin/auth/SetupAdminForm";
 export default function AdminSetupPage() {
   return (
     <main className="w-full">

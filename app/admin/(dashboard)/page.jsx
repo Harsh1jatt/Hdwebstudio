@@ -15,7 +15,7 @@ import { requireAdmin } from "../../../lib/auth";
 import connectDB from "../../../lib/db";
 import Contact from "../../../models/Contact";
 
-import QuickActions from "../../../components/admin/dashboard/QuickActions";
+import QuickActions from "@/components/Admin/dashboard/QuickActions";
 
 function formatDate(date) {
   if (!date) return "—";
