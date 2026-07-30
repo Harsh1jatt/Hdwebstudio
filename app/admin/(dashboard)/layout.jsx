@@ -1,6 +1,6 @@
-import AdminHeader from "@/components/admin/layout/AdminHeader";
-import AdminSidebar from "@/components/admin/layout/AdminSidebar";
-import AdminMobileNav from "@/components/admin/layout/AdminMobileNav";
+import AdminHeader from "@/components/Admin/layout/AdminHeader";
+import AdminSidebar from "@/components/Admin/layout/AdminSidebar";
+import AdminMobileNav from "@/components/Admin/layout/AdminMobileNav";
 
 export const metadata = {
   title: {
