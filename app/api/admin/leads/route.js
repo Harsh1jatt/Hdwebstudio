@@ -1,6 +1,6 @@
 import connectDB from '../../../../lib/db';
 import Contact from '../../../../models/Contact';
-import { requireAdminApi } from '../../../../lib/adminAuth';
+import { requireAdminApi } from '../../../../lib/auth';
 
 export async function GET(req){
   try{
@@ -17,6 +17,6 @@ export async function GET(req){
     return new Response(JSON.stringify({ success: true, leads, total, page, perPage }), { headers: { 'Content-Type': 'application/json' } });
   }catch(e){
     console.error('leads list error', e);
-    return new Response(JSON.stringify({ error: 'Server' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+    return new Response(JSON.stringify({ success: false, error: 'Server error' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 }

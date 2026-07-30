@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { requireAdminApi } from '../../../../lib/adminAuth';
+import { requireAdminApi } from '../../../../lib/auth';
 import connectDB from '../../../../lib/db';
 import Contact from '../../../../models/Contact';
 import { parse } from 'url';
