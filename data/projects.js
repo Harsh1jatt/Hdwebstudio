@@ -3,7 +3,7 @@ export const projects = [
     title: "Raretech Institute",
     slug: "raretech-institute",
     category: "Institute Website · Admin Panel · Exam Portal",
-    img: "/projects/raretech.jpg",
+    img: "/projects/placeholder.svg",
     link: "http://raretech.co.in/",
     featured: true,
     type: "client",
@@ -66,7 +66,7 @@ export const projects = [
     title: "JMD Solar Energy",
     slug: "jmd-solar-energy",
     category: "Business Website · Solar Industry",
-    img: "/projects/jmdsolar.png",
+    img: "/projects/placeholder.svg",
     link: "https://jmdsolarenergy.ct.ws/",
     featured: false,
     type: "client",
@@ -128,7 +128,7 @@ export const projects = [
     title: "Vastu Divine",
     slug: "vastu-divine",
     category: "Business Website · Service Business",
-    img: "/projects/vastudivine.jpg",
+    img: "/projects/placeholder.svg",
     link: "https://vastudivine.in/",
     featured: false,
     type: "client",
@@ -186,3 +186,29 @@ export const projects = [
     },
   },
 ];
+
+export function getProject(slug) {
+  return projects.find((project) => project.slug === slug) ?? null;
+}
+
+export function getAllProjectSlugs() {
+  return projects.map((project) => project.slug);
+}
+
+export function getFeaturedProject() {
+  return projects.find((project) => project.featured) ?? null;
+}
+
+export function getOtherProjects() {
+  return projects.filter((project) => !project.featured);
+}
+
+/** Normalized image path (supports legacy `img` field). */
+export function getProjectImage(project) {
+  return project?.img ?? project?.image ?? null;
+}
+
+/** Short summary for cards and listings. */
+export function getProjectShortDescription(project) {
+  return project?.shortDescription ?? project?.challenge ?? "";
+}

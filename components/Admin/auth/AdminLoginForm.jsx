@@ -102,7 +102,7 @@ export default function AdminLoginForm() {
       <div className="mb-8 flex items-center gap-3 lg:hidden">
         <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
           <img
-            src="/logo.png"
+            src="/logo.svg"
             alt="HD Web Studios"
             className="h-full w-full object-contain"
           />

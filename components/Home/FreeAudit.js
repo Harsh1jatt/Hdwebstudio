@@ -11,6 +11,7 @@ ArrowRight,
 import { useState } from "react";
 
 import { fadeUp } from "../../lib/motion";
+import { whatsAppUrl } from "@/config/site";
 
 const auditPoints = [
 "A review of your website's user experience and first impression",
@@ -126,9 +127,7 @@ Website: ${websiteUrl}
 I'd like to understand how my website can be improved.`;
 
  
-const whatsappUrl = `https://wa.me/917589434135?text=${encodeURIComponent(
-  message
-)}`;
+const whatsappUrl = whatsAppUrl(message);
 
 window.open(whatsappUrl, "_blank", "noopener,noreferrer");
 
@@ -239,7 +238,7 @@ return ( <section className="relative overflow-hidden bg-gradient-to-br from-blu
 
             <div className="mt-7 flex flex-col gap-3">
               <a
-                href="https://wa.me/917589434135"
+                href={whatsAppUrl()}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700"

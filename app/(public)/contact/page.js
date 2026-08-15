@@ -6,6 +6,12 @@ import { motion } from "framer-motion";
 import { fadeUp, staggerContainer } from "@/lib/motion";
 import { Phone, Mail } from "lucide-react";
 import { SiWhatsapp } from "react-icons/si";
+import {
+  siteConfig,
+  telUrl,
+  mailtoUrl,
+  whatsAppUrl,
+} from "@/config/site";
 
 export default function ContactPage() {
   const router = useRouter();
@@ -90,9 +96,9 @@ export default function ContactPage() {
           >
             <Phone className="w-10 h-10 text-blue-600 mb-4 group-hover:animate-bounce" />
             <h3 className="text-xl font-semibold mb-2">Call</h3>
-            <p className="text-gray-600 mb-4">+91 75894 34135</p>
+            <p className="text-gray-600 mb-4">{siteConfig.phoneDisplay}</p>
             <a
-              href="tel:+917589434135"
+              href={telUrl()}
               className="px-6 py-2 rounded-full bg-blue-600 text-white font-medium shadow hover:bg-blue-700 transition"
             >
               Call Now
@@ -106,9 +112,9 @@ export default function ContactPage() {
           >
             <Mail className="w-10 h-10 text-green-600 mb-4 group-hover:animate-pulse" />
             <h3 className="text-xl font-semibold mb-2">Email</h3>
-            <p className="text-gray-600 mb-4">contact@harshdeepweb.com</p>
+            <p className="text-gray-600 mb-4">{siteConfig.email}</p>
             <a
-              href="mailto:contact@harshdeepweb.com"
+              href={mailtoUrl()}
               className="px-6 py-2 rounded-full bg-green-600 text-white font-medium shadow hover:bg-green-700 transition"
             >
               Send Email
@@ -122,9 +128,9 @@ export default function ContactPage() {
           >
             <SiWhatsapp className="w-10 h-10 text-emerald-500 mb-4 group-hover:animate-pulse" />
             <h3 className="text-xl font-semibold mb-2">Whatsapp</h3>
-            <p className="text-gray-600 mb-4">+91 75894 34135</p>
+            <p className="text-gray-600 mb-4">{siteConfig.phoneDisplay}</p>
             <a
-              href="https://wa.me/917589434135"
+              href={whatsAppUrl()}
               target="_blank"
               rel="noopener noreferrer"
               className="px-6 py-2 rounded-full bg-emerald-500 text-white font-medium shadow hover:bg-emerald-600 transition"

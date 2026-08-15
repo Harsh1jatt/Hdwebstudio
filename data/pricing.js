@@ -1,0 +1,120 @@
+/**
+ * Pricing plan data (amounts and features).
+ * Icon values are Lucide icon names resolved in the pricing page UI.
+ */
+
+export const pricingPlans = [
+  {
+    title: "One Page Website",
+    price: "₹8,000",
+    discountPrice: "₹6,500",
+    icon: "Globe",
+    features: [
+      "Modern responsive design",
+      "Fast-loading & SEO ready",
+      "Basic contact form",
+      "Delivery in 5-7 days",
+      "Up to 3 revisions included",
+    ],
+    note: "Perfect for startups or individuals who need a clean and professional online presence.",
+  },
+  {
+    title: "Multi-Page Business Website",
+    price: "₹15,000",
+    discountPrice: "₹12,000",
+    popular: true,
+    icon: "Globe",
+    features: [
+      "Up to 7 pages (Home, About, Services, Contact, etc.)",
+      "SEO-friendly architecture",
+      "Custom design & animations",
+      "Admin-friendly structure",
+      "Up to 3 revisions included",
+    ],
+    note: "Ideal for small businesses looking for a complete digital identity with multiple pages.",
+  },
+  {
+    title: "E-commerce Website",
+    price: "₹30,000",
+    discountPrice: "₹25,000",
+    icon: "ShoppingCart",
+    features: [
+      "Product pages with categories",
+      "Cart & Checkout flow",
+      "Payment gateway integration",
+      "Order & inventory management",
+      "Up to 3 revisions included",
+    ],
+    note: "Designed for businesses ready to sell online with smooth shopping experiences.",
+  },
+  {
+    title: "WordPress Website",
+    price: "₹12,000",
+    discountPrice: "₹9,500",
+    icon: "Wordpress",
+    features: [
+      "Business or blog website",
+      "Premium theme setup",
+      "Essential plugins installed",
+      "Easy to manage dashboard",
+      "Up to 3 revisions included",
+    ],
+    note: "Great choice if you want a website that's easy to manage with WordPress.",
+  },
+  {
+    title: "Landing Page Design",
+    price: "₹10,000",
+    discountPrice: "₹7,500",
+    icon: "PenTool",
+    features: [
+      "Conversion-focused design",
+      "A/B testing ready",
+      "Responsive & modern UI",
+      "Delivery in 4 days",
+      "Up to 3 revisions included",
+    ],
+    note: "Best for marketing campaigns or single product/service promotions.",
+  },
+  {
+    title: "Portfolio Website",
+    price: "₹12,000",
+    discountPrice: "₹9,000",
+    icon: "Briefcase",
+    features: [
+      "Showcase projects & case studies",
+      "Image/video gallery support",
+      "SEO & speed optimized",
+      "Custom branding",
+      "Up to 3 revisions included",
+    ],
+    note: "Show off your skills, projects, and achievements with a professional portfolio.",
+  },
+  {
+    title: "SEO Optimization",
+    price: "₹5,000/mo",
+    discountPrice: "₹4,000/mo",
+    icon: "Search",
+    features: [
+      "On-page SEO & keyword optimization",
+      "Google indexing & sitemap setup",
+      "Performance & speed tuning",
+      "Monthly growth report",
+      "Up to 3 revisions included",
+    ],
+    note: "Boost your website rankings and visibility with consistent SEO efforts.",
+  },
+  {
+    title: "Maintenance & Support",
+    price: "₹2,500/mo",
+    discountPrice: "₹2,000/mo",
+    icon: "Wrench",
+    features: [
+      "Regular updates & security",
+      "Backup & monitoring",
+      "Bug fixes & small edits",
+      "Priority support",
+      "Up to 3 revisions included",
+    ],
+    note: "Peace of mind with continuous support, updates, and maintenance.",
+  },
+];

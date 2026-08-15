@@ -3,10 +3,11 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, ArrowUpRight, Sparkles } from "lucide-react";
+import ServiceIcon from "@/components/common/ServiceIcon";
 
 /**
- * services: [{ href, label, description?, icon?: LucideIcon }]
- * icon/description optional — cards fall back to a simpler look without them.
+ * services: [{ href, label, description?, icon?: string }]
+ * icon is a Lucide icon name resolved client-side via ServiceIcon.
  */
 export default function MegaMenu({ services }) {
   return (
@@ -38,16 +39,15 @@ export default function MegaMenu({ services }) {
         {/* Card grid */}
         <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3">
           {services.map((service) => {
-            const Icon = service.icon;
             return (
               <li key={service.href}>
                 <Link
                   href={service.href}
                   className="group relative flex h-full flex-col gap-3 rounded-xl border border-slate-200/80 bg-white p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-blue-200 hover:bg-blue-50/40 hover:shadow-md hover:shadow-blue-900/[0.06]"
                 >
-                  {Icon && (
+                  {service.icon && (
                     <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 text-slate-500 transition-colors duration-200 group-hover:bg-blue-600 group-hover:text-white">
-                      <Icon size={16} strokeWidth={2} aria-hidden="true" />
+                      <ServiceIcon name={service.icon} size={16} strokeWidth={2} />
                     </span>
                   )}
                   <span className="min-w-0">

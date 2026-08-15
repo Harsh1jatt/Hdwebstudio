@@ -1,101 +1,63 @@
 import Navbar from "@/components/navbar/Navbar";
 import Footer from "@/components/common/Footer";
-import Script from "next/script";
-import { getServices } from "@/lib/getServices";
 import WhatsAppFloat from "@/components/common/WhatsAppFloat";
-
-const SITE_URL = "https://hdwebstudios.in";
+import { getServices } from "@/lib/getServices";
+import { absoluteUrl, siteConfig } from "@/config/site";
 
 const jsonLd = {
   "@context": "https://schema.org",
-
   "@graph": [
     {
       "@type": "Organization",
-
-      "@id": `${SITE_URL}/#organization`,
-
-      name: "HD Web Studios",
-
-      url: SITE_URL,
-
-      logo: `${SITE_URL}/logo.png`,
-
-      image: `${SITE_URL}/og-default.png`,
-
-      description:
-        "Professional Website Development Company in Ludhiana offering Next.js, React, MERN Stack, SEO, eCommerce and Custom Software Development.",
-
-      email: "contact@hdwebstudios.in",
-
-      telephone: "+917589434135",
-
+      "@id": `${siteConfig.url}/#organization`,
+      name: siteConfig.name,
+      url: siteConfig.url,
+      logo: absoluteUrl(siteConfig.assets.logo),
+      image: absoluteUrl(siteConfig.assets.ogImage),
+      description: siteConfig.description,
+      email: siteConfig.email,
+      telephone: siteConfig.phone,
       founder: {
         "@type": "Person",
         name: "Harshdeep",
       },
-
       contactPoint: {
         "@type": "ContactPoint",
-        telephone: "+917589434135",
+        telephone: siteConfig.phone,
         contactType: "Customer Support",
         areaServed: "IN",
-        availableLanguage: [
-          "English",
-          "Hindi",
-          "Punjabi",
-        ],
+        availableLanguage: ["English", "Hindi", "Punjabi"],
       },
     },
-
     {
       "@type": "LocalBusiness",
-
-      "@id": `${SITE_URL}/#localbusiness`,
-
-      name: "HD Web Studios",
-
-      url: SITE_URL,
-
-      logo: `${SITE_URL}/logo.png`,
-
-      image: `${SITE_URL}/og-image.png`,
-
-      telephone: "+917589434135",
-
-      email: "contact@hdwebstudios.in",
-
+      "@id": `${siteConfig.url}/#localbusiness`,
+      name: siteConfig.name,
+      url: siteConfig.url,
+      logo: absoluteUrl(siteConfig.assets.logo),
+      image: absoluteUrl(siteConfig.assets.ogImage),
+      telephone: siteConfig.phone,
+      email: siteConfig.email,
       priceRange: "₹₹",
-
       address: {
         "@type": "PostalAddress",
-
-        addressLocality: "Ludhiana",
-
-        addressRegion: "Punjab",
-
-        postalCode: "141001",
-
-        addressCountry: "IN",
+        addressLocality: siteConfig.address.city,
+        addressRegion: siteConfig.address.state,
+        postalCode: siteConfig.address.pincode,
+        addressCountry: siteConfig.address.country,
       },
-
       geo: {
         "@type": "GeoCoordinates",
-
         latitude: 30.900965,
-
         longitude: 75.857277,
       },
-
       areaServed: {
         "@type": "Country",
         name: "India",
       },
-
       openingHoursSpecification: [
         {
           "@type": "OpeningHoursSpecification",
-
           dayOfWeek: [
             "Monday",
             "Tuesday",
@@ -104,45 +66,37 @@ const jsonLd = {
             "Friday",
             "Saturday",
           ],
-
           opens: "09:00",
-
           closes: "18:00",
         },
       ],
     },
-
     {
       "@type": "WebSite",
-
-      "@id": `${SITE_URL}/#website`,
-
-      url: SITE_URL,
-
-      name: "HD Web Studios",
-
+      "@id": `${siteConfig.url}/#website`,
+      url: siteConfig.url,
+      name: siteConfig.name,
       publisher: {
-        "@id": `${SITE_URL}/#organization`,
+        "@id": `${siteConfig.url}/#organization`,
       },
-
       inLanguage: "en-IN",
     },
   ],
 };
 
-export default function PublicLayout({ children }) {
+export default async function PublicLayout({ children }) {
+  const services = await getServices();
+
   return (
     <>
-      <Script
-        id="schema-org"
+      <script
         type="application/ld+json"
-        strategy="beforeInteractive"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(jsonLd),
         }}
       />
 
-      <Navbar services={getServices()} />
+      <Navbar services={services} />
 
       <main>{children}</main>
 

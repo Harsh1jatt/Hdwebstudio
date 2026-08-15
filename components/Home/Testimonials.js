@@ -6,51 +6,6 @@ import { Star, Quote, ExternalLink } from "lucide-react";
 import { fadeUp, staggerContainer } from "../../lib/motion";
 
 /*
-IMPORTANT:
-Only add real client testimonials here.
-
-If a testimonial is from Google:
-
-* Set source: "Google"
-* Add the actual Google review URL if available.
-
-If it is a direct client testimonial:
-
-* Set source: "Client Feedback"
-* Do not call it a "Verified Google Review".
-  */
-
-const testimonials = [
-{
-name: "Aman Kumar",
-role: "Founder, Raretech Institute",
-location: "Ludhiana, Punjab",
-quote:
-"Harshdeep delivered our complete institute website, admin panel, and online exam portal on time and within budget. Our student admissions process is now much more organized and digital.",
-initials: "AK",
-source: "Client Feedback",
-},
-{
-name: "Priya Sharma",
-role: "Owner, JMD Solar Energy",
-location: "Punjab",
-quote:
-"The website gave our business a much more professional online presence. The team was easy to communicate with, explained everything clearly, and provided support after launch.",
-initials: "PS",
-source: "Client Feedback",
-},
-{
-name: "Rohit Mehta",
-role: "Business Owner",
-location: "Ludhiana, Punjab",
-quote:
-"The entire process was transparent and straightforward. I liked that everything was explained clearly and there were no unexpected costs during the project.",
-initials: "RM",
-source: "Client Feedback",
-},
-];
-
-/*
 Add your real Google Business Profile information here.
 
 Example:
@@ -86,7 +41,7 @@ return ( <div className="flex h-11 w-11 shrink-0 items-center justify-center rou
 );
 }
 
-export default function Testimonials() {
+export default function Testimonials({ testimonials = [] }) {
 const shouldReduceMotion = useReducedMotion();
 
 return ( <section className="bg-white py-20 sm:py-24 lg:py-28"> <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
@@ -152,7 +107,6 @@ return ( <section className="bg-white py-20 sm:py-24 lg:py-28"> <div className="
           variants={fadeUp}
           className="group relative flex h-full flex-col rounded-2xl border border-slate-200 bg-slate-50 p-7 transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:bg-white hover:shadow-xl hover:shadow-slate-900/5 sm:p-8"
         >
-          {/* Quote Icon */}
           <div className="absolute right-7 top-7 text-slate-200 transition-colors duration-300 group-hover:text-blue-100">
             <Quote
               className="h-10 w-10"
@@ -160,17 +114,14 @@ return ( <section className="bg-white py-20 sm:py-24 lg:py-28"> <div className="
             />
           </div>
 
-          {/* Rating */}
           <div className="relative">
             <StarRating />
           </div>
 
-          {/* Quote */}
           <blockquote className="relative mt-6 flex-1 text-[15px] leading-7 text-slate-600">
-            "{testimonial.quote}"
+            &ldquo;{testimonial.content || testimonial.quote}&rdquo;
           </blockquote>
 
-          {/* Client */}
           <footer className="mt-8 flex items-center gap-3 border-t border-slate-200 pt-6">
             <ClientAvatar initials={testimonial.initials} />
 
@@ -183,18 +134,13 @@ return ( <section className="bg-white py-20 sm:py-24 lg:py-28"> <div className="
                 {testimonial.role}
               </p>
 
-              <p className="mt-0.5 text-xs text-slate-400">
-                {testimonial.location}
-              </p>
+              {testimonial.location && (
+                <p className="mt-0.5 text-xs text-slate-400">
+                  {testimonial.location}
+                </p>
+              )}
             </div>
           </footer>
-
-          {/* Source */}
-          {testimonial.source && (
-            <p className="mt-5 text-xs font-medium text-slate-400">
-              {testimonial.source}
-            </p>
-          )}
         </motion.article>
       ))}
     </motion.div>

@@ -2,6 +2,10 @@
 // Production-ready homepage for SEO, local lead generation, and CRO.
 // ─────────────────────────────────────────────────────────────────────────────
 
+import { getPublishedServices } from "@/lib/services";
+import { getPublishedProjects } from "@/lib/projects";
+import { getPublishedTestimonials } from "@/lib/testimonials";
+import { getPublishedFaqs } from "@/lib/faqs";
 import Hero from "@/components/Home/Hero";
 import TrustBar from "@/components/Home/TrustBar";
 import PortfolioPreview from "@/components/Home/PortfolioPreview";
@@ -13,7 +17,7 @@ import FreeAudit from "@/components/Home/FreeAudit";
 import Testimonials from "@/components/Home/Testimonials";
 import FAQ from "@/components/Home/FAQ";
 import FinalCTA from "@/components/Home/FinalCTA";
-import WhatsAppFloat from "@/components/common/WhatsAppFloat";
+import { absoluteUrl, siteConfig } from "@/config/site";
 
 // ─── SEO Metadata ─────────────────────────────────────────────────────────────
 export const metadata = {
@@ -40,7 +44,7 @@ export const metadata = {
   ],
 
   alternates: {
-    canonical: "https://hdwebstudios.in",
+    canonical: siteConfig.url,
   },
 
   openGraph: {
@@ -50,9 +54,9 @@ export const metadata = {
     description:
       "Professional Website Development, Next.js, MERN Stack, eCommerce, SEO and Custom Software Solutions.",
 
-    url: "https://hdwebstudios.in",
+    url: siteConfig.url,
 
-    siteName: "HD Web Studios",
+    siteName: siteConfig.name,
 
     locale: "en_IN",
 
@@ -60,10 +64,10 @@ export const metadata = {
 
     images: [
       {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "HD Web Studios",
+        url: absoluteUrl(siteConfig.assets.logo),
+        width: 64,
+        height: 64,
+        alt: siteConfig.name,
       },
     ],
   },
@@ -77,7 +81,7 @@ export const metadata = {
     description:
       "Professional Website Development, Next.js, MERN Stack & SEO Services.",
 
-    images: ["/og-image.png"],
+    images: [absoluteUrl(siteConfig.assets.logo)],
   },
 };
 // ─── JSON-LD Schemas (inject into <head> via layout.js or Script component) ───
@@ -154,19 +158,24 @@ export const metadata = {
 //   }
 // }
 
-export default function HomePage() {
+export default async function HomePage() {
+  const services = await getPublishedServices();
+  const projects = await getPublishedProjects();
+  const testimonials = await getPublishedTestimonials();
+  const faqs = await getPublishedFaqs();
+
   return (
     <>
       <Hero />
       <TrustBar />
-      <PortfolioPreview />
-      <Services />
+      <PortfolioPreview projects={projects} />
+      <Services services={services} />
       <Founder />
       <Benefits />
       <Process />
       <FreeAudit />
-      <Testimonials />
-      <FAQ />
+      <Testimonials testimonials={testimonials} />
+      <FAQ faqs={faqs} />
       <FinalCTA />
     </>
   );

@@ -2,9 +2,9 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { defaultWhatsAppMessage, whatsAppUrl } from "@/config/site";
 
-const WHATSAPP_URL =
-"https://wa.me/917589434135?text=Hi%20Harshdeep%2C%20I'd%20like%20to%20discuss%20a%20digital%20solution%20for%20my%20business.";
+const WHATSAPP_URL = whatsAppUrl(defaultWhatsAppMessage);
 
 export default function WhatsAppFloat() {
 const [visible, setVisible] = useState(false);

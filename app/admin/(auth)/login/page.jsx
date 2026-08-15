@@ -26,7 +26,7 @@ export default function AdminLoginPage() {
             <div className="flex items-center gap-4">
               <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl bg-white shadow-lg">
                 <Image
-                  src="/logo.png"
+                  src="/logo.svg"
                   alt="HD Web Studios"
                   width={48}
                   height={48}

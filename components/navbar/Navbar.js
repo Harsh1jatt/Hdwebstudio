@@ -53,7 +53,7 @@ export default function Navbar({ services }) {
               className="relative flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full ring-1 ring-white/70"
             >
               <Image
-                src="/logo.png"
+                src="/logo.svg"
                 alt="HD Web Studios Logo"
                 width={36}
                 height={36}

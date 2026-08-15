@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { fadeUp } from "../../lib/motion";
+import { whatsAppUrl } from "@/config/site";
 import { Check, X, AlertCircle } from "lucide-react";
 
 const rows = [
@@ -154,7 +155,9 @@ export default function WhyChooseUs() {
           className="text-center mt-12"
         >
           <a
-            href="https://wa.me/917589434135?text=Hi%20Harshdeep%2C%20I%27d%20like%20to%20discuss%20my%20website%20project."
+            href={whatsAppUrl(
+              "Hi Harshdeep, I'd like to discuss my website project."
+            )}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-10 py-4 rounded-full bg-blue-600 text-white font-semibold shadow-lg hover:bg-blue-700 transition duration-300"
