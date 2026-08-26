@@ -1,329 +1,280 @@
-// app/about/page.jsx
-"use client";
-import { motion } from "framer-motion";
-import { fadeUp, staggerContainer } from "@/lib/motion";
+import Link from "next/link";
+import Image from "next/image";
 import {
-  Rocket,
-  ShieldCheck,
-  Handshake,
-  Gauge,
-  Award,
-  Clock,
-  CheckCircle2,
-  PhoneCall,
-  Palette,
+  ArrowRight,
   Code2,
-  Search,
+  Gauge,
+  SearchCheck,
+  KeyRound,
+  MessageCircle,
+  Zap,
+  Smartphone,
 } from "lucide-react";
+import { absoluteUrl, siteConfig, whatsAppUrl, defaultWhatsAppMessage } from "@/config/site";
+
+export const metadata = {
+  title: "About HD Web Studios | Founder-Led Website Development in Ludhiana",
+  description:
+    "HD Web Studios is a founder-led digital agency in Ludhiana, Punjab. We build professional websites, local SEO, and digital growth solutions for businesses across India.",
+  alternates: {
+    canonical: absoluteUrl("/about"),
+  },
+  openGraph: {
+    title: "About HD Web Studios",
+    description:
+      "Founder-led website development agency in Ludhiana, Punjab. Professional websites, local SEO, and digital growth.",
+    url: absoluteUrl("/about"),
+    siteName: siteConfig.name,
+    type: "website",
+    images: [
+      {
+        url: absoluteUrl("/images/founder.png"),
+        width: 800,
+        height: 1000,
+        alt: "Harshdeep, Founder of HD Web Studios",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About HD Web Studios",
+    description:
+      "Founder-led website development agency in Ludhiana, Punjab.",
+    images: [absoluteUrl("/images/founder.png")],
+  },
+};
+
+const principles = [
+  {
+    icon: Code2,
+    title: "Built With Purpose",
+    desc: "Every website is designed around your business goals, audience, and customer journey.",
+  },
+  {
+    icon: Zap,
+    title: "Performance First",
+    desc: "Fast-loading, responsive experiences that work smoothly across modern devices.",
+  },
+  {
+    icon: SearchCheck,
+    title: "SEO Ready",
+    desc: "Clean technical foundations that give your website a strong starting point for search visibility.",
+  },
+];
+
+const values = [
+  {
+    icon: Code2,
+    title: "Direct Developer Communication",
+    desc: "You communicate directly with the person building your project. No layers, no handoffs, no confusion.",
+  },
+  {
+    icon: Gauge,
+    title: "Performance Comes First",
+    desc: "Clean code, optimized assets, responsive layouts, and efficient loading are standard, not optional extras.",
+  },
+  {
+    icon: Smartphone,
+    title: "Designed for Every Screen",
+    desc: "Your customers discover you from phones, tablets, or desktops. We build for all of them.",
+  },
+  {
+    icon: SearchCheck,
+    title: "SEO-Ready From the Start",
+    desc: "Semantic structure, metadata, performance, and mobile usability built in from day one.",
+  },
+  {
+    icon: KeyRound,
+    title: "You Own Your Digital Assets",
+    desc: "Your domain, content, and data belong to you. No lock-in, no dependencies.",
+  },
+  {
+    icon: MessageCircle,
+    title: "Support Beyond Launch",
+    desc: "Launching your website is not the end. We remain available for updates, fixes, and improvements.",
+  },
+];
 
 export default function AboutPage() {
   return (
-    <section className="relative overflow-hidden">
-      {/* Background Glow */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(37,99,235,0.15),transparent_60%),radial-gradient(ellipse_at_bottom,rgba(34,197,94,0.15),transparent_60%)]" />
-
-      {/* --- HERO --- */}
-      <div className="relative max-w-7xl mx-auto px-6 pt-28 pb-20">
-        <motion.div
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          className="text-center max-w-3xl mx-auto"
-        >
-          <motion.h1
-            variants={fadeUp}
-            className="text-4xl md:text-6xl font-extrabold tracking-tight bg-gradient-to-r from-blue-600 via-emerald-500 to-cyan-400 bg-clip-text text-transparent drop-shadow-sm"
-          >
-            Crafting Digital Experiences That Drive Growth
-          </motion.h1>
-          <motion.p
-            variants={fadeUp}
-            className="mt-5 text-lg md:text-xl text-slate-600"
-          >
-            Harshdeep Web Studios is a Ludhiana-based agency delivering{" "}
-            <span className="font-semibold text-slate-800">
-              modern, high-performance, SEO-ready websites
-            </span>{" "}
-            for businesses across India & beyond.
-          </motion.p>
-          <motion.div variants={fadeUp} className="mt-8 flex justify-center gap-4">
-            <a
-              href="/contact"
-              className="px-6 py-3 rounded-full bg-blue-600 text-white font-semibold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition"
-            >
-              Book a Free Consultation
-            </a>
-            <a
-              href="/portfolio"
-              className="px-6 py-3 rounded-full border border-blue-600 text-blue-600 font-semibold hover:bg-blue-600 hover:text-white transition"
-            >
-              See Our Work
-            </a>
-          </motion.div>
-        </motion.div>
-      </div>
-
-      {/* --- STORY --- */}
-      <div className="relative max-w-7xl mx-auto px-6 pb-20">
-        <div className="grid md:grid-cols-2 gap-10 items-center">
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
-            className="rounded-2xl overflow-hidden shadow-xl"
-          >
-            <img
-              src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1600&q=80"
-              alt="Design collaboration"
-              className="w-full h-[420px] object-cover"
-            />
-          </motion.div>
-
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
-            className="space-y-5"
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900">
-              Our Story
-            </h2>
-            <p className="text-slate-600 leading-relaxed">
-              We started with one goal: help businesses turn websites into{" "}
-              <span className="font-semibold">real growth engines</span>. From
-              one-page sites to custom solutions, we ship with clean UI, strong
-              performance, and scalable architecture.
+    <div className="bg-white">
+      {/* Hero */}
+      <section className="border-b border-slate-100 bg-slate-50">
+        <div className="mx-auto max-w-7xl px-5 py-20 sm:px-6 sm:py-28">
+          <div className="mx-auto max-w-3xl text-center">
+            <p className="text-sm font-bold uppercase tracking-[0.18em] text-blue-600">
+              About HD Web Studios
             </p>
-            <p className="text-slate-600 leading-relaxed">
-              As a nimble team led by{" "}
-              <span className="font-semibold">Harshdeep</span>, we work like a
-              product partner — aligning with your vision, shipping fast, and
-              delivering measurable results.
+            <h1 className="mt-5 text-4xl font-bold tracking-tight text-slate-950 sm:text-5xl lg:text-6xl">
+              A Founder-Led Digital Agency
+              <span className="text-slate-400"> in Ludhiana.</span>
+            </h1>
+            <p className="mt-5 text-lg leading-8 text-slate-600">
+              We help businesses build a professional digital presence that gets
+              them discovered, trusted, and contacted. Not just a website &mdash;
+              a complete digital growth system.
             </p>
-
-            {/* Highlights */}
-            <div className="grid sm:grid-cols-3 gap-4 pt-2">
-              {[
-                { icon: <Gauge className="w-5 h-5 text-blue-600" />, label: "Performance First" },
-                { icon: <Search className="w-5 h-5 text-emerald-600" />, label: "SEO-Ready Builds" },
-                { icon: <ShieldCheck className="w-5 h-5 text-cyan-600" />, label: "Secure Code" },
-              ].map((item, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-2 bg-white border border-slate-200 rounded-xl px-3 py-2"
-                >
-                  {item.icon}
-                  <span className="text-sm font-medium text-slate-700">{item.label}</span>
-                </div>
-              ))}
+            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <Link
+                href="/contact"
+                className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-slate-950 px-6 py-3.5 text-sm font-bold text-white shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:bg-blue-600"
+              >
+                Get a Free Audit
+                <ArrowRight size={17} className="transition-transform duration-200 group-hover:translate-x-1" />
+              </Link>
+              <Link
+                href="/portfolio"
+                className="inline-flex min-h-12 items-center justify-center rounded-xl border border-slate-200 bg-white px-6 py-3.5 text-sm font-semibold text-slate-700 transition-colors duration-200 hover:border-slate-300 hover:bg-slate-50"
+              >
+                View Our Work
+              </Link>
             </div>
-          </motion.div>
-        </div>
-      </div>
-
-      {/* --- WHY CHOOSE US --- */}
-      <div className="relative max-w-7xl mx-auto px-6 pb-20">
-        <motion.h3
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          className="text-3xl md:text-4xl font-bold text-center text-slate-900 mb-12"
-        >
-          Why Choose Us
-        </motion.h3>
-
-        <motion.div
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          className="grid md:grid-cols-4 gap-6"
-        >
-          {[
-            {
-              icon: <Rocket className="w-8 h-8 text-blue-600" />,
-              title: "Modern Stack",
-              desc: "MERN, Tailwind, Next.js — fast, scalable, future-ready.",
-            },
-            {
-              icon: <Handshake className="w-8 h-8 text-emerald-600" />,
-              title: "Client-Centric",
-              desc: "Your growth = our roadmap. We focus on outcomes.",
-            },
-            {
-              icon: <Award className="w-8 h-8 text-pink-600" />,
-              title: "Quality First",
-              desc: "Pixel-perfect UI, Core Web Vitals, clean code.",
-            },
-            {
-              icon: <Clock className="w-8 h-8 text-amber-600" />,
-              title: "On-Time Delivery",
-              desc: "Clear timelines, proactive updates, zero surprises.",
-            },
-          ].map((card, i) => (
-            <motion.div
-              key={i}
-              variants={fadeUp}
-              className="p-6 bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition"
-            >
-              <div className="mb-4">{card.icon}</div>
-              <h4 className="text-lg font-semibold text-slate-900 mb-1">{card.title}</h4>
-              <p className="text-slate-600 text-sm leading-relaxed">{card.desc}</p>
-            </motion.div>
-          ))}
-        </motion.div>
-      </div>
-
-      {/* --- PROCESS --- */}
-      <div className="relative max-w-7xl mx-auto px-6 py-20">
-        <motion.h3
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          className="text-3xl md:text-4xl font-bold text-center text-slate-900 mb-12"
-        >
-          Our Process — Simple & Transparent
-        </motion.h3>
-
-        <div className="max-w-3xl mx-auto">
-          {[
-            {
-              icon: <PhoneCall className="w-6 h-6 text-blue-600" />,
-              title: "1) Discovery Call",
-              desc: "We understand your goals, audience, and success metrics.",
-            },
-            {
-              icon: <Palette className="w-6 h-6 text-rose-600" />,
-              title: "2) Design & Content",
-              desc: "Clean UI/UX, modern layouts, persuasive copywriting.",
-            },
-            {
-              icon: <Code2 className="w-6 h-6 text-emerald-600" />,
-              title: "3) Development",
-              desc: "Performance-first build with SEO & accessibility hygiene.",
-            },
-            {
-              icon: <CheckCircle2 className="w-6 h-6 text-cyan-600" />,
-              title: "4) Review & Revisions",
-              desc: "Up to 3 revisions included before final launch.",
-            },
-          ].map((step, i) => (
-            <motion.div
-              key={i}
-              variants={fadeUp}
-              className="relative pl-12 pb-10 last:pb-0"
-            >
-              <div className="absolute left-0 top-1.5 w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center shadow-sm">
-                {step.icon}
-              </div>
-              {i < 3 && (
-                <div className="absolute left-4 top-10 h-full w-px bg-slate-200" />
-              )}
-              <h4 className="text-lg font-semibold text-slate-900">{step.title}</h4>
-              <p className="text-slate-600">{step.desc}</p>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-
-      {/* --- FOUNDER --- */}
-      <div className="relative max-w-7xl mx-auto px-6 pb-20">
-        <div className="grid md:grid-cols-5 gap-10 items-center">
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="show"
-            className="md:col-span-2 rounded-2xl overflow-hidden shadow-xl"
-          >
-            <img
-              src="https://images.unsplash.com/photo-1543269865-cbf427effbad?q=80&w=1600&auto=format&fit=crop"
-              alt="Founder workspace"
-              className="w-full h-[360px] object-cover"
-            />
-          </motion.div>
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="show"
-            className="md:col-span-3"
-          >
-            <h3 className="text-2xl font-bold text-slate-900 mb-3">
-              A Note from the Founder
-            </h3>
-            <p className="text-slate-600 leading-relaxed">
-              I’m <span className="font-semibold">Harshdeep</span>. I started Harshdeep Web
-              Studios to empower businesses in Ludhiana and across India with{" "}
-              <span className="font-semibold">modern, honest, and impactful</span>{" "}
-              web solutions. We keep things simple: clear communication,
-              transparent pricing, and websites that convert.
-            </p>
-            <p className="text-slate-600 leading-relaxed mt-4">
-              We’re not just builders — we’re your long-term partners.
-              Let’s build something great together.
-            </p>
-          </motion.div>
-        </div>
-      </div>
-
-      {/* --- TECH STRIP --- */}
-      <div className="relative max-w-7xl mx-auto px-6 pb-20">
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 md:p-8 shadow-sm">
-          <p className="text-center text-sm uppercase tracking-wider text-slate-500 mb-6">
-            Tools & Technologies We Love
-          </p>
-          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-4 items-center opacity-90">
-            {[
-              "https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/NextJS-Light.svg",
-              "https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/React-Light.svg",
-              "https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/TailwindCSS-Light.svg",
-              "https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/NodeJS-Light.svg",
-              "https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/MongoDB.svg",
-              "https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/Wordpress.svg",
-            ].map((src, i) => (
-              <div key={i} className="flex items-center justify-center p-3">
-                <img src={src} alt="Tech logo" className="h-10 w-auto" />
-              </div>
-            ))}
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* --- CTA --- */}
-      <div className="relative max-w-7xl mx-auto px-6 pb-24">
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="show"
-          className="text-center bg-gradient-to-r from-blue-600 via-emerald-500 to-cyan-500 text-white p-10 md:p-14 rounded-3xl shadow-xl"
-        >
-          <h3 className="text-3xl md:text-4xl font-extrabold mb-4">
-            Let’s Build Something Great Together
-          </h3>
-          <p className="text-white/90 max-w-2xl mx-auto mb-8">
-            Book a free consultation and discover how we can help you grow your
-            business with a modern, high-performing website.
+      {/* Founder Story */}
+      <section className="py-16 sm:py-20">
+        <div className="mx-auto max-w-7xl px-5 sm:px-6">
+          <div className="grid items-center gap-12 lg:grid-cols-[0.4fr_0.6fr] lg:gap-16">
+            <div className="relative mx-auto w-full max-w-sm">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-slate-200 bg-slate-100">
+                <Image
+                  src="/images/founder.png"
+                  alt="Harshdeep, Founder of HD Web Studios"
+                  fill
+                  priority
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 40vw"
+                />
+              </div>
+            </div>
+
+            <div>
+              <p className="text-sm font-bold uppercase tracking-[0.18em] text-blue-600">
+                Meet the Founder
+              </p>
+              <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">
+                Hi, I&apos;m Harshdeep.
+              </h2>
+              <div className="mt-6 space-y-4 text-base leading-7 text-slate-600">
+                <p>
+                  I started HD Web Studios with a simple belief: a business
+                  website should be more than just a digital visiting card. It
+                  should communicate your value, build trust with your customers,
+                  and make it easier for people to take action.
+                </p>
+                <p>
+                  I work directly with every client. No layers of account managers
+                  and developers between you and the person actually building your
+                  website. You get clear communication, honest timelines, and a
+                  developer who understands your business goals.
+                </p>
+                <p>
+                  My approach combines modern web development, thoughtful design,
+                  performance optimization, and SEO fundamentals to create
+                  websites that are built around real business requirements &mdash;
+                  not from one-size-fits-all templates.
+                </p>
+              </div>
+
+              <div className="mt-8 grid gap-4 sm:grid-cols-3">
+                {principles.map((principle) => {
+                  const Icon = principle.icon;
+                  return (
+                    <div
+                      key={principle.title}
+                      className="rounded-2xl border border-slate-200 bg-slate-50 p-5"
+                    >
+                      <Icon className="h-5 w-5 text-blue-600" strokeWidth={1.8} />
+                      <h3 className="mt-4 text-sm font-bold text-slate-900">
+                        {principle.title}
+                      </h3>
+                      <p className="mt-2 text-xs leading-5 text-slate-500">
+                        {principle.desc}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Why HD Web Studios */}
+      <section className="border-y border-slate-100 bg-slate-50 py-16 sm:py-20">
+        <div className="mx-auto max-w-7xl px-5 sm:px-6">
+          <div className="mx-auto max-w-3xl text-center">
+            <p className="text-sm font-bold uppercase tracking-[0.18em] text-blue-600">
+              Why HD Web Studios
+            </p>
+            <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">
+              A Better Way to Build
+              <span className="text-slate-400"> Your Digital Presence.</span>
+            </h2>
+            <p className="mt-4 text-base leading-7 text-slate-600">
+              We combine thoughtful design, modern development, performance, and
+              SEO fundamentals to create digital experiences that are built for
+              your business.
+            </p>
+          </div>
+
+          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {values.map((value) => {
+              const Icon = value.icon;
+              return (
+                <div
+                  key={value.title}
+                  className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+                >
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                    <Icon className="h-5 w-5" strokeWidth={1.8} />
+                  </div>
+                  <h3 className="mt-5 text-base font-bold tracking-tight text-slate-950">
+                    {value.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-500">
+                    {value.desc}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-16 sm:py-20">
+        <div className="mx-auto max-w-3xl px-5 text-center sm:px-6">
+          <h2 className="text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">
+            Let&apos;s Build Something That Moves Your Business Forward.
+          </h2>
+          <p className="mt-4 text-base leading-7 text-slate-600">
+            Whether you need a professional website, better local search
+            visibility, or a complete digital presence &mdash; let&apos;s
+            discuss what you&apos;re trying to achieve.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
+          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <Link
               href="/contact"
-              className="px-7 py-3 rounded-full bg-white text-blue-700 font-semibold shadow-lg hover:bg-slate-100 transition"
+              className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-slate-950 px-6 py-3.5 text-sm font-bold text-white shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:bg-blue-600"
             >
-              Book a Call
-            </a>
+              Get a Free Digital Audit
+              <ArrowRight size={17} className="transition-transform duration-200 group-hover:translate-x-1" />
+            </Link>
             <a
-              href="/services"
-              className="px-7 py-3 rounded-full border border-white/70 text-white font-semibold hover:bg-white hover:text-blue-700 transition"
+              href={whatsAppUrl(defaultWhatsAppMessage)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-6 py-3.5 text-sm font-semibold text-slate-700 transition-colors duration-200 hover:border-slate-300 hover:bg-slate-50"
             >
-              Explore Services
+              <MessageCircle size={16} />
+              WhatsApp Us
             </a>
           </div>
-        </motion.div>
-      </div>
-    </section>
+        </div>
+      </section>
+    </div>
   );
 }

@@ -1,14 +1,20 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { FaWordpress } from "react-icons/fa";
-
 import { fadeUp, staggerContainer } from "@/lib/motion";
 import { resolveIcon } from "@/lib/icons";
 
+function WordpressIcon({ className }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
+      <path fill="currentColor" d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm5.894 6.111l-1.97 9.285c-.146.658-.537.818-1.084.508l-2.998-2.211-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.334-.374-.121L7.668 14.5l-2.966-.924c-.646-.203-.658-.646.135-.954l11.59-4.467c.538-.193 1.006.132.83.924l-.117-.068z"/>
+    </svg>
+  );
+}
+
 function PlanIcon({ name, className }) {
   if (name === "Wordpress") {
-    return <FaWordpress className={className} />;
+    return <WordpressIcon className={className} />;
   }
 
   const Icon = resolveIcon(name);

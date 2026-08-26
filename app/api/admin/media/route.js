@@ -2,11 +2,7 @@ import { NextResponse } from "next/server";
 import connectDB from "@/lib/db";
 import { requireAdminApi } from "@/lib/auth";
 import Media from "@/models/Media";
-import {
-  saveUploadedFile,
-  deleteUploadedFile,
-  generateUploadFilename,
-} from "@/lib/media/storage";
+import { saveUploadedFile, deleteUploadedFile } from "@/lib/media/storage";
 
 const ALLOWED_MIME = new Set([
   "image/jpeg",
@@ -16,7 +12,7 @@ const ALLOWED_MIME = new Set([
   "image/svg+xml",
 ]);
 
-const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_SIZE = 10 * 1024 * 1024; // 10MB
 
 const EXT_MAP = {
   "image/jpeg": "jpg",
@@ -61,29 +57,39 @@ export async function POST(req) {
   }
 
   if (!ALLOWED_MIME.has(file.type)) {
-    return NextResponse.json({ success: false, error: `File type ${file.type} not allowed` }, { status: 400 });
+    return NextResponse.json({ success: false, error: `File type ${file.type} not allowed. Accepted: JPEG, PNG, WebP, AVIF, SVG.` }, { status: 400 });
   }
 
   if (file.size > MAX_SIZE) {
-    return NextResponse.json({ success: false, error: "File too large (max 5MB)" }, { status: 400 });
+    return NextResponse.json({ success: false, error: "File too large (max 10MB)" }, { status: 400 });
   }
 
   const ext = EXT_MAP[file.type] || "bin";
   const filename = generateUploadFilename(ext);
 
   const buffer = Buffer.from(await file.arrayBuffer());
-  const url = await saveUploadedFile(buffer, filename);
+  const folder = formData.get("folder") || "media";
+  const alt = formData.get("alt") || "";
+  const title = formData.get("title") || "";
+
+  const result = await saveUploadedFile(buffer, filename, {
+    mimeType: file.type,
+    folder,
+    title,
+    alt,
+  });
 
   await connectDB();
-  const folder = formData.get("folder") || "general";
-  const alt = formData.get("alt") || "";
 
   const doc = await Media.create({
     filename,
     originalName: file.name || filename,
-    url,
+    url: result.url,
+    publicId: result.publicId || "",
     mimeType: file.type,
     size: file.size,
+    width: result.width || 0,
+    height: result.height || 0,
     alt,
     folder,
     uploadedBy: auth.name || auth.email || "",
@@ -93,4 +99,9 @@ export async function POST(req) {
     success: true,
     item: { ...doc.toObject(), id: doc._id.toString() },
   }, { status: 201 });
+}
+
+function generateUploadFilename(ext) {
+  const safeExt = String(ext || "bin").replace(/[^a-z0-9]/gi, "").slice(0, 8);
+  return `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${safeExt}`;
 }

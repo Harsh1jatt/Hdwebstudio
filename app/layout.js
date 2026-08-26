@@ -7,17 +7,18 @@ export const metadata = {
     template: "%s | HD Web Studios",
   },
   description:
-    "HD Web Studios - Website Development and Digital Solutions.",
+    "HD Web Studios is a professional website development company in Ludhiana, Punjab. We build business websites, local SEO, and digital growth solutions for businesses across India.",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en-IN">
+      <head>
+        <GoogleAnalytics gaId="G-X5WDX0TLD9" />
+      </head>
       <body className="bg-slate-50 text-slate-900 antialiased">
         {children}
       </body>
-
-      <GoogleAnalytics gaId="G-X5WDX0TLD9" />
     </html>
   );
 }

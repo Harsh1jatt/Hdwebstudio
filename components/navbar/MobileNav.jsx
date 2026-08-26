@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ChevronDown } from "lucide-react";
+import { X, ChevronDown, MessageCircle, Phone } from "lucide-react";
+import { whatsAppUrl, defaultWhatsAppMessage, telUrl } from "@/config/site";
 
 export default function MobileNav({ links, services, pathname, open, onClose }) {
   const [mounted, setMounted] = useState(false);
@@ -148,14 +149,34 @@ export default function MobileNav({ links, services, pathname, open, onClose }) 
                   );
                 })}
 
+                {/* Mobile Quick Actions */}
+                <li className="mt-4 flex gap-2">
+                  <a
+                    href={whatsAppUrl(defaultWhatsAppMessage)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-emerald-500 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-emerald-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+                  >
+                    <MessageCircle size={16} aria-hidden="true" />
+                    WhatsApp
+                  </a>
+                  <a
+                    href={telUrl()}
+                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900"
+                  >
+                    <Phone size={16} aria-hidden="true" />
+                    Call
+                  </a>
+                </li>
+
                 {/* Mobile CTA */}
-                <li className="mt-4">
+                <li className="mt-3">
                   <Link
                     href="/contact"
                     onClick={onClose}
                     className="inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 px-5 py-3 text-sm font-semibold text-white shadow-md shadow-blue-500/25 transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                   >
-                    Get Free Quote
+                    Free Digital Audit
                   </Link>
                 </li>
               </ul>

@@ -118,7 +118,7 @@ export default function DesktopNav({ links, services, pathname }) {
           href="/contact"
           className="inline-flex items-center rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-blue-500/25 transition-shadow duration-200 hover:shadow-lg hover:shadow-blue-500/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
         >
-          Get Free Quote
+          Free Audit
         </Link>
       </motion.div>
     </nav>

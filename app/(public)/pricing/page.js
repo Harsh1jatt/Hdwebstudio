@@ -2,8 +2,6 @@ import PricingPlans from "@/components/pricing/PricingPlans";
 import { getPublishedPricingPlans } from "@/lib/pricing";
 import { absoluteUrl, siteConfig } from "@/config/site";
 
-export const dynamic = "force-dynamic";
-
 export const metadata = {
   title: "Pricing | HD Web Studios",
   description:

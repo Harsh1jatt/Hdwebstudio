@@ -43,10 +43,11 @@ export async function DELETE(req, { params }) {
   const doc = await Media.findByIdAndDelete(id);
   if (!doc) return NextResponse.json({ success: false, error: "Not found" }, { status: 404 });
 
+  // Clean up the file from storage (Cloudinary or local)
   try {
     await deleteUploadedFile(doc.url);
   } catch {
-    /* file may already be gone */
+    // File may already be gone
   }
 
   return NextResponse.json({ success: true });

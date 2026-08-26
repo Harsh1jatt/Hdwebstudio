@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Plus } from "lucide-react";
 import { Container, SectionHeading } from "./shared/ui";
 
+
 export default function FAQSection({ service }) {
   const [openIndex, setOpenIndex] = useState(0);
 

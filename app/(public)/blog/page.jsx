@@ -3,17 +3,46 @@ import Image from "next/image";
 
 import { getFeaturedAndLatestPublishedPosts, getPublishedPosts } from "@/lib/posts";
 import { siteConfig } from "@/config/site";
+import { absoluteUrl } from "@/config/site";
 
 import { ArrowRight } from "lucide-react";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600; // Revalidate every hour
+
+export async function generateMetadata({ searchParams }) {
+  const params = await searchParams;
+  const category = params?.category || "";
+  const title = category
+    ? `${category} Articles | HD Web Studios Blog`
+    : "Blog | HD Web Studios";
+  const description = category
+    ? `Read our latest articles about ${category.toLowerCase()} for businesses.`
+    : "Practical articles on web development, SEO, and digital growth for businesses.";
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: absoluteUrl(category ? `/blog?category=${encodeURIComponent(category)}` : "/blog"),
+    },
+    openGraph: {
+      title,
+      description,
+      url: absoluteUrl("/blog"),
+      siteName: siteConfig.name,
+      type: "website",
+    },
+  };
+}
 
 export default async function BlogListingPage({ searchParams }) {
-  const page = Math.max(1, parseInt(searchParams?.page || "1", 10) || 1);
+  const params = await searchParams;
+  const page = Math.max(1, parseInt(params?.page || "1", 10) || 1);
+  const category = params?.category || "";
   const perPage = 6;
 
   const { featured } = await getFeaturedAndLatestPublishedPosts();
-  const latest = await getPublishedPosts({ page, perPage });
+  const latest = await getPublishedPosts({ page, perPage, category: category || undefined });
 
   const featuredSlugs = new Set((featured || []).map((p) => p.slug));
   const latestFiltered = latest.filter((p) => !featuredSlugs.has(p.slug));
@@ -31,6 +60,31 @@ export default async function BlogListingPage({ searchParams }) {
           <p className="mt-4 max-w-2xl text-lg leading-8 text-slate-600">
             Practical articles that help you build faster, clearer experiences — and improve conversions.
           </p>
+        </div>
+      </section>
+
+      {/* Category Filter */}
+      <section className="mx-auto max-w-7xl px-5 pt-8 sm:px-6">
+        <div className="flex flex-wrap items-center gap-2">
+          <Link
+            href="/blog"
+            className={`inline-flex items-center rounded-full px-4 py-2 text-sm font-semibold transition ${
+              !category ? "bg-slate-950 text-white" : "border border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:text-slate-900"
+            }`}
+          >
+            All
+          </Link>
+          {["Web Development", "SEO", "Digital Growth", "Design", "Business"].map((cat) => (
+            <Link
+              key={cat}
+              href={`/blog?category=${encodeURIComponent(cat)}`}
+              className={`inline-flex items-center rounded-full px-4 py-2 text-sm font-semibold transition ${
+                category === cat ? "bg-slate-950 text-white" : "border border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:text-slate-900"
+              }`}
+            >
+              {cat}
+            </Link>
+          ))}
         </div>
       </section>
 

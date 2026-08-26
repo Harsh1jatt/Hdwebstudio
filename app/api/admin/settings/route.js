@@ -3,6 +3,7 @@ import connectDB from "@/lib/db";
 import { requireAdminApi } from "@/lib/auth";
 import SiteSettings from "@/models/SiteSettings";
 import { settingsPayloadSchema } from "@/utils/settingsValidation";
+import { clearSettingsCache } from "@/lib/settings";
 
 export async function GET(req) {
   const auth = await requireAdminApi(req);
@@ -35,6 +36,7 @@ export async function PUT(req) {
   }
 
   await settings.save();
+  clearSettingsCache(); // Invalidate cache so public site picks up new values
   const updated = settings.toObject();
   return NextResponse.json({ success: true, settings: { ...updated, id: updated._id.toString(), _id: undefined } });
 }

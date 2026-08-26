@@ -6,6 +6,8 @@ const SiteSettingsSchema = new mongoose.Schema(
       name: { type: String, trim: true, default: "HD Web Studios" },
       shortName: { type: String, trim: true, default: "HDWS" },
       tagline: { type: String, trim: true, default: "" },
+      logo: { type: String, trim: true, default: "" },
+      favicon: { type: String, trim: true, default: "" },
     },
     contact: {
       email: { type: String, trim: true, default: "contact@hdwebstudios.in" },
@@ -21,6 +23,7 @@ const SiteSettingsSchema = new mongoose.Schema(
       facebook: { type: String, trim: true, default: "" },
       instagram: { type: String, trim: true, default: "" },
       linkedin: { type: String, trim: true, default: "" },
+      twitter: { type: String, trim: true, default: "" },
       github: { type: String, trim: true, default: "" },
       youtube: { type: String, trim: true, default: "" },
     },

@@ -10,7 +10,7 @@ import { navigation } from "@/config/navigation";
 import DesktopNav from "./DesktopNav.jsx";
 import MobileNav from "./MobileNav.jsx";
 
-export default function Navbar({ services }) {
+export default function Navbar({ services, logoUrl = "/logo.png" }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
@@ -53,7 +53,7 @@ export default function Navbar({ services }) {
               className="relative flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full ring-1 ring-white/70"
             >
               <Image
-                src="/logo.svg"
+                src={logoUrl}
                 alt="HD Web Studios Logo"
                 width={36}
                 height={36}

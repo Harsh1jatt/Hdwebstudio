@@ -18,8 +18,6 @@ export const metadata = {
   },
 };
 
-export const dynamic = "force-dynamic";
-
 export default async function PortfolioPage() {
   const projects = await getPublishedProjects();
   return <PortfolioListing projects={projects} />;

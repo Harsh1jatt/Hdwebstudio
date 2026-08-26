@@ -2,6 +2,7 @@ import { absoluteUrl } from "@/config/site";
 import { getAllPublishedServiceSlugs } from "@/lib/services";
 import { getAllPublishedProjectSlugs } from "@/lib/projects";
 import { getAllPublishedPostSlugs } from "@/lib/posts";
+import { getAllPublishedStorySlugs } from "@/lib/stories";
 
 export const dynamic = "force-dynamic";
 
@@ -14,6 +15,7 @@ export default async function sitemap() {
     { path: "/services", priority: 0.9, changeFrequency: "weekly" },
     { path: "/portfolio", priority: 0.9, changeFrequency: "weekly" },
     { path: "/blog", priority: 0.7, changeFrequency: "weekly" },
+    { path: "/stories", priority: 0.7, changeFrequency: "weekly" },
     { path: "/pricing", priority: 0.7, changeFrequency: "monthly" },
     { path: "/contact", priority: 0.9, changeFrequency: "monthly" },
     { path: "/privacy", priority: 0.3, changeFrequency: "yearly" },
@@ -42,7 +44,14 @@ export default async function sitemap() {
     changeFrequency: "monthly",
   }));
 
-  return [...staticRoutes, ...serviceRoutes, ...portfolioRoutes, ...blogRoutes].map(
+  const storySlugs = await getAllPublishedStorySlugs();
+  const storyRoutes = storySlugs.map((slug) => ({
+    path: `/stories/${slug}`,
+    priority: 0.7,
+    changeFrequency: "monthly",
+  }));
+
+  return [...staticRoutes, ...serviceRoutes, ...portfolioRoutes, ...blogRoutes, ...storyRoutes].map(
     ({ path, priority, changeFrequency }) => ({
       url: absoluteUrl(path),
       lastModified: currentDate,

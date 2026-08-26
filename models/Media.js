@@ -5,6 +5,7 @@ const MediaSchema = new mongoose.Schema(
     filename: { type: String, required: true, trim: true },
     originalName: { type: String, trim: true, default: "" },
     url: { type: String, required: true, trim: true },
+    publicId: { type: String, trim: true, default: "" }, // Cloudinary public ID
     mimeType: { type: String, trim: true, default: "" },
     size: { type: Number, default: 0 },
     width: { type: Number, default: 0 },

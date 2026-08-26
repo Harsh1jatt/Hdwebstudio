@@ -7,6 +7,8 @@ export const settingsPayloadSchema = z.object({
     name: optStr,
     shortName: optStr,
     tagline: optStr,
+    logo: optStr,
+    favicon: optStr,
   }).optional(),
   contact: z.object({
     email: optStr,
@@ -22,6 +24,7 @@ export const settingsPayloadSchema = z.object({
     facebook: optStr,
     instagram: optStr,
     linkedin: optStr,
+    twitter: optStr,
     github: optStr,
     youtube: optStr,
   }).optional(),

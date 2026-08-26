@@ -1,67 +1,101 @@
 "use client";
 
-import Link from 'next/link';
-import { Home, Mail, Layers, Settings, Sparkles, LogOut, BookOpen, MessageSquare, HelpCircle, DollarSign, Users, Image as ImageIcon } from 'lucide-react';
-import { usePathname, useRouter } from 'next/navigation';
-
-const navItems = [
-  { href: '/admin', label: 'Dashboard', icon: Home, enabled: true },
-  { href: '/admin/leads', label: 'Leads', icon: Mail, enabled: true },
-  { href: '/admin/services', label: 'Services', icon: Sparkles, enabled: true },
-  { href: '/admin/projects', label: 'Projects', icon: Layers, enabled: true },
-  { href: '/admin/blog', label: 'Blog', icon: BookOpen, enabled: true },
-  { href: '/admin/testimonials', label: 'Testimonials', icon: MessageSquare, enabled: true },
-  { href: '/admin/faqs', label: 'FAQs', icon: HelpCircle, enabled: true },
-  { href: '/admin/pricing', label: 'Pricing', icon: DollarSign, enabled: true },
-  { href: '/admin/team', label: 'Team', icon: Users, enabled: true },
-  { href: '/admin/media', label: 'Media', icon: ImageIcon, enabled: true },
-  { href: '/admin/settings', label: 'Settings', icon: Settings, enabled: true },
-];
+import { useState } from "react";
+import Link from "next/link";
+import { LogOut, PanelLeftClose, PanelLeft } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import adminNavGroups from "@/config/admin-nav";
 
 export default function AdminSidebar() {
   const pathname = usePathname();
   const router = useRouter();
+  const [collapsed, setCollapsed] = useState(false);
 
   async function handleLogout() {
-    await fetch('/api/admin/logout', { method: 'POST' });
-    router.push('/admin/login');
+    await fetch("/api/admin/logout", { method: "POST" });
+    router.push("/admin/login");
   }
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-20 w-72 border-r border-slate-800/70 bg-slate-950/95 px-4 py-6 backdrop-blur-xl lg:static lg:translate-x-0">
-      <div className="flex items-center gap-3 px-2 pb-6">
-        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-500 to-indigo-500 text-sm font-bold text-white shadow-lg shadow-sky-500/20">
-          HD
-        </div>
-        <div>
-          <p className="text-sm font-semibold text-white">HD Web Studios</p>
-          <p className="text-xs text-slate-500">Admin Console</p>
-        </div>
+    <aside
+      className={`fixed inset-y-0 left-0 z-20 flex flex-col border-r border-slate-200 bg-white transition-all duration-300 lg:static lg:translate-x-0 ${
+        collapsed ? "w-[68px]" : "w-64"
+      }`}
+    >
+      {/* Brand + Collapse toggle */}
+      <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3">
+        <Link href="/admin" className="flex items-center gap-2.5">
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-xs font-bold text-white">
+            HD
+          </span>
+          {!collapsed && (
+            <div>
+              <p className="text-sm font-semibold text-slate-900">HD Web Studios</p>
+              <p className="text-[11px] text-slate-400">Admin</p>
+            </div>
+          )}
+        </Link>
+        <button
+          type="button"
+          onClick={() => setCollapsed(!collapsed)}
+          className="hidden lg:flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
+          title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+        >
+          {collapsed ? <PanelLeft className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
+        </button>
       </div>
 
-      <nav className="space-y-0.5 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 220px)' }}>
-        {navItems.map((item) => {
-          const active = pathname === item.href || (item.href !== '/admin' && pathname.startsWith(item.href + '/'));
-          return (
-            <Link
-              href={item.href}
-              key={item.label}
-              className={`group flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-medium transition ${active ? 'bg-slate-900 text-white shadow-sm shadow-slate-900/25' : 'text-slate-400 hover:bg-slate-900/80 hover:text-white'} ${!item.enabled ? 'cursor-not-allowed opacity-50' : ''}`}
-              onClick={(event) => {
-                if (!item.enabled) event.preventDefault();
-              }}
-            >
-              <item.icon className="h-4 w-4" />
-              {item.label}
-            </Link>
-          );
-        })}
+      {/* Navigation */}
+      <nav className="flex-1 overflow-y-auto px-3 py-4" style={{ maxHeight: "calc(100vh - 140px)" }}>
+        {adminNavGroups.map((group) => (
+          <div key={group.label} className="mb-5">
+            {!collapsed && (
+              <p className="mb-1.5 px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+                {group.label}
+              </p>
+            )}
+            {collapsed && <div className="mx-3 mb-2 h-px bg-slate-100" />}
+            <div className="space-y-0.5">
+              {group.items.map((item) => {
+                const active =
+                  pathname === item.href ||
+                  (item.href !== "/admin" && pathname.startsWith(item.href + "/"));
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    title={collapsed ? item.label : undefined}
+                    className={`flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition ${
+                      active
+                        ? "bg-blue-50 text-blue-700"
+                        : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                    } ${collapsed ? "justify-center px-2" : ""}`}
+                  >
+                    <item.icon
+                      className={`h-4 w-4 shrink-0 ${active ? "text-blue-600" : "text-slate-400"}`}
+                    />
+                    {!collapsed && item.label}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        ))}
       </nav>
 
-      <button onClick={handleLogout} className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-red-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-red-500">
-        <LogOut className="h-4 w-4" />
-        Sign out
-      </button>
+      {/* Bottom: Logout only */}
+      <div className="border-t border-slate-100 px-3 py-3">
+        <button
+          onClick={handleLogout}
+          className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-red-50 hover:text-red-600 ${
+            collapsed ? "justify-center px-2" : ""
+          }`}
+          title={collapsed ? "Sign out" : undefined}
+        >
+          <LogOut className="h-4 w-4 shrink-0" />
+          {!collapsed && "Sign out"}
+        </button>
+      </div>
     </aside>
   );
 }

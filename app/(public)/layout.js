@@ -1,108 +1,130 @@
 import Navbar from "@/components/navbar/Navbar";
 import Footer from "@/components/common/Footer";
 import WhatsAppFloat from "@/components/common/WhatsAppFloat";
-import { getServices } from "@/lib/getServices";
+import { getPublishedServices } from "@/lib/services";
 import { absoluteUrl, siteConfig } from "@/config/site";
-
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Organization",
-      "@id": `${siteConfig.url}/#organization`,
-      name: siteConfig.name,
-      url: siteConfig.url,
-      logo: absoluteUrl(siteConfig.assets.logo),
-      image: absoluteUrl(siteConfig.assets.ogImage),
-      description: siteConfig.description,
-      email: siteConfig.email,
-      telephone: siteConfig.phone,
-      founder: {
-        "@type": "Person",
-        name: "Harshdeep",
-      },
-      contactPoint: {
-        "@type": "ContactPoint",
-        telephone: siteConfig.phone,
-        contactType: "Customer Support",
-        areaServed: "IN",
-        availableLanguage: ["English", "Hindi", "Punjabi"],
-      },
-    },
-    {
-      "@type": "LocalBusiness",
-      "@id": `${siteConfig.url}/#localbusiness`,
-      name: siteConfig.name,
-      url: siteConfig.url,
-      logo: absoluteUrl(siteConfig.assets.logo),
-      image: absoluteUrl(siteConfig.assets.ogImage),
-      telephone: siteConfig.phone,
-      email: siteConfig.email,
-      priceRange: "₹₹",
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: siteConfig.address.city,
-        addressRegion: siteConfig.address.state,
-        postalCode: siteConfig.address.pincode,
-        addressCountry: siteConfig.address.country,
-      },
-      geo: {
-        "@type": "GeoCoordinates",
-        latitude: 30.900965,
-        longitude: 75.857277,
-      },
-      areaServed: {
-        "@type": "Country",
-        name: "India",
-      },
-      openingHoursSpecification: [
-        {
-          "@type": "OpeningHoursSpecification",
-          dayOfWeek: [
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday",
-          ],
-          opens: "09:00",
-          closes: "18:00",
-        },
-      ],
-    },
-    {
-      "@type": "WebSite",
-      "@id": `${siteConfig.url}/#website`,
-      url: siteConfig.url,
-      name: siteConfig.name,
-      publisher: {
-        "@id": `${siteConfig.url}/#organization`,
-      },
-      inLanguage: "en-IN",
-    },
-  ],
-};
+import { getSiteSettings } from "@/lib/settings";
 
 export default async function PublicLayout({ children }) {
-  const services = await getServices();
+  const [services, settings] = await Promise.all([
+    getPublishedServices(),
+    getSiteSettings(),
+  ]);
+
+  // Map services for navbar
+  const navServices = services.map((s) => ({
+    slug: s.slug,
+    href: `/services/${s.slug}`,
+    label: s.eyebrow || s.title,
+    description: s.shortDescription || "",
+    icon: s.icon,
+  }));
+
+  // Map services for footer
+  const footerServices = services.slice(0, 4).map((s) => ({
+    title: s.title || s.eyebrow,
+    slug: s.slug,
+  }));
+
+  // DB settings override hardcoded defaults
+  const site = {
+    ...siteConfig,
+    name: settings.brand?.name || siteConfig.name,
+    shortName: settings.brand?.shortName || siteConfig.shortName,
+    phone: settings.contact?.phone || siteConfig.phone,
+    email: settings.contact?.email || siteConfig.email,
+    address: {
+      city: settings.contact?.city || siteConfig.address.city,
+      state: settings.contact?.state || siteConfig.address.state,
+      country: settings.contact?.country || siteConfig.address.country,
+      pincode: settings.contact?.pincode || siteConfig.address.pincode,
+    },
+    socials: {
+      facebook: settings.social?.facebook || siteConfig.socials.facebook,
+      instagram: settings.social?.instagram || siteConfig.socials.instagram,
+      linkedin: settings.social?.linkedin || siteConfig.socials.linkedin,
+      twitter: settings.social?.twitter || "",
+      github: settings.social?.github || siteConfig.socials.github,
+      youtube: settings.social?.youtube || "",
+    },
+  };
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": `${site.url}/#organization`,
+        name: site.name,
+        url: site.url,
+        logo: absoluteUrl(settings.brand?.logo || siteConfig.assets.logo),
+        image: absoluteUrl(settings.brand?.logo || siteConfig.assets.ogImage),
+        description: siteConfig.description,
+        email: site.email,
+        telephone: site.phone,
+        founder: { "@type": "Person", name: "Harshdeep" },
+        contactPoint: {
+          "@type": "ContactPoint",
+          telephone: site.phone,
+          contactType: "Customer Support",
+          areaServed: "IN",
+          availableLanguage: ["English", "Hindi", "Punjabi"],
+        },
+        sameAs: Object.values(site.socials).filter(Boolean),
+      },
+      {
+        "@type": "LocalBusiness",
+        "@id": `${site.url}/#localbusiness`,
+        name: site.name,
+        url: site.url,
+        logo: absoluteUrl(settings.brand?.logo || siteConfig.assets.logo),
+        image: absoluteUrl(settings.brand?.logo || siteConfig.assets.ogImage),
+        telephone: site.phone,
+        email: site.email,
+        priceRange: "₹₹",
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: site.address.city,
+          addressRegion: site.address.state,
+          postalCode: site.address.pincode,
+          addressCountry: site.address.country,
+        },
+        geo: { "@type": "GeoCoordinates", latitude: 30.900965, longitude: 75.857277 },
+        areaServed: { "@type": "Country", name: "India" },
+        openingHoursSpecification: [
+          {
+            "@type": "OpeningHoursSpecification",
+            dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+            opens: "09:00",
+            closes: "18:00",
+          },
+        ],
+      },
+      {
+        "@type": "WebSite",
+        "@id": `${site.url}/#website`,
+        url: site.url,
+        name: site.name,
+        publisher: { "@id": `${site.url}/#organization` },
+        inLanguage: "en-IN",
+      },
+    ],
+  };
 
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(jsonLd),
-        }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <Navbar services={services} />
+      <Navbar services={navServices} logoUrl={settings.brand?.logo || siteConfig.assets.logo} />
 
       <main>{children}</main>
 
       <WhatsAppFloat />
 
-      <Footer />
+      <Footer services={footerServices} site={site} />
     </>
   );
 }
