@@ -24,12 +24,16 @@ export async function PUT(req) {
   let settings = await SiteSettings.findOne();
   if (!settings) settings = new SiteSettings();
 
-  const sections = ["brand", "contact", "social", "seo", "business", "analytics", "footer"];
+  const sections = ["brand", "contact", "social", "seo", "business", "analytics", "footer", "homepage", "servicePage"];
   for (const section of sections) {
     if (result.data[section]) {
-      for (const [key, value] of Object.entries(result.data[section])) {
-        if (value !== undefined) {
-          settings[section][key] = value;
+      if (section === "servicePage" || section === "homepage") {
+        settings[section] = result.data[section];
+      } else {
+        for (const [key, value] of Object.entries(result.data[section])) {
+          if (value !== undefined) {
+            settings[section][key] = value;
+          }
         }
       }
     }

@@ -11,7 +11,8 @@ export async function GET(req){
     const q = url.searchParams.get('q') || '';
     const page = parseInt(url.searchParams.get('page') || '1', 10) || 1;
     const perPage = Math.min(100, parseInt(url.searchParams.get('perPage') || '20', 10) || 20);
-    const filter = q ? { $or: [ { name: { $regex: q, $options: 'i' } }, { email: { $regex: q, $options: 'i' } }, { phone: { $regex: q, $options: 'i' } }, { business: { $regex: q, $options: 'i' } } ] } : {};
+    const escaped = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const filter = q ? { $or: [ { name: { $regex: escaped, $options: 'i' } }, { email: { $regex: escaped, $options: 'i' } }, { phone: { $regex: escaped, $options: 'i' } }, { business: { $regex: escaped, $options: 'i' } } ] } : {};
     const total = await Contact.countDocuments(filter);
     const leads = await Contact.find(filter).sort({ createdAt: -1 }).skip((page-1)*perPage).limit(perPage).lean();
     return new Response(JSON.stringify({ success: true, leads, total, page, perPage }), { headers: { 'Content-Type': 'application/json' } });

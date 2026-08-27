@@ -45,7 +45,10 @@ function Section({ title, description, children }) {
 }
 
 function draftKey(postId) {
-  return `hdws-blog-draft-${postId || "new"}`;
+  // In create mode (postId is null), use a unique session key so each
+  // "Create New Blog" gets a fresh editor. Edit mode uses the actual post ID.
+  if (!postId) return null; // disable localStorage draft for unsaved new posts
+  return `hdws-blog-draft-${postId}`;
 }
 
 export default function PostForm({
@@ -81,11 +84,14 @@ export default function PostForm({
     setSlugTouched(Boolean(initialData.slug));
   }, [initialData]);
 
-  // Recover local draft if newer than server data
+  // Recover local draft ONLY in edit mode (postId exists)
+  // This prevents stale data from appearing in new blog creation.
   useEffect(() => {
     if (typeof window === "undefined") return;
+    const key = draftKey(postId);
+    if (!key) return; // create mode — never recover drafts
     try {
-      const saved = localStorage.getItem(draftKey(postId));
+      const saved = localStorage.getItem(key);
       if (!saved) return;
       const draft = JSON.parse(saved);
       if (draft.savedAt && initialData?.updatedAt) {
@@ -121,14 +127,16 @@ export default function PostForm({
     });
   }, [slugTouched]);
 
-  // Autosave to localStorage (debounced)
+  // Autosave to localStorage (debounced) — only in edit mode
   useEffect(() => {
     if (!dirty) return;
+    const key = draftKey(postId);
+    if (!key) return; // skip autosave for unsaved new posts
     if (autosaveTimer.current) clearTimeout(autosaveTimer.current);
     autosaveTimer.current = setTimeout(() => {
       try {
         localStorage.setItem(
-          draftKey(postId),
+          key,
           JSON.stringify({ form, savedAt: new Date().toISOString() })
         );
         setAutosaveStatus("Draft saved locally");
@@ -189,7 +197,8 @@ export default function PostForm({
     await onSubmit(payload);
     setDirty(false);
     try {
-      localStorage.removeItem(draftKey(postId));
+      const key = draftKey(postId);
+      if (key) localStorage.removeItem(key);
     } catch {
       /* ignore */
     }

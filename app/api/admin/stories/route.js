@@ -20,10 +20,11 @@ export async function GET(req) {
 
     const filter = {};
     if (q) {
+      const escaped = q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
       filter.$or = [
-        { title: { $regex: q, $options: "i" } },
-        { slug: { $regex: q, $options: "i" } },
-        { description: { $regex: q, $options: "i" } },
+        { title: { $regex: escaped, $options: "i" } },
+        { slug: { $regex: escaped, $options: "i" } },
+        { description: { $regex: escaped, $options: "i" } },
       ];
     }
     if (status !== "all") filter.status = status;

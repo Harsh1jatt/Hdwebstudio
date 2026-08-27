@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import PostForm from "@/components/Admin/blog/PostForm";
 import AdminButton from "@/components/Admin/common/AdminButton";
@@ -9,6 +9,18 @@ export default function NewPostPageClient() {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+
+  // Clear any stale localStorage drafts so the editor starts fresh
+  useEffect(() => {
+    try {
+      const keys = Object.keys(localStorage).filter((k) =>
+        k.startsWith("hdws-blog-draft-")
+      );
+      keys.forEach((k) => localStorage.removeItem(k));
+    } catch {
+      /* ignore */
+    }
+  }, []);
 
   async function handleSubmit(payload) {
     setSubmitting(true);

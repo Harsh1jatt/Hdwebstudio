@@ -3,9 +3,7 @@ import Image from "next/image";
 import { ArrowRight, BookOpen } from "lucide-react";
 
 import { getPublishedStories } from "@/lib/stories";
-import { siteConfig } from "@/config/site";
-
-import { absoluteUrl } from "@/config/site";
+import { siteConfig, absoluteUrl } from "@/config/site";
 
 export const metadata = {
   title: "Web Stories | HD Web Studios",

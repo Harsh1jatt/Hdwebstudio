@@ -2,9 +2,21 @@
 
 import { motion } from "framer-motion";
 import { Icon, Container, SectionHeading } from "./shared/ui";
-import { industries } from "@/lib/services-data";
 
-export default function IndustriesServed() {
+
+const defaultIndustries = [
+  { icon: "Stethoscope", name: "Clinics & Healthcare" },
+  { icon: "GraduationCap", name: "Coaching & Education" },
+  { icon: "Factory", name: "Manufacturing" },
+  { icon: "Building2", name: "Local Service Businesses" },
+  { icon: "ShoppingBag", name: "E-commerce" },
+  { icon: "UtensilsCrossed", name: "Restaurants & Hospitality" },
+  { icon: "Briefcase", name: "Professional Services" },
+  { icon: "Sun", name: "Solar & Energy" },
+];
+
+export default function IndustriesServed({ data }) {
+  const industries = data?.length ? data : defaultIndustries;
   return (
     <section className="bg-gradient-to-b from-white to-slate-50/60 py-24 sm:py-28">
       <Container>

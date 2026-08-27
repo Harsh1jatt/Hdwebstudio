@@ -46,6 +46,72 @@ const SiteSettingsSchema = new mongoose.Schema(
       footerText: { type: String, trim: true, default: "" },
       copyrightText: { type: String, trim: true, default: "" },
     },
+    homepage: {
+      hero: {
+        heading1: { type: String, trim: true, default: "We Build Websites That" },
+        heading2: { type: String, trim: true, default: "Grow Businesses." },
+        description: {
+          type: String,
+          trim: true,
+          default: "Professional website development, local SEO, and digital growth solutions for businesses in Ludhiana, Punjab and across India. We help you get discovered, build trust, and get contacted.",
+        },
+        ctaText: { type: String, trim: true, default: "Get a Free Digital Audit" },
+        ctaLink: { type: String, trim: true, default: "/contact" },
+        secondaryText: { type: String, trim: true, default: "View Our Work" },
+        secondaryLink: { type: String, trim: true, default: "/portfolio" },
+      },
+    },
+    servicePage: {
+      techStack: {
+        type: [
+          {
+            name: { type: String, required: true },
+            icon: { type: String, default: "Circle" },
+          },
+        ],
+        default: [],
+      },
+      process: {
+        type: [
+          {
+            icon: { type: String, default: "Circle" },
+            title: { type: String, required: true },
+            text: { type: String, required: true },
+          },
+        ],
+        default: [],
+      },
+      whyChooseUs: {
+        type: [
+          {
+            icon: { type: String, default: "Circle" },
+            title: { type: String, required: true },
+            text: { type: String, required: true },
+          },
+        ],
+        default: [],
+      },
+      industries: {
+        type: [
+          {
+            icon: { type: String, default: "Circle" },
+            name: { type: String, required: true },
+          },
+        ],
+        default: [],
+      },
+      trustStats: {
+        type: [
+          {
+            icon: { type: String, default: "Users" },
+            value: { type: Number, default: 0 },
+            suffix: { type: String, default: "" },
+            label: { type: String, required: true },
+          },
+        ],
+        default: [],
+      },
+    },
   },
   { timestamps: true }
 );

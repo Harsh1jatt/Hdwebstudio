@@ -2,9 +2,21 @@
 
 import { motion } from "framer-motion";
 import { Icon, Container, SectionHeading } from "./shared/ui";
-import { techStack } from "@/lib/services-data";
 
-export default function TechStack() {
+
+const defaultTechStack = [
+  { name: "Next.js", icon: "Triangle" },
+  { name: "React", icon: "Atom" },
+  { name: "Node.js", icon: "Hexagon" },
+  { name: "MongoDB", icon: "Leaf" },
+  { name: "Express", icon: "Server" },
+  { name: "Tailwind CSS", icon: "Wind" },
+  { name: "TypeScript", icon: "FileCode2" },
+  { name: "Firebase", icon: "Flame" },
+];
+
+export default function TechStack({ data }) {
+  const techStack = data?.length ? data : defaultTechStack;
   return (
     <section className="py-24 sm:py-28">
       <Container>

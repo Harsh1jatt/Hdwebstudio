@@ -2,9 +2,20 @@
 
 import { motion } from "framer-motion";
 import { Icon, Container, SectionHeading } from "./shared/ui";
-import { process } from "@/lib/services-data";
 
-export default function ProcessTimeline() {
+
+const defaultProcess = [
+  { icon: "Compass", title: "Discovery", text: "Understanding your business, audience, and goals." },
+  { icon: "ClipboardList", title: "Planning", text: "Mapping the structure, content, and technical approach." },
+  { icon: "PenTool", title: "UI Design", text: "Designing a user experience around real customer journeys." },
+  { icon: "Code2", title: "Development", text: "Building with clean, modern, maintainable code." },
+  { icon: "TestTube2", title: "Testing", text: "Reviewing performance, responsiveness, and edge cases." },
+  { icon: "Rocket", title: "Launch", text: "Deploying your project with everything checked and ready." },
+  { icon: "LifeBuoy", title: "Support", text: "Staying available for updates and improvements after launch." },
+];
+
+export default function ProcessTimeline({ data }) {
+  const process = data?.length ? data : defaultProcess;
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-slate-50/60 to-white py-24 sm:py-28">
       <Container>

@@ -47,4 +47,41 @@ export const settingsPayloadSchema = z.object({
     footerText: z.string().max(2000).optional(),
     copyrightText: z.string().max(500).optional(),
   }).optional(),
+  homepage: z.object({
+    hero: z.object({
+      heading1: optStr,
+      heading2: optStr,
+      description: z.string().max(1000).optional(),
+      ctaText: optStr,
+      ctaLink: optStr,
+      secondaryText: optStr,
+      secondaryLink: optStr,
+    }).optional(),
+  }).optional(),
+  servicePage: z.object({
+    techStack: z.array(z.object({
+      name: z.string().max(100),
+      icon: z.string().max(50).optional(),
+    })).optional(),
+    process: z.array(z.object({
+      icon: z.string().max(50).optional(),
+      title: z.string().max(100),
+      text: z.string().max(500),
+    })).optional(),
+    whyChooseUs: z.array(z.object({
+      icon: z.string().max(50).optional(),
+      title: z.string().max(200),
+      text: z.string().max(500),
+    })).optional(),
+    industries: z.array(z.object({
+      icon: z.string().max(50).optional(),
+      name: z.string().max(100),
+    })).optional(),
+    trustStats: z.array(z.object({
+      icon: z.string().max(50).optional(),
+      value: z.number().optional(),
+      suffix: z.string().max(10).optional(),
+      label: z.string().max(100),
+    })).optional(),
+  }).optional(),
 });

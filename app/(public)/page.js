@@ -8,6 +8,7 @@ import { getPublishedServices } from "@/lib/services";
 import { getPublishedProjects } from "@/lib/projects";
 import { getPublishedTestimonials } from "@/lib/testimonials";
 import { getPublishedFaqs } from "@/lib/faqs";
+import { getSiteSettings } from "@/lib/settings";
 import HomeClient from "@/components/Home/HomeClient";
 import HeroSection from "@/components/Home/HeroSection";
 import TrustBarSection from "@/components/Home/TrustBarSection";
@@ -51,16 +52,17 @@ export const metadata = {
 };
 
 export default async function HomePage() {
-  const [services, projects, testimonials, faqs] = await Promise.all([
+  const [services, projects, testimonials, faqs, settings] = await Promise.all([
     getPublishedServices(),
     getPublishedProjects(),
     getPublishedTestimonials(),
     getPublishedFaqs(),
+    getSiteSettings(),
   ]);
 
   return (
     <>
-      <HeroSection />
+      <HeroSection settings={settings} />
       <TrustBarSection />
       <HomeClient
         services={services}

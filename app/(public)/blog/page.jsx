@@ -2,8 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 import { getFeaturedAndLatestPublishedPosts, getPublishedPosts } from "@/lib/posts";
-import { siteConfig } from "@/config/site";
-import { absoluteUrl } from "@/config/site";
+import { siteConfig, absoluteUrl } from "@/config/site";
 
 import { ArrowRight } from "lucide-react";
 
@@ -174,7 +173,7 @@ export default async function BlogListingPage({ searchParams }) {
           <div className="flex items-center gap-3">
             {page > 1 ? (
               <Link
-                href={`/blog?page=${page - 1}`}
+                href={`/blog?page=${page - 1}${category ? `&category=${encodeURIComponent(category)}` : ""}`}
                 className="inline-flex items-center rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50"
               >
                 Previous
@@ -188,7 +187,7 @@ export default async function BlogListingPage({ searchParams }) {
 
           {hasNextPage ? (
             <Link
-              href={`/blog?page=${page + 1}`}
+              href={`/blog?page=${page + 1}${category ? `&category=${encodeURIComponent(category)}` : ""}`}
               className="inline-flex items-center rounded-xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-600"
             >
               Next <ArrowRight size={16} />

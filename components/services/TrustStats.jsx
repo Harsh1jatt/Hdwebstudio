@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView, animate } from "framer-motion";
 import { Icon, Container } from "./shared/ui";
-import { trustStats } from "@/lib/services-data";
+
 
 function Counter({ value, suffix }) {
   const ref = useRef(null);
@@ -28,7 +28,16 @@ function Counter({ value, suffix }) {
   );
 }
 
-export default function TrustStats() {
+const defaultStats = [
+  { icon: "Users", value: 3, suffix: "+", label: "Projects Delivered" },
+  { icon: "FolderCheck", value: 3, suffix: "+", label: "Paid Client Projects" },
+  { icon: "CalendarClock", value: 2, suffix: "+", label: "Years of Experience" },
+  { icon: "LifeBuoy", value: 7, suffix: "\u201314", label: "Days Typical Launch" },
+  { icon: "Smile", value: 100, suffix: "%", label: "Project Ownership" },
+];
+
+export default function TrustStats({ data }) {
+  const trustStats = data?.length ? data : defaultStats;
   return (
     <section className="relative border-y border-slate-100 bg-white py-16 sm:py-20">
       <Container>

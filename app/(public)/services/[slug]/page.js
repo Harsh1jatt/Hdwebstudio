@@ -4,6 +4,7 @@ import {
   getPublishedServices,
 } from "@/lib/services";
 import { getPublishedTestimonials } from "@/lib/testimonials";
+import { getServicePageData } from "@/lib/settings";
 import { absoluteUrl, siteConfig } from "@/config/site";
 
 import ServiceHero from "@/components/services/ServiceHero";
@@ -67,9 +68,10 @@ export default async function ServiceDetailsPage({ params }) {
     notFound();
   }
 
-  const [allServices, testimonials] = await Promise.all([
+  const [allServices, testimonials, servicePageData] = await Promise.all([
     getPublishedServices(),
     getPublishedTestimonials(),
+    getServicePageData(),
   ]);
 
   const breadcrumbJsonLd = {
@@ -108,13 +110,13 @@ export default async function ServiceDetailsPage({ params }) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }} />
       {faqJsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />}
       <ServiceHero service={service} />
-      <TrustStats />
+      <TrustStats data={servicePageData.trustStats} />
       <ServiceOverview service={service} />
       <WhatYouGet service={service} />
-      <TechStack />
-      <ProcessTimeline />
-      <WhyChooseUs />
-      <IndustriesServed />
+      <TechStack data={servicePageData.techStack} />
+      <ProcessTimeline data={servicePageData.process} />
+      <WhyChooseUs data={servicePageData.whyChooseUs} />
+      <IndustriesServed data={servicePageData.industries} />
       <TestimonialsPreview testimonials={testimonials} />
       <FAQSection service={service} />
       <RelatedServices currentSlug={service.slug} services={allServices} />

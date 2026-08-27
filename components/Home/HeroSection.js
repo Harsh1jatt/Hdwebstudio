@@ -14,7 +14,15 @@ const heroServices = [
   { icon: LineChart, label: "Growth" },
 ];
 
-export default function HeroSection() {
+export default function HeroSection({ settings = {} }) {
+  const hero = settings.homepage?.hero || {};
+  const heroHeading1 = hero.heading1 || "We Build Websites That";
+  const heroHeading2 = hero.heading2 || "Grow Businesses.";
+  const heroDescription = hero.description || "Professional website development, local SEO, and digital growth solutions for businesses in Ludhiana, Punjab and across India. We help you get discovered, build trust, and get contacted.";
+  const heroCtaText = hero.ctaText || "Get a Free Digital Audit";
+  const heroCtaLink = hero.ctaLink || "/contact";
+  const heroSecondaryText = hero.secondaryText || "View Our Work";
+  const heroSecondaryLink = hero.secondaryLink || "/portfolio";
   return (
     <section className="relative isolate overflow-hidden bg-white">
       {/* Background */}
@@ -40,26 +48,24 @@ export default function HeroSection() {
 
             {/* Heading */}
             <h1 className="mt-7 text-4xl font-bold tracking-[-0.04em] text-slate-950 sm:text-5xl lg:text-6xl xl:text-7xl">
-              We Build Websites That{" "}
+              {heroHeading1}{" "}
               <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 bg-clip-text text-transparent">
-                Grow Businesses.
+                {heroHeading2}
               </span>
             </h1>
 
             {/* Description */}
             <p className="mt-6 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg sm:leading-8">
-              Professional website development, local SEO, and digital growth
-              solutions for businesses in Ludhiana, Punjab and across India. We
-              help you get discovered, build trust, and get contacted.
+              {heroDescription}
             </p>
 
             {/* CTAs */}
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
-                href="/contact"
+                href={heroCtaLink}
                 className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-slate-950 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-slate-950/10 transition-all duration-200 hover:-translate-y-0.5 hover:bg-blue-600 hover:shadow-blue-600/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
               >
-                Get a Free Digital Audit
+                {heroCtaText}
                 <ArrowRight
                   size={18}
                   className="transition-transform duration-200 group-hover:translate-x-1"
@@ -67,10 +73,10 @@ export default function HeroSection() {
               </Link>
 
               <Link
-                href="/portfolio"
+                href={heroSecondaryLink}
                 className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-800 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-slate-400 focus-visible:outline-offset-2"
               >
-                View Our Work
+                {heroSecondaryText}
               </Link>
             </div>
 

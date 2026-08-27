@@ -12,6 +12,7 @@ import {
   Users,
   ImageIcon,
   Settings,
+  Bot,
 } from "lucide-react";
 
 const adminNavGroups = [
@@ -21,6 +22,7 @@ const adminNavGroups = [
       { href: "/admin", label: "Dashboard", icon: Home },
       { href: "/admin/leads", label: "Leads", icon: Mail },
       { href: "/admin/seo", label: "SEO", icon: BarChart3 },
+      { href: "/admin/chat", label: "AI Assistant", icon: Bot },
     ],
   },
   {

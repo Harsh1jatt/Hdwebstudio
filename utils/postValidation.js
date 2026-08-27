@@ -15,7 +15,10 @@ const siteRelativePathOrEmpty = z
   .trim()
   .optional()
   .or(z.literal(""))
-  .refine((value) => value === "" || value.startsWith("/"), "Image must be a site-relative path starting with /");
+  .refine(
+    (value) => value === "" || value.startsWith("/") || value.startsWith("http"),
+    "Image must be a valid URL or a site-relative path starting with /"
+  );
 
 const contentSchema = z.string().trim().min(1, "Content is required");
 

@@ -2,9 +2,19 @@
 
 import { motion } from "framer-motion";
 import { Icon, Container, SectionHeading, GradientBlob } from "./shared/ui";
-import { whyChooseUs } from "@/lib/services-data";
 
-export default function WhyChooseUs() {
+
+const defaultWhyChooseUs = [
+  { icon: "UserCheck", title: "Built By A Developer, Not A Sales Team", text: "Direct communication with the person actually building your project." },
+  { icon: "Gauge", title: "Performance Comes First", text: "Clean code and optimized assets for a fast, smooth experience." },
+  { icon: "Smartphone", title: "Designed For Every Screen", text: "Responsive experiences that work well on any device." },
+  { icon: "Search", title: "SEO-Ready From The Start", text: "Semantic structure and metadata built in, not bolted on later." },
+  { icon: "KeyRound", title: "You Own Your Digital Assets", text: "Your domain, content, and data belong to you — no lock-in." },
+  { icon: "LifeBuoy", title: "Support Beyond Launch", text: "We stay available for updates, fixes, and improvements." },
+];
+
+export default function WhyChooseUs({ data }) {
+  const whyChooseUs = data?.length ? data : defaultWhyChooseUs;
   return (
     <section className="relative overflow-hidden py-24 sm:py-28">
       <GradientBlob className="left-1/2 top-0 h-[26rem] w-[36rem] -translate-x-1/2 bg-blue-50" />

@@ -20,7 +20,7 @@ export default function AdminDashboardLayout({ children }) {
       <div className="lg:flex lg:min-h-screen">
         <AdminSidebar />
 
-        <div className="min-w-0 flex-1 lg:pl-72">
+        <div className="min-w-0 flex-1">
           <div className="border-b border-slate-200 bg-white lg:hidden">
             <AdminMobileNav />
           </div>
