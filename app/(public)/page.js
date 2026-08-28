@@ -16,19 +16,19 @@ import { absoluteUrl, siteConfig } from "@/config/site";
 
 // ─── SEO Metadata ─────────────────────────────────────────────────────────────
 export const metadata = {
-  title: "HD Web Studios | Website Development Company in Ludhiana | Local SEO & Digital Growth",
+  title: { absolute: "Website Development Company in Ludhiana | HD Web Studios" },
 
   description:
-    "HD Web Studios is a professional website development company in Ludhiana, Punjab. We build business websites, local SEO, and digital growth solutions for businesses across India.",
+    "Website development company in Ludhiana, Punjab. We engineer fast business websites, ecommerce, Local SEO, and custom Next.js web applications.",
 
   alternates: {
     canonical: siteConfig.url,
   },
 
   openGraph: {
-    title: "HD Web Studios | Website Development Company in Ludhiana",
+    title: "Website Development Company in Ludhiana | HD Web Studios",
     description:
-      "Professional Website Development, Next.js, MERN Stack, eCommerce, SEO and Custom Software Solutions.",
+      "Website development company in Ludhiana, Punjab. We engineer fast business websites, ecommerce, Local SEO, and custom Next.js web applications.",
     url: siteConfig.url,
     siteName: siteConfig.name,
     locale: "en_IN",

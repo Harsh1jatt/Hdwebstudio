@@ -17,7 +17,12 @@ export async function generateMetadata({ params }) {
 
   if (!post) return {};
 
-  const title = post.seoTitle || `${post.title} | HD Web Studios`;
+  const rawTitle = post.seoTitle || post.title;
+  const title = {
+    absolute: rawTitle.includes("HD Web Studios")
+      ? rawTitle
+      : `${rawTitle} | HD Web Studios`,
+  };
   const description = post.seoDescription || post.excerpt || post.title;
 
   const ogImage =

@@ -12,7 +12,9 @@ export function proxy(request) {
     pathname === "/api/admin/login" ||
     pathname === "/api/admin/setup"
   ) {
-    return NextResponse.next();
+    const res = NextResponse.next();
+    res.headers.set("X-Robots-Tag", "noindex, nofollow");
+    return res;
   }
 
   // 2. Protect Admin Dashboard Pages
@@ -21,19 +23,29 @@ export function proxy(request) {
     if (!token) {
       const loginUrl = new URL("/admin/login", request.url);
       loginUrl.searchParams.set("from", pathname);
-      return NextResponse.redirect(loginUrl);
+      const redirectRes = NextResponse.redirect(loginUrl);
+      redirectRes.headers.set("X-Robots-Tag", "noindex, nofollow");
+      return redirectRes;
     }
+    const res = NextResponse.next();
+    res.headers.set("X-Robots-Tag", "noindex, nofollow");
+    return res;
   }
 
   // 3. Protect Admin API Routes
   if (pathname.startsWith("/api/admin")) {
     const token = request.cookies.get(COOKIE_NAME)?.value;
     if (!token) {
-      return NextResponse.json(
+      const unauthorizedRes = NextResponse.json(
         { success: false, error: "Unauthorized" },
         { status: 401 }
       );
+      unauthorizedRes.headers.set("X-Robots-Tag", "noindex, nofollow");
+      return unauthorizedRes;
     }
+    const res = NextResponse.next();
+    res.headers.set("X-Robots-Tag", "noindex, nofollow");
+    return res;
   }
 
   return NextResponse.next();
@@ -52,3 +64,4 @@ export const config = {
     "/((?!_next/static|_next/image|favicon.ico|logo.svg|logo.png|images|uploads|projects|og).*)",
   ],
 };
+

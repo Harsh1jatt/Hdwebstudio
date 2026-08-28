@@ -53,7 +53,7 @@ const CORE_SERVICES = [
       { q: "Will my website rank on Google in Ludhiana and Punjab?", a: "Every website includes local SEO structure, Schema markup, and localized metadata to maximize search engine discovery." },
       { q: "Can I manage content and inquiries easily?", a: "Yes. You receive access to an intuitive admin portal to review leads and manage updates." },
     ],
-    seoTitle: "Business Website Development Company in Ludhiana | HD Web Studios",
+    seoTitle: "Website Development Company in Ludhiana | HD Web Studios",
     seoDescription: "Professional business website development in Ludhiana, Punjab. Fast, mobile-first, and conversion-focused websites engineered for business growth.",
   },
   {
@@ -77,7 +77,7 @@ const CORE_SERVICES = [
       { q: "Will I lose my existing Google search rankings during redesign?", a: "No. We implement strict 301 redirect mappings and URL structure matching to preserve your existing search equity." },
       { q: "How do you handle content migration?", a: "We audit, transfer, and format all existing text, images, and case studies into the new architecture." },
     ],
-    seoTitle: "Website Redesign Services in Ludhiana, Punjab | HD Web Studios",
+    seoTitle: "Website Redesign Services in Ludhiana | HD Web Studios",
     seoDescription: "Upgrade your outdated website with HD Web Studios. Modern UI/UX, faster load speeds, and improved lead conversions without losing SEO rankings.",
   },
   {
@@ -123,7 +123,7 @@ const CORE_SERVICES = [
       { q: "What tech stack do you use for custom software?", a: "We primarily build on Next.js, React, Node.js, Express, MongoDB, and Tailwind CSS." },
       { q: "Do I own 100% of the code and intellectual property?", a: "Yes. You retain complete ownership of all source code, database architectures, and assets." },
     ],
-    seoTitle: "Custom Web Application Development in Ludhiana | MERN & Next.js",
+    seoTitle: "Custom Web App Development in Ludhiana | HD Web Studios",
     seoDescription: "Custom web app development company in Ludhiana. Full-stack MERN, SaaS portals, and scalable cloud software solutions by HD Web Studios.",
   },
   {
@@ -146,7 +146,7 @@ const CORE_SERVICES = [
       { q: "How is custom software better than off-the-shelf tools?", a: "Off-the-shelf tools charge monthly per-user fees and force your business into their rigid format. Custom software is built around your workflow and owned entirely by you." },
       { q: "Can this software work on mobile devices and tablets?", a: "Yes. All our management applications are fully responsive web applications accessible on mobile phones, tablets, and desktops." },
     ],
-    seoTitle: "Custom Business Management Software Development | HD Web Studios",
+    seoTitle: "Business Management Software in Ludhiana | HD Web Studios",
     seoDescription: "Custom business management software for manufacturers and trading companies in Punjab. Automate inventory, invoicing, and operations.",
   },
   {
@@ -169,7 +169,7 @@ const CORE_SERVICES = [
       { q: "Can parents access student records and pay fees online?", a: "Yes. We provide parent portals with integrated payment gateways (UPI, Razorpay) for fee payments." },
       { q: "Can this system handle multiple branches or campuses?", a: "Yes. Multi-campus hierarchy allows head office administration alongside branch-specific staff permissions." },
     ],
-    seoTitle: "Institute Management Software Development | School & Coaching Portals",
+    seoTitle: "Institute Management Software in Ludhiana | HD Web Studios",
     seoDescription: "Custom institute management software for schools, coaching centers, and colleges in Punjab. Admissions, fee tracking, and student portals.",
   },
   {
@@ -192,7 +192,7 @@ const CORE_SERVICES = [
       { q: "How do you measure conversion rate improvements?", a: "We configure Google Analytics 4 and Google Tag Manager to track every phone call, WhatsApp trigger, and form completion." },
       { q: "Do we need running ads for this to work?", a: "No. While it enhances paid advertising ROI, it also dramatically improves lead generation from existing organic search traffic." },
     ],
-    seoTitle: "Lead Generation & Digital Growth Services | HD Web Studios",
+    seoTitle: "Lead Generation & Growth in Ludhiana | HD Web Studios",
     seoDescription: "Turn website traffic into qualified inquiries. Conversion-focused landing pages, WhatsApp funnels, and local growth systems by HD Web Studios.",
   },
   {
@@ -215,11 +215,11 @@ const CORE_SERVICES = [
       { q: "How long does it take to see results from Local SEO?", a: "Local search improvements typically manifest within 30 to 60 days of profile optimization and citation building." },
       { q: "Do you guarantee #1 ranking on Google Maps?", a: "No ethical agency guarantees #1 rankings, as Google algorithms fluctuate. We implement verified white-hat local SEO practices that maximize ranking probability." },
     ],
-    seoTitle: "Local SEO Company in Ludhiana | Google Business Profile Experts",
+    seoTitle: "Local SEO Services in Ludhiana | HD Web Studios",
     seoDescription: "Dominate Google Maps in Ludhiana & Punjab with HD Web Studios. Expert Local SEO, Google Business Profile optimization, and local citation building.",
   },
   {
-    slug: "website-maintenance-security-support",
+    slug: "website-maintenance-support",
     title: "Website Maintenance & Support",
     eyebrow: "Peace of Mind",
     tagline: "Proactive security patching, daily backups, speed monitoring, and on-demand technical support.",
@@ -238,7 +238,7 @@ const CORE_SERVICES = [
       { q: "What does website maintenance cover?", a: "Maintenance covers security patches, uptime monitoring, cloud backups, bug fixes, and minor content updates." },
       { q: "What happens if my site experiences downtime?", a: "Our monitoring alerts us immediately, allowing our team to investigate and restore operations promptly." },
     ],
-    seoTitle: "Website Maintenance & Support Services in Ludhiana | HD Web Studios",
+    seoTitle: "Website Maintenance Services in Ludhiana | HD Web Studios",
     seoDescription: "Reliable website maintenance and support in Ludhiana, Punjab. 24/7 uptime monitoring, security patching, and fast technical support.",
   },
 ];

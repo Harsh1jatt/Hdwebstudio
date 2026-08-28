@@ -17,7 +17,12 @@ export async function generateMetadata({ params }) {
   const story = await getPublishedStoryBySlug(slug);
   if (!story) return {};
 
-  const title = story.seoTitle || `${story.title} | Web Story`;
+  const rawTitle = story.seoTitle || `${story.title} | Web Story`;
+  const title = {
+    absolute: rawTitle.includes("HD Web Studios")
+      ? rawTitle
+      : `${rawTitle} | HD Web Studios`,
+  };
   const description = story.seoDescription || story.description || story.title;
 
   return {

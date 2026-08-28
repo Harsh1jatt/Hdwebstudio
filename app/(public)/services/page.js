@@ -3,19 +3,24 @@ import ServicesListing from "@/components/services/ServicesListing";
 import { absoluteUrl, siteConfig } from "@/config/site";
 
 export const metadata = {
-  title: "Services | HD Web Studios",
+  title: { absolute: "Website Development & Digital Solutions in Ludhiana | HD Web Studios" },
   description:
-    "Professional website development, web applications, SEO, and digital growth solutions for businesses in Ludhiana, Punjab and across India.",
+    "Explore custom website development, website redesign, ecommerce stores, web apps, and Local SEO services in Ludhiana, Punjab. Fast Next.js architecture.",
   alternates: {
     canonical: absoluteUrl("/services"),
   },
   openGraph: {
-    title: "Services | HD Web Studios",
+    title: "Website Development & Digital Services | HD Web Studios",
     description:
-      "Website development, web applications, SEO, and digital growth solutions.",
+      "Custom website development, ecommerce, and Local SEO services in Ludhiana, Punjab. Sub-second performance and full code ownership.",
     url: absoluteUrl("/services"),
     siteName: siteConfig.name,
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Website Development & Digital Services | HD Web Studios",
+    description: "Custom website development, ecommerce, and Local SEO services in Ludhiana.",
   },
 };
 

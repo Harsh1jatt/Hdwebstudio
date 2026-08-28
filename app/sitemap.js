@@ -1,9 +1,8 @@
 import { absoluteUrl } from "@/config/site";
-import connectDB from "@/lib/db";
-import Service from "@/models/Service";
-import Project from "@/models/Project";
-import Post from "@/models/Post";
-import Story from "@/models/Story";
+import { getPublishedServices } from "@/lib/services";
+import { getPublishedProjects } from "@/lib/projects";
+import { getPublishedPosts } from "@/lib/posts";
+import { getPublishedStories } from "@/lib/stories";
 
 export const dynamic = "force-dynamic";
 
@@ -25,13 +24,11 @@ export default async function sitemap() {
   ];
 
   try {
-    await connectDB();
-
     const [services, projects, posts, stories] = await Promise.all([
-      Service.find({ published: true }).select("slug updatedAt").sort({ order: 1 }).lean(),
-      Project.find({ published: true }).select("slug updatedAt").sort({ order: 1 }).lean(),
-      Post.find({ status: "published" }).select("slug updatedAt publishedAt").sort({ publishedAt: -1 }).lean(),
-      Story.find({ status: "published" }).select("slug updatedAt publishedAt").sort({ publishedAt: -1 }).lean(),
+      getPublishedServices().catch(() => []),
+      getPublishedProjects().catch(() => []),
+      getPublishedPosts({ perPage: 100 }).catch(() => []),
+      getPublishedStories({ perPage: 100 }).catch(() => []),
     ]);
 
     const serviceRoutes = services.map((s) => ({
@@ -71,7 +68,7 @@ export default async function sitemap() {
 
     return [...staticMapped, ...serviceRoutes, ...workRoutes, ...blogRoutes, ...storyRoutes];
   } catch (error) {
-    console.error("[sitemap] Failed to fetch dynamic routes:", error);
+    console.error("[sitemap] Error generating sitemap:", error);
     return staticRoutes.map(({ path, priority, changeFrequency }) => ({
       url: absoluteUrl(path),
       lastModified: currentDate,

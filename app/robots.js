@@ -5,13 +5,23 @@ export default function robots() {
     rules: [
       {
         userAgent: "*",
-        allow: ["/", "/_next/static/", "/_next/image/", "/logo.svg", "/favicon.ico", "/images/"],
+        allow: [
+          "/",
+          "/_next/static/",
+          "/_next/image/",
+          "/logo.svg",
+          "/logo.png",
+          "/favicon.ico",
+          "/images/",
+          "/projects/",
+          "/uploads/",
+          "/og/",
+        ],
         disallow: [
           "/admin",
           "/admin/",
-          "/api/admin/",
-          "/api/auth/",
-          "/api/setup-admin",
+          "/api/",
+          "/thank-you",
         ],
       },
     ],

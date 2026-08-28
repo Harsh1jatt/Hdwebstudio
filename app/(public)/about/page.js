@@ -13,16 +13,16 @@ import {
 import { absoluteUrl, siteConfig, whatsAppUrl, defaultWhatsAppMessage } from "@/config/site";
 
 export const metadata = {
-  title: "About HD Web Studios | Founder-Led Website Development in Ludhiana",
+  title: { absolute: "About HD Web Studios | Web Developers in Ludhiana" },
   description:
-    "HD Web Studios is a founder-led digital agency in Ludhiana, Punjab. We build professional websites, local SEO, and digital growth solutions for businesses across India.",
+    "HD Web Studios is a founder-led website development and digital agency in Ludhiana, Punjab. We engineer high-speed Next.js websites and custom cloud software.",
   alternates: {
     canonical: absoluteUrl("/about"),
   },
   openGraph: {
-    title: "About HD Web Studios",
+    title: "About HD Web Studios | Web Developers in Ludhiana",
     description:
-      "Founder-led website development agency in Ludhiana, Punjab. Professional websites, local SEO, and digital growth.",
+      "Founder-led website development agency in Ludhiana, Punjab. High-speed Next.js websites, local SEO, and full code ownership.",
     url: absoluteUrl("/about"),
     siteName: siteConfig.name,
     type: "website",
@@ -37,7 +37,7 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "About HD Web Studios",
+    title: "About HD Web Studios | Web Developers in Ludhiana",
     description:
       "Founder-led website development agency in Ludhiana, Punjab.",
     images: [absoluteUrl("/images/founder.png")],

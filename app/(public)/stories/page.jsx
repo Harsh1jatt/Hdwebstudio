@@ -6,11 +6,11 @@ import { getPublishedStories } from "@/lib/stories";
 import { siteConfig, absoluteUrl } from "@/config/site";
 
 export const metadata = {
-  title: "Web Stories | HD Web Studios",
-  description: "Visual stories about web development, SEO, and digital growth for businesses.",
+  title: { absolute: "Web Stories & Visual Guides | HD Web Studios" },
+  description: "Visual stories and guides about web development, Local SEO, and digital growth in Punjab.",
   alternates: { canonical: absoluteUrl("/stories") },
   openGraph: {
-    title: "Web Stories | HD Web Studios",
+    title: "Web Stories & Visual Guides | HD Web Studios",
     description: "Visual guides on web development, SEO, and digital growth.",
     url: absoluteUrl("/stories"),
     type: "website",

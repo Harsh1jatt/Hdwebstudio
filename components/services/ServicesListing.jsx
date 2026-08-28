@@ -1,16 +1,17 @@
 import Link from "next/link";
-import { ArrowRight, Sparkles, CheckCircle2, Globe, ShoppingBag, Code, TrendingUp } from "lucide-react";
+import { ArrowRight, Sparkles, CheckCircle2, Globe, ShoppingBag, Code, TrendingUp, Zap, ShieldCheck, Smartphone, Layers, HelpCircle, MessageSquare } from "lucide-react";
+import { whatsAppUrl } from "@/config/site";
 
 const CATEGORY_META = {
   Websites: {
     icon: Globe,
     title: "Websites & Digital Acquisition",
-    subtitle: "Custom business websites and redesigns engineered for speed, mobile UX, and high conversion.",
+    subtitle: "Custom business websites and modernization engineered for sub-second speed, mobile UX, and high conversion.",
   },
   "E-Commerce": {
     icon: ShoppingBag,
     title: "Ecommerce & Online Stores",
-    subtitle: "Scalable D2C and B2B online storefronts with payment gateways and 1-click mobile checkout.",
+    subtitle: "Scalable D2C and B2B online storefronts with Indian payment gateways (Razorpay, UPI) and 1-click checkout.",
   },
   "Web Applications": {
     icon: Code,
@@ -20,9 +21,37 @@ const CATEGORY_META = {
   "SEO & Growth": {
     icon: TrendingUp,
     title: "Local SEO & Digital Growth",
-    subtitle: "Google Business Profile optimization and search dominance for regional businesses.",
+    subtitle: "Google Business Profile optimization and search dominance for businesses in Ludhiana and Punjab.",
   },
 };
+
+const serviceFaqs = [
+  {
+    q: "Why should we choose HD Web Studios over other web development agencies?",
+    a: "We operate on a founder-led engineering model where you communicate directly with senior software engineers. We build custom Next.js web applications rather than fragile WordPress themes, ensuring sub-second load times, 100% intellectual property ownership, and technical SEO from day one.",
+  },
+  {
+    q: "What is your typical project delivery timeline?",
+    a: "Starter business websites launch in 7 to 10 days. Comprehensive Business Acquisition websites take 10 to 14 days. Custom software, SaaS MVPs, and complex ecommerce stores take 3 to 6 weeks depending on scope.",
+  },
+  {
+    q: "Do you build mobile-friendly websites?",
+    a: "Yes. Every single screen is designed mobile-first for modern smartphones and tablets, ensuring thumb-friendly navigation, instant touch response, and flawless layout stability.",
+  },
+  {
+    q: "Do we own the full source code and database?",
+    a: "Yes, 100%. Upon project milestone completion and full payment, you receive complete GitHub repository ownership, database credentials, and production deployment control with zero vendor lock-in.",
+  },
+];
+
+const lifecycleSteps = [
+  { step: "01", title: "Discovery & Strategy", desc: "Understanding your business model, target market in Ludhiana/Punjab, and key competitors." },
+  { step: "02", title: "Information Architecture", desc: "Mapping page hierarchies, high-intent content clusters, and conversion funnels." },
+  { step: "03", title: "UI/UX Prototype Design", desc: "Creating bespoke, mobile-first layouts aligned with your brand's unique positioning." },
+  { step: "04", title: "Server Component Build", desc: "Writing performant, clean Next.js code with LocalBusiness Schema and API endpoints." },
+  { step: "05", title: "QA & Performance Testing", desc: "Cross-device verification, Core Web Vitals tuning, and accessibility testing." },
+  { step: "06", title: "Zero-Downtime Launch", desc: "Deploying to production cloud hosting with SSL, XML sitemaps, and GA4 event tracking." },
+];
 
 export default function ServicesListing({ services = [] }) {
   // Group services into 4 pillars
@@ -35,9 +64,9 @@ export default function ServicesListing({ services = [] }) {
 
   for (const s of services) {
     const cat = s.category || "Web Development";
-    if (cat === "E-Commerce") groups["E-Commerce"].push(s);
-    else if (cat === "Web Applications" || cat === "Custom Software") groups["Web Applications"].push(s);
-    else if (cat === "SEO & Growth" || cat === "SEO") groups["SEO & Growth"].push(s);
+    if (cat === "E-Commerce" || s.slug?.includes("ecommerce")) groups["E-Commerce"].push(s);
+    else if (cat === "Web Applications" || cat === "Custom Software" || s.slug?.includes("application")) groups["Web Applications"].push(s);
+    else if (cat === "SEO & Growth" || cat === "SEO" || s.slug?.includes("seo")) groups["SEO & Growth"].push(s);
     else groups.Websites.push(s);
   }
 
@@ -49,13 +78,13 @@ export default function ServicesListing({ services = [] }) {
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50/80 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-blue-700">
               <Sparkles size={13} className="text-blue-600" />
-              Core Capabilities
+              Full-Stack Engineering Capabilities
             </div>
             <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-slate-950 sm:text-5xl">
               Web Development &amp; Digital Solutions
             </h1>
             <p className="mt-4 text-base leading-7 text-slate-600 sm:text-lg">
-              We design and build fast, modern, conversion-focused websites and custom software tailored for growing businesses.
+              We design and engineer high-speed, modern, conversion-focused websites, ecommerce storefronts, and custom software systems in Ludhiana, Punjab.
             </p>
           </div>
         </div>
@@ -81,7 +110,7 @@ export default function ServicesListing({ services = [] }) {
                       {meta.title}
                     </h2>
                   </div>
-                  <p className="mt-1 text-sm text-slate-500">{meta.subtitle}</p>
+                  <p className="mt-1 text-xs text-slate-500">{meta.subtitle}</p>
                 </div>
 
                 {/* Cards Grid */}
@@ -102,7 +131,7 @@ export default function ServicesListing({ services = [] }) {
                             {service.title}
                           </Link>
                         </h3>
-                        <p className="mt-2 text-sm leading-6 text-slate-600">
+                        <p className="mt-2 text-xs leading-5 text-slate-600">
                           {service.shortDescription || service.description}
                         </p>
 
@@ -124,7 +153,7 @@ export default function ServicesListing({ services = [] }) {
                           href={`/services/${service.slug}`}
                           className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-blue-600 group-hover:text-blue-700"
                         >
-                          Explore Service
+                          Explore Service Details
                           <ArrowRight size={14} />
                         </Link>
                       </div>
@@ -137,28 +166,79 @@ export default function ServicesListing({ services = [] }) {
         </div>
       </section>
 
-      {/* Audit CTA */}
-      <section className="border-t border-slate-100 bg-slate-50/50 py-16 text-center">
+      {/* Engineering Lifecycle */}
+      <section className="border-t border-slate-100 bg-slate-50/50 py-16 sm:py-24">
+        <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto">
+            <h2 className="text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl">
+              Our 6-Step Engineering Process
+            </h2>
+            <p className="mt-3 text-sm text-slate-600">
+              From requirement discovery to production launch, here is how we engineer high-performance digital systems.
+            </p>
+          </div>
+
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {lifecycleSteps.map((s, idx) => (
+              <div key={idx} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 font-bold text-white text-xs">
+                  {s.step}
+                </div>
+                <h3 className="mt-4 text-base font-bold text-slate-950">{s.title}</h3>
+                <p className="mt-2 text-xs leading-5 text-slate-600">{s.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-16 sm:py-24">
         <div className="mx-auto max-w-4xl px-5 sm:px-6">
-          <h2 className="text-2xl font-bold text-slate-950 sm:text-3xl">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl">
+              Services Frequently Asked Questions
+            </h2>
+            <p className="mt-3 text-sm text-slate-600">
+              Learn about our development standards, code ownership, and support models.
+            </p>
+          </div>
+
+          <div className="mt-10 space-y-4">
+            {serviceFaqs.map((faq, idx) => (
+              <div key={idx} className="rounded-2xl border border-slate-200 bg-slate-50/50 p-6">
+                <h3 className="text-base font-bold text-slate-950">{faq.q}</h3>
+                <p className="mt-2 text-xs leading-5 text-slate-600">{faq.a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Audit CTA */}
+      <section className="border-t border-slate-100 bg-slate-900 py-16 sm:py-20 text-center text-white">
+        <div className="mx-auto max-w-4xl px-5 sm:px-6">
+          <h2 className="text-2xl font-bold text-white sm:text-3xl">
             Not sure which service fits your current stage?
           </h2>
-          <p className="mt-3 text-sm text-slate-600 sm:text-base">
-            Run a free digital audit or speak directly with our engineering team for an honest assessment.
+          <p className="mt-3 text-sm text-slate-300 sm:text-base max-w-xl mx-auto">
+            Run a free digital audit or speak directly with our engineering team for an honest assessment of your digital presence.
           </p>
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link
               href="/audit"
-              className="rounded-full bg-blue-600 px-6 py-3 text-xs font-bold uppercase tracking-wider text-white shadow-sm transition hover:bg-blue-700"
+              className="rounded-full bg-blue-600 px-6 py-3 text-xs font-bold uppercase tracking-wider text-white shadow-sm transition hover:bg-blue-500"
             >
               Get Free Website Audit
             </Link>
-            <Link
-              href="/contact"
-              className="rounded-full border border-slate-300 bg-white px-6 py-3 text-xs font-bold uppercase tracking-wider text-slate-700 transition hover:bg-slate-50"
+            <a
+              href={whatsAppUrl("Hi Harshdeep, I'm reviewing the services on hdwebstudios.in and would like to discuss my project.")}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-full border border-slate-700 bg-slate-800 px-6 py-3 text-xs font-bold uppercase tracking-wider text-slate-200 transition hover:bg-slate-700"
             >
-              Talk to Founder
-            </Link>
+              WhatsApp Consultation
+            </a>
           </div>
         </div>
       </section>

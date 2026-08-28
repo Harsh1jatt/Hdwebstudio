@@ -13,10 +13,10 @@ export async function generateMetadata({ searchParams }) {
   const category = params?.category || "";
   const title = category
     ? `${category} Articles | HD Web Studios Blog`
-    : "Blog | HD Web Studios";
+    : { absolute: "Web Development & SEO Blog | HD Web Studios" };
   const description = category
     ? `Read our latest articles about ${category.toLowerCase()} for businesses.`
-    : "Practical articles on web development, SEO, and digital growth for businesses.";
+    : "Practical insights on website development, Core Web Vitals, and Local SEO in Ludhiana and Punjab.";
 
   return {
     title,
@@ -25,7 +25,7 @@ export async function generateMetadata({ searchParams }) {
       canonical: absoluteUrl(category ? `/blog?category=${encodeURIComponent(category)}` : "/blog"),
     },
     openGraph: {
-      title,
+      title: category ? `${category} Articles | HD Web Studios Blog` : "Web Development & SEO Blog | HD Web Studios",
       description,
       url: absoluteUrl("/blog"),
       siteName: siteConfig.name,

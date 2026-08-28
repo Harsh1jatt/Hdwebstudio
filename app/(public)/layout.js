@@ -4,7 +4,6 @@ import WhatsAppFloat from "@/components/common/WhatsAppFloat";
 import { getPublishedServices } from "@/lib/services";
 import { absoluteUrl, siteConfig } from "@/config/site";
 import { getSiteSettings } from "@/lib/settings";
-import Script from "next/script";
 
 export default async function PublicLayout({ children }) {
   const [services, settings] = await Promise.all([
@@ -23,8 +22,8 @@ export default async function PublicLayout({ children }) {
     icon: s.icon,
   }));
 
-  // Map services for footer
-  const footerServices = services.slice(0, 4).map((s) => ({
+  // Map services for footer (all core services)
+  const footerServices = services.map((s) => ({
     title: s.title || s.eyebrow,
     slug: s.slug,
   }));
@@ -59,6 +58,7 @@ export default async function PublicLayout({ children }) {
         "@type": "Organization",
         "@id": `${site.url}/#organization`,
         name: site.name,
+        alternateName: ["HD Web", "HD Web Studio", "HDWebStudios"],
         url: site.url,
         logo: absoluteUrl(settings.brand?.logo || siteConfig.assets.logo),
         image: absoluteUrl(settings.brand?.logo || siteConfig.assets.ogImage),
@@ -76,31 +76,47 @@ export default async function PublicLayout({ children }) {
         sameAs: Object.values(site.socials).filter(Boolean),
       },
       {
-        "@type": "LocalBusiness",
+        "@type": ["LocalBusiness", "ProfessionalService"],
         "@id": `${site.url}/#localbusiness`,
         name: site.name,
+        alternateName: ["HD Web", "HD Web Studio", "HDWebStudios"],
         url: site.url,
         logo: absoluteUrl(settings.brand?.logo || siteConfig.assets.logo),
         image: absoluteUrl(settings.brand?.logo || siteConfig.assets.ogImage),
         telephone: site.phone,
         email: site.email,
         priceRange: "₹₹",
+        currenciesAccepted: "INR",
+        paymentAccepted: "Cash, Credit Card, Bank Transfer, UPI",
         address: {
           "@type": "PostalAddress",
-          addressLocality: site.address.city,
-          addressRegion: site.address.state,
-          postalCode: site.address.pincode,
-          addressCountry: site.address.country,
+          streetAddress: site.address?.streetAddress || siteConfig.address?.streetAddress || "Kakka Rd, Subhash Nagar",
+          addressLocality: site.address?.city || siteConfig.address?.city || "Ludhiana",
+          addressRegion: site.address?.state || siteConfig.address?.state || "Punjab",
+          postalCode: site.address?.pincode || siteConfig.address?.pincode || "141007",
+          addressCountry: "IN",
         },
         geo: { "@type": "GeoCoordinates", latitude: 30.900965, longitude: 75.857277 },
-        areaServed: { "@type": "Country", name: "India" },
+        areaServed: [
+          { "@type": "City", name: "Ludhiana" },
+          { "@type": "State", name: "Punjab" },
+          { "@type": "Country", name: "India" },
+        ],
         openingHoursSpecification: [
           {
             "@type": "OpeningHoursSpecification",
             dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
             opens: "09:00",
-            closes: "18:00",
+            closes: "19:00",
           },
+        ],
+        knowsAbout: [
+          "Website Development",
+          "Website Redesign",
+          "Ecommerce Website Development",
+          "Custom Web Application Development",
+          "Local SEO & Google Business Profile Optimization",
+          "Next.js and React Engineering",
         ],
       },
       {
@@ -116,25 +132,6 @@ export default async function PublicLayout({ children }) {
 
   return (
     <>
-      {gaId && (
-        <>
-          <Script
-            src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
-            strategy="afterInteractive"
-          />
-          <Script id="google-analytics" strategy="afterInteractive">
-            {`
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', '${gaId}', {
-                page_path: window.location.pathname,
-              });
-            `}
-          </Script>
-        </>
-      )}
-
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

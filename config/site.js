@@ -21,10 +21,20 @@ export const siteConfig = {
   email: "contact@hdwebstudios.in",
 
   address: {
+    streetAddress: "Kakka Rd, Subhash Nagar",
     city: "Ludhiana",
     state: "Punjab",
-    country: "IN",
-    pincode: "141001",
+    country: "India",
+    addressLocality: "Ludhiana",
+    addressRegion: "Punjab",
+    postalCode: "141007",
+    addressCountry: "IN",
+    pincode: "141007",
+  },
+
+  geo: {
+    latitude: "30.9010",
+    longitude: "75.8573",
   },
 
   socials: {

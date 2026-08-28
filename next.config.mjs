@@ -64,6 +64,41 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: "/services/web-development",
+        destination: "/services/business-website-development",
+        permanent: true,
+      },
+      {
+        source: "/services/website-design",
+        destination: "/services/business-website-development",
+        permanent: true,
+      },
+      {
+        source: "/services/website-redesign",
+        destination: "/services/website-redesign-modernization",
+        permanent: true,
+      },
+      {
+        source: "/services/local-seo",
+        destination: "/services/local-seo-google-business-optimization",
+        permanent: true,
+      },
+      {
+        source: "/services/ecommerce-development",
+        destination: "/services/ecommerce-website-development",
+        permanent: true,
+      },
+      {
+        source: "/services/custom-web-apps",
+        destination: "/services/custom-web-application-development",
+        permanent: true,
+      },
+      {
+        source: "/services/website-maintenance",
+        destination: "/services/website-maintenance-support",
+        permanent: true,
+      },
+      {
         source: "/portfolio",
         destination: "/work",
         permanent: true,

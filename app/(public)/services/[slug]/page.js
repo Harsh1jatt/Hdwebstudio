@@ -31,9 +31,14 @@ export async function generateMetadata({ params }) {
     return {};
   }
 
-  const title =
-    service.seoTitle || `${service.eyebrow || service.title} | HD Web Studios`;
-  const description = service.seoDescription || service.description;
+  const rawTitle =
+    service.seoTitle || `${service.title} | HD Web Studios`;
+  const title = {
+    absolute: rawTitle.includes("HD Web Studios")
+      ? rawTitle
+      : `${rawTitle} | HD Web Studios`,
+  };
+  const description = service.seoDescription || service.shortDescription || service.description;
   const ogImage = service.ogImage
     ? absoluteUrl(service.ogImage)
     : absoluteUrl(siteConfig.assets.ogImage || "/logo.svg");

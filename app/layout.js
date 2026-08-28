@@ -5,11 +5,11 @@ import { siteConfig } from "@/config/site";
 export const metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: "HD Web Studios | Website Development Company in Ludhiana | Local SEO & Digital Growth",
+    default: "Website Development Company in Ludhiana | HD Web Studios",
     template: "%s | HD Web Studios",
   },
   description:
-    "HD Web Studios is a professional website development company in Ludhiana, Punjab. We build high-speed business websites, local SEO, and digital growth solutions for businesses across India.",
+    "HD Web Studios is a professional website development company in Ludhiana, Punjab. We engineer high-speed business websites, local SEO, and digital growth systems.",
   alternates: {
     canonical: siteConfig.url,
   },

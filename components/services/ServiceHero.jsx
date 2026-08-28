@@ -50,9 +50,9 @@ export default function ServiceHero({ service }) {
               variants={item}
               className="text-4xl font-bold leading-[1.08] tracking-tight text-slate-900 sm:text-5xl lg:text-[3.4rem]"
             >
-              {service.title.split(" ").slice(0, -2).join(" ")}{" "}
+              {(service.h1Heading || service.title).split(" ").slice(0, -2).join(" ")}{" "}
               <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-                {service.title.split(" ").slice(-2).join(" ")}
+                {(service.h1Heading || service.title).split(" ").slice(-2).join(" ")}
               </span>
             </motion.h1>
 

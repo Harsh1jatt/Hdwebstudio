@@ -16,7 +16,12 @@ export async function generateMetadata({ params }) {
     return { title: "Case Study Not Found | HD Web Studios" };
   }
 
-  const title = project.seoTitle || `${project.title} Case Study | HD Web Studios`;
+  const rawTitle = project.seoTitle || `${project.title} Case Study | HD Web Studios`;
+  const title = {
+    absolute: rawTitle.includes("HD Web Studios")
+      ? rawTitle
+      : `${rawTitle} | HD Web Studios`,
+  };
   const description = project.seoDescription || project.shortDescription || `${project.title} case study by HD Web Studios.`;
   const ogImage = project.ogImage || project.featuredImage || siteConfig.assets.projectPlaceholder;
 

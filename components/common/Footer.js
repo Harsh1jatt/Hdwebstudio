@@ -24,7 +24,14 @@ const company = [
 
 export default function Footer({ services = [], site = null }) {
   const s = site || siteConfig;
-  const serviceLinks = services.slice(0, 4).map((sv) => ({
+  const serviceLinks = (services && services.length >= 6 ? services : [
+    { title: "Business Website Development", slug: "business-website-development" },
+    { title: "Website Redesign & Modernization", slug: "website-redesign-modernization" },
+    { title: "Ecommerce Website Development", slug: "ecommerce-website-development" },
+    { title: "Custom Web Application Development", slug: "custom-web-application-development" },
+    { title: "Local SEO & Google Business", slug: "local-seo-google-business-optimization" },
+    { title: "Website Maintenance & Support", slug: "website-maintenance-support" },
+  ]).map((sv) => ({
     label: sv.title || sv.eyebrow,
     href: `/services/${sv.slug}`,
   }));

@@ -18,7 +18,7 @@ export default function HeroSection({ settings = {} }) {
   const hero = settings.homepage?.hero || {};
   const heroHeading1 = hero.heading1 || "We Build Websites That";
   const heroHeading2 = hero.heading2 || "Grow Businesses.";
-  const heroDescription = hero.description || "Professional website development, local SEO, and digital growth solutions for businesses in Ludhiana, Punjab and across India. We help you get discovered, build trust, and get contacted.";
+  const heroDescription = hero.description || "Professional website development, custom Next.js web applications, and Local SEO solutions for businesses in Ludhiana, Punjab and across India. Engineered for speed, mobile UX, and customer acquisition.";
   const heroCtaText = hero.ctaText || "Get Free Website Audit";
   const heroCtaLink = hero.ctaLink || "/audit";
   const heroSecondaryText = hero.secondaryText || "View Our Work";
@@ -42,7 +42,7 @@ export default function HeroSection({ settings = {} }) {
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-blue-500 opacity-60" />
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-blue-600" />
                 </span>
-                Websites &middot; Local SEO &middot; Digital Growth
+                Website Development Company in Ludhiana &middot; Local SEO &middot; Web Apps
               </div>
             </div>
 
