@@ -70,7 +70,7 @@ function FeaturedProject({ project, shouldReduceMotion }) {
     >
       <div className="grid lg:grid-cols-[1.15fr_0.85fr]">
         <a
-          href={project.liveUrl || project.demoUrl || `/portfolio/${project.slug}`}
+          href={project.liveUrl || project.demoUrl || `/work/${project.slug}`}
           target="_blank"
           rel="noopener noreferrer"
           aria-label={`View ${project.title} live website`}

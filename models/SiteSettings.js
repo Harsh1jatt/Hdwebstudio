@@ -68,7 +68,7 @@ const SiteSettingsSchema = new mongoose.Schema(
         ctaText: { type: String, trim: true, default: "Get a Free Digital Audit" },
         ctaLink: { type: String, trim: true, default: "/contact" },
         secondaryText: { type: String, trim: true, default: "View Our Work" },
-        secondaryLink: { type: String, trim: true, default: "/portfolio" },
+        secondaryLink: { type: String, trim: true, default: "/work" },
       },
     },
     servicePage: {

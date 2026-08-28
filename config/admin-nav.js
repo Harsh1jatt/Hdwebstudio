@@ -19,6 +19,7 @@ import {
   Link2,
   TrendingUp,
   Compass,
+  Globe,
 } from "lucide-react";
 
 const adminNavGroups = [

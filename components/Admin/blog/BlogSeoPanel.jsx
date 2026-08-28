@@ -10,6 +10,7 @@ import {
   ExternalLink,
   BookOpen,
   Plus,
+  Globe,
 } from "lucide-react";
 import { analyzeBlogSeo, SEO_SECTIONS } from "@/lib/seo/blogSeoAnalysis";
 import { findInternalLinkRecommendations } from "@/lib/ai/internalLinks";

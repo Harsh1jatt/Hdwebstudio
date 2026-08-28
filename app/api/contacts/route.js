@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
-import connectDB from '../../../lib/db';
-import Contact from '../../../models/Contact';
-import { contactSchema } from '../../../utils/validation';
-import { sendLeadEmail } from '../../../lib/mail';
+import connectDB from '@/lib/db';
+import Contact from '@/models/Contact';
+import { contactSchema } from '@/utils/validation';
+import { sendLeadEmail } from '@/lib/mail';
 
 // Rate limiter per IP with automatic stale cleanup
 const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute

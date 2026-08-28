@@ -40,7 +40,7 @@ export default function NotFound() {
           <div className="mt-4 flex flex-wrap justify-center gap-2">
             {[
               { label: "Services", href: "/services" },
-              { label: "Work", href: "/portfolio" },
+              { label: "Work", href: "/work" },
               { label: "Pricing", href: "/pricing" },
               { label: "Blog", href: "/blog" },
               { label: "About", href: "/about" },
