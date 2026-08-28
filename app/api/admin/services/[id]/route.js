@@ -4,6 +4,7 @@ import connectDB from "@/lib/db";
 import Service from "@/models/Service";
 import { requireAdminApi } from "@/lib/auth";
 import { parseServicePayload } from "@/utils/serviceValidation";
+import { revalidateContent } from "@/lib/revalidation";
 
 function serializeService(doc) {
   return {
@@ -125,6 +126,9 @@ export async function PUT(req, { params }) {
       );
     }
 
+    // Invalidate sitemap & service cache
+    await revalidateContent({ type: "service", slug: service.slug });
+
     return NextResponse.json({
       success: true,
       service: serializeService(service),
@@ -199,6 +203,9 @@ export async function PATCH(req, { params }) {
       );
     }
 
+    // Invalidate sitemap & service cache
+    await revalidateContent({ type: "service", slug: service.slug });
+
     return NextResponse.json({
       success: true,
       service: serializeService(service),
@@ -236,6 +243,9 @@ export async function DELETE(req, { params }) {
       );
     }
 
+    // Invalidate sitemap & service cache after deletion
+    await revalidateContent({ type: "service", slug: deleted.slug });
+
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("admin service delete error:", error);
@@ -245,3 +255,4 @@ export async function DELETE(req, { params }) {
     );
   }
 }
+

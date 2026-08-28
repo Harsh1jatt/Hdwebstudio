@@ -3,6 +3,7 @@ import { requireAdminApi } from "@/lib/auth";
 import connectDB from "@/lib/db";
 import Story from "@/models/Story";
 import { slugify } from "@/lib/slugify";
+import { revalidateContent } from "@/lib/revalidation";
 
 export async function GET(req, { params }) {
   try {
@@ -85,6 +86,10 @@ export async function PATCH(req, { params }) {
     }
 
     await story.save();
+
+    // Invalidate sitemap & story cache
+    await revalidateContent({ type: "story", slug: story.slug });
+
     return NextResponse.json({ success: true, story: { id: story._id.toString(), slug: story.slug } });
   } catch (error) {
     console.error("story PATCH error", error);
@@ -104,9 +109,13 @@ export async function DELETE(req, { params }) {
       return NextResponse.json({ success: false, error: "Story not found" }, { status: 404 });
     }
 
+    // Invalidate sitemap & story cache after deletion
+    await revalidateContent({ type: "story", slug: story.slug });
+
     return NextResponse.json({ success: true, message: "Story deleted" });
   } catch (error) {
     console.error("story DELETE error", error);
     return NextResponse.json({ success: false, error: "Server error" }, { status: 500 });
   }
 }
+

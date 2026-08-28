@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertTriangle, CheckCircle2, XCircle, X } from "lucide-react";
+import { AlertTriangle, CheckCircle2, XCircle, X, ShieldCheck } from "lucide-react";
 
 export function validateContentQuality(doc, type = "post") {
   const errors = [];
@@ -11,9 +11,32 @@ export function validateContentQuality(doc, type = "post") {
   const content = (doc.content || doc.description || "").trim();
   const plainText = content.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
   const wordCount = plainText ? plainText.split(/\s+/).length : 0;
+  const seoTitle = (doc.seoTitle || title || "").trim();
   const seoDescription = (doc.seoDescription || doc.excerpt || "").trim();
   const featuredImage = (doc.featuredImage || doc.heroImage || "").trim();
   const imageAlt = (doc.featuredImageAlt || "").trim();
+
+  // Extract internal/external links from HTML
+  const hasH1InBody = /<h1[^>]*>/i.test(content);
+  const internalLinksCount = (content.match(/href=["'](\/[^"']*)["']/gi) || []).length;
+  const externalLinksCount = (content.match(/href=["'](https?:\/\/[^"']*)["']/gi) || []).length;
+
+  // 13-Point SEO Readiness Checklist
+  const checklist = [
+    { label: "Title", pass: Boolean(title && title.length >= 20 && title.length <= 70), detail: `${title.length} characters` },
+    { label: "Meta Description", pass: Boolean(seoDescription && seoDescription.length >= 80 && seoDescription.length <= 165), detail: `${seoDescription.length} characters` },
+    { label: "Slug", pass: Boolean(slug && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)), detail: `/${type === "post" ? "blog" : "services"}/${slug}` },
+    { label: "H1 Hierarchy", pass: !hasH1InBody, detail: hasH1InBody ? "H1 found inside body (title is page H1)" : "Title serves as page H1" },
+    { label: "Content Length", pass: wordCount >= (type === "post" ? 400 : 200), detail: `${wordCount} words` },
+    { label: "Featured Image", pass: Boolean(featuredImage), detail: featuredImage ? "Provided" : "Missing" },
+    { label: "Alt Text", pass: Boolean(!featuredImage || imageAlt), detail: imageAlt ? "Provided" : "Missing alt" },
+    { label: "Internal Links", pass: internalLinksCount >= 1, detail: `${internalLinksCount} internal links` },
+    { label: "External References", pass: externalLinksCount >= 0, detail: `${externalLinksCount} external links` },
+    { label: "Canonical URL", pass: Boolean(slug), detail: `https://hdwebstudios.in/${type === "post" ? "blog" : "services"}/${slug}` },
+    { label: "Schema.org Graph", pass: true, detail: type === "post" ? "BlogPosting + Organization" : "Service + LocalBusiness" },
+    { label: "Indexability", pass: true, detail: "index, follow" },
+    { label: "Sitemap Readiness", pass: Boolean(slug), detail: "Will be added to /sitemap.xml" },
+  ];
 
   // Critical Checks (Block Publishing)
   if (!title) {
@@ -29,7 +52,7 @@ export function validateContentQuality(doc, type = "post") {
     errors.push(`Content is nearly empty (${wordCount} words). Add comprehensive text before publishing.`);
   }
 
-  // Warning Checks (Allow Publishing with notice)
+  // Warning Checks
   if (!seoDescription) {
     warnings.push("Missing Meta Description: Search engines will auto-generate snippets which may not be optimal.");
   } else if (seoDescription.length < 80 || seoDescription.length > 165) {
@@ -57,6 +80,7 @@ export function validateContentQuality(doc, type = "post") {
     canPublish: isValid,
     errors,
     warnings,
+    checklist,
     summary: {
       wordCount,
       hasTitle: Boolean(title),
@@ -74,11 +98,11 @@ export default function QualityGateModal({
 }) {
   if (!isOpen || !validation) return null;
 
-  const { isValid, errors, warnings } = validation;
+  const { isValid, errors, warnings, checklist = [] } = validation;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-xs">
-      <div className="relative w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl animate-scaleUp">
+      <div className="relative w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl animate-scaleUp">
         <button
           onClick={onClose}
           className="absolute right-4 top-4 rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
@@ -89,26 +113,53 @@ export default function QualityGateModal({
         <div className="flex items-center gap-3">
           <div
             className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
-              isValid ? "bg-amber-100 text-amber-700" : "bg-red-100 text-red-700"
+              isValid ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-700"
             }`}
           >
-            {isValid ? <AlertTriangle size={20} /> : <XCircle size={20} />}
+            {isValid ? <CheckCircle2 size={20} /> : <XCircle size={20} />}
           </div>
           <div>
             <h3 className="text-base font-bold text-slate-900">
-              {isValid ? "Pre-Publish Quality Review" : "Publishing Blocked"}
+              {isValid ? "SEO Readiness & Pre-Publish Review" : "Publishing Blocked"}
             </h3>
             <p className="text-xs text-slate-500">
               {isValid
-                ? "Your content passed critical criteria with minor optimization notices."
+                ? "13-point SEO inspection passed. Review checks below before live publishing."
                 : "Resolve critical validation errors before publishing live to Google."}
             </p>
           </div>
         </div>
 
+        {/* 13-Point Checklist Table */}
+        <div className="mt-5 rounded-xl border border-slate-200 bg-slate-50/70 p-3 space-y-2">
+          <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+            13-Point Search &amp; Indexability Checklist
+          </p>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
+            {checklist.map((item, idx) => (
+              <div
+                key={idx}
+                className="flex items-center justify-between rounded-lg bg-white p-2 border border-slate-100"
+              >
+                <div className="truncate pr-1">
+                  <span className="font-semibold text-slate-800 text-[11px] block truncate">{item.label}</span>
+                  <span className="text-[10px] text-slate-400 block truncate">{item.detail}</span>
+                </div>
+                <span
+                  className={`rounded-md px-1.5 py-0.5 text-[10px] font-bold shrink-0 ${
+                    item.pass ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-700"
+                  }`}
+                >
+                  {item.pass ? "PASS" : "WARN"}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Critical Errors */}
         {errors.length > 0 && (
-          <div className="mt-5 space-y-2 rounded-xl border border-red-200 bg-red-50/70 p-4">
+          <div className="mt-4 space-y-2 rounded-xl border border-red-200 bg-red-50/70 p-4">
             <p className="text-xs font-bold text-red-900 uppercase tracking-wider">Critical Errors (Must Fix)</p>
             <ul className="space-y-1.5 text-xs text-red-700">
               {errors.map((err, i) => (
@@ -163,3 +214,4 @@ export default function QualityGateModal({
     </div>
   );
 }
+

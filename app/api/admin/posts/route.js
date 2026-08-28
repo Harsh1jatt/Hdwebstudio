@@ -5,6 +5,7 @@ import Post from "@/models/Post";
 import { requireAdminApi } from "@/lib/auth";
 import { parsePostPayload } from "@/utils/postValidation";
 import { serializePost, derivePostMetrics } from "@/lib/admin/serializePost";
+import { revalidateContent } from "@/lib/revalidation";
 
 export async function GET(req) {
   try {
@@ -118,6 +119,9 @@ export async function POST(req) {
       readingTime,
       publishedAt,
     });
+
+    // Invalidate sitemap & blog cache
+    await revalidateContent({ type: "blog", slug: post.slug });
 
     return NextResponse.json(
       { success: true, post: serializePost(post, { includeContent: true }) },

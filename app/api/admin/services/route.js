@@ -3,6 +3,7 @@ import connectDB from "@/lib/db";
 import Service from "@/models/Service";
 import { requireAdminApi } from "@/lib/auth";
 import { parseServicePayload } from "@/utils/serviceValidation";
+import { revalidateContent } from "@/lib/revalidation";
 
 function serializeService(doc) {
   return {
@@ -123,6 +124,9 @@ export async function POST(req) {
     }
 
     const service = await Service.create(parsed.data);
+
+    // Invalidate sitemap & services cache
+    await revalidateContent({ type: "service", slug: service.slug });
 
     return NextResponse.json(
       { success: true, service: serializeService(service) },

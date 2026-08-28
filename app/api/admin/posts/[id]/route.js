@@ -5,6 +5,7 @@ import Post from "@/models/Post";
 import { requireAdminApi } from "@/lib/auth";
 import { parsePostPayload, parsePostPatchPayload } from "@/utils/postValidation";
 import { serializePost, derivePostMetrics } from "@/lib/admin/serializePost";
+import { revalidateContent } from "@/lib/revalidation";
 
 function isValidObjectId(id) {
   return mongoose.Types.ObjectId.isValid(id);
@@ -93,6 +94,9 @@ export async function PUT(req, { params }) {
       return NextResponse.json({ success: false, error: "Post not found" }, { status: 404 });
     }
 
+    // Invalidate sitemap & blog cache
+    await revalidateContent({ type: "blog", slug: post.slug });
+
     return NextResponse.json({
       success: true,
       post: serializePost(post, { includeContent: true }),
@@ -172,6 +176,12 @@ export async function PATCH(req, { params }) {
       return NextResponse.json({ success: false, error: "Post not found" }, { status: 404 });
     }
 
+    // Invalidate sitemap & blog cache
+    await revalidateContent({ type: "blog", slug: post.slug });
+    if (existing.slug !== post.slug) {
+      await revalidateContent({ type: "blog", slug: existing.slug });
+    }
+
     return NextResponse.json({
       success: true,
       post: serializePost(post, { includeContent: true }),
@@ -204,9 +214,13 @@ export async function DELETE(req, { params }) {
       return NextResponse.json({ success: false, error: "Post not found" }, { status: 404 });
     }
 
+    // Invalidate sitemap & blog cache after deletion
+    await revalidateContent({ type: "blog", slug: deleted.slug });
+
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("admin post delete error:", error);
     return NextResponse.json({ success: false, error: "Server error" }, { status: 500 });
   }
 }
+

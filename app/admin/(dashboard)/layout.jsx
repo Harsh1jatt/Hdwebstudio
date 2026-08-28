@@ -1,6 +1,7 @@
 import AdminHeader from "@/components/Admin/layout/AdminHeader";
 import AdminSidebar from "@/components/Admin/layout/AdminSidebar";
 import AdminMobileNav from "@/components/Admin/layout/AdminMobileNav";
+import KeyboardShortcuts from "@/components/Admin/common/KeyboardShortcuts";
 import { requireAdmin } from "@/lib/auth";
 
 export const metadata = {
@@ -20,6 +21,7 @@ export default async function AdminDashboardLayout({ children }) {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
+      <KeyboardShortcuts />
       <div className="lg:flex lg:min-h-screen">
         <AdminSidebar />
 
@@ -37,4 +39,4 @@ export default async function AdminDashboardLayout({ children }) {
       </div>
     </div>
   );
-}
+}

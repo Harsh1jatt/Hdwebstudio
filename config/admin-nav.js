@@ -44,6 +44,8 @@ const adminNavGroups = [
     items: [
       { href: "/admin/leads", label: "Leads", icon: Mail },
       { href: "/admin/seo", label: "SEO Dashboard", icon: BarChart3 },
+      { href: "/admin/seo/sitemap", label: "Sitemap Manager", icon: Globe },
+      { href: "/admin/seo/gsc", label: "Search Console", icon: Search },
       { href: "/admin/seo/test", label: "Live Diagnostics", icon: Compass },
       { href: "/admin/seo/redirects", label: "301 Redirects", icon: ArrowRight },
       { href: "/admin/seo/backlinks", label: "Backlink CRM", icon: Link2 },

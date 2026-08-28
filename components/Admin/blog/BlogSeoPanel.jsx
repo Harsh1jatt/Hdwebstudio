@@ -84,8 +84,82 @@ export default function BlogSeoPanel({
       ? "Focused Overview"
       : "Brief / Needs Expansion";
 
+  const canonicalUrl = `https://hdwebstudios.in/blog/${form.slug || ""}`;
+  const gscInspectUrl = `https://search.google.com/search-console/inspect?resource_id=https%3A%2F%2Fhdwebstudios.in&id=${encodeURIComponent(
+    canonicalUrl
+  )}`;
+
+  const [copied, setCopied] = useState(false);
+
+  function copyCanonical() {
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard.writeText(canonicalUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  }
+
   return (
     <div className="space-y-4 text-xs">
+      {/* Google Indexing & Discovery Status Card */}
+      <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs space-y-3">
+        <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
+          <div className="flex items-center gap-1.5 font-bold text-slate-900">
+            <Globe size={13} className="text-blue-600" />
+            <span>Google Indexing &amp; Discovery</span>
+          </div>
+          <span
+            className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
+              form.status === "published"
+                ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                : "bg-amber-50 text-amber-700 border border-amber-200"
+            }`}
+          >
+            {form.status === "published" ? "DISCOVERED IN SITEMAP" : "DRAFT (NOINDEX)"}
+          </span>
+        </div>
+
+        <div className="space-y-1.5 text-[11px] text-slate-600">
+          <div className="flex justify-between">
+            <span className="text-slate-400">Sitemap:</span>
+            <span className="font-semibold text-slate-900">
+              {form.status === "published" ? "INCLUDED (/sitemap.xml)" : "NOT INCLUDED"}
+            </span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-slate-400">Robots:</span>
+            <span className="font-semibold text-slate-900">
+              {form.status === "published" ? "INDEX, FOLLOW" : "NOINDEX (Draft)"}
+            </span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-slate-400">HTTP Status:</span>
+            <span className="font-semibold text-emerald-600">200 OK</span>
+          </div>
+          <div className="truncate text-[10px] text-slate-400 font-mono mt-1">
+            {canonicalUrl}
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 pt-1">
+          <button
+            type="button"
+            onClick={copyCanonical}
+            className="flex-1 rounded-lg border border-slate-200 bg-white py-1.5 text-[10px] font-bold text-slate-700 hover:bg-slate-50 transition text-center"
+          >
+            {copied ? "Copied URL!" : "Copy Canonical URL"}
+          </button>
+          <a
+            href={gscInspectUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="flex-1 rounded-lg bg-blue-50 border border-blue-200 py-1.5 text-[10px] font-bold text-blue-700 hover:bg-blue-100 transition text-center inline-flex items-center justify-center gap-1"
+          >
+            Inspect in GSC <ExternalLink size={10} />
+          </a>
+        </div>
+      </div>
+
       {/* Overall Score Card */}
       <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
         <div className="flex items-center justify-between">

@@ -3,6 +3,7 @@ import { requireAdminApi } from "@/lib/auth";
 import connectDB from "@/lib/db";
 import Story from "@/models/Story";
 import { slugify } from "@/lib/slugify";
+import { revalidateContent } from "@/lib/revalidation";
 
 export async function GET(req) {
   try {
@@ -99,6 +100,9 @@ export async function POST(req) {
       canonicalUrl: canonicalUrl || "",
       noindex: noindex || false,
     });
+
+    // Invalidate sitemap & story cache
+    await revalidateContent({ type: "story", slug: story.slug });
 
     return NextResponse.json({ success: true, story: { id: story._id.toString(), slug: story.slug } }, { status: 201 });
   } catch (error) {

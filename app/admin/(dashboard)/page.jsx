@@ -285,14 +285,25 @@ export default async function AdminDashboardPage() {
 
       {/* Quick Actions */}
       <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-        <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
-          Quick Actions
-        </h2>
-        <div className="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-4">
-          <QuickAction label="New Blog Post" icon={BookOpen} href="/admin/blog/new" />
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+            Quick Actions &amp; Productivity Shortcuts
+          </h2>
+          <span className="text-[11px] font-mono text-slate-400">Press <kbd className="font-bold bg-slate-100 px-1 py-0.5 rounded border border-slate-200">Ctrl+K</kbd> for Command Palette</span>
+        </div>
+        <div className="grid gap-2.5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+          <QuickAction label="New Blog" icon={BookOpen} href="/admin/blog/new" />
           <QuickAction label="New Service" icon={Sparkles} href="/admin/services/new" />
           <QuickAction label="New Project" icon={Layers} href="/admin/projects/new" />
-          <QuickAction label="New Web Story" icon={Play} href="/admin/stories/new" />
+          <QuickAction label="New Story" icon={Play} href="/admin/stories/new" />
+          <QuickAction label="New FAQ" icon={HelpCircle} href="/admin/faqs/new" />
+          <QuickAction label="New Testimonial" icon={MessageSquare} href="/admin/testimonials/new" />
+          <QuickAction label="View Leads" icon={Mail} href="/admin/leads" />
+          <QuickAction label="Media Library" icon={ImageIcon} href="/admin/media" />
+          <QuickAction label="SEO Health" icon={BarChart3} href="/admin/seo" />
+          <QuickAction label="Sitemap" icon={Globe} href="/admin/seo/sitemap" />
+          <QuickAction label="Search Console" icon={Search} href="/admin/seo/gsc" />
+          <QuickAction label="Settings" icon={Settings} href="/admin/settings" />
         </div>
       </div>
 

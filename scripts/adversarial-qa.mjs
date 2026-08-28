@@ -66,7 +66,7 @@ async function runAdversarialTests() {
   console.log("\n[1] Testing Edge Proxy & Auth Guard Against Attacks...");
 
   function mockRequest(pathname, cookieValue = null) {
-    const url = new URL(`https://www.hdwebstudios.in${pathname}`);
+    const url = new URL(`https://hdwebstudios.in${pathname}`);
     return {
       nextUrl: url,
       url: url.href,
