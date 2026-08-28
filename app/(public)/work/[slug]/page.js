@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowLeft, ArrowRight, ExternalLink, CheckCircle2, Sparkles, Layers, ShieldCheck } from "lucide-react";
 import { getProjectBySlug, getPublishedProjects } from "@/lib/projects";
 import { absoluteUrl, siteConfig } from "@/config/site";
+import Breadcrumbs from "@/components/common/Breadcrumbs";
 
 export const dynamic = "force-dynamic";
 
@@ -30,7 +31,13 @@ export async function generateMetadata({ params }) {
       description,
       url: absoluteUrl(`/work/${project.slug}`),
       siteName: siteConfig.name,
-      images: [{ url: absoluteUrl(ogImage), alt: `${project.title} case study` }],
+      images: [{ url: absoluteUrl(ogImage), width: 1200, height: 630, alt: `${project.title} case study` }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [absoluteUrl(ogImage)],
     },
   };
 }
@@ -45,18 +52,39 @@ export default async function WorkDetailPage({ params }) {
 
   const imageSrc = project.featuredImage || project.thumbnail || siteConfig.assets.projectPlaceholder;
 
+  const creativeWorkJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    "@id": `${siteConfig.url}/work/${project.slug}#case-study`,
+    name: project.title,
+    headline: project.title,
+    description: project.seoDescription || project.shortDescription || project.description || "",
+    creator: {
+      "@type": "Organization",
+      "@id": `${siteConfig.url}/#organization`,
+      name: siteConfig.name,
+      url: siteConfig.url,
+    },
+    image: absoluteUrl(imageSrc),
+    url: absoluteUrl(`/work/${project.slug}`),
+    ...(project.client ? { client: { "@type": "Organization", name: project.client } } : {}),
+  };
+
   return (
     <div className="bg-white">
-      {/* Back Link */}
-      <div className="border-b border-slate-100 bg-slate-50/50 py-4">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(creativeWorkJsonLd) }}
+      />
+      {/* Breadcrumb Bar */}
+      <div className="border-b border-slate-100 bg-slate-50/70 py-2">
         <div className="mx-auto max-w-5xl px-5 sm:px-6">
-          <Link
-            href="/work"
-            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-500 transition hover:text-blue-600"
-          >
-            <ArrowLeft size={14} />
-            Back to Selected Work
-          </Link>
+          <Breadcrumbs
+            items={[
+              { label: "Work", href: "/work" },
+              { label: project.title },
+            ]}
+          />
         </div>
       </div>
 

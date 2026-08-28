@@ -30,10 +30,15 @@ import {
   Heading2,
   Heading3,
   Heading4,
+  Sparkles,
+  HelpCircle,
+  Megaphone,
+  Info,
 } from "lucide-react";
 
 import InternalLinkPicker from "./InternalLinkPicker";
 import MediaPicker from "@/components/Admin/media/MediaPicker";
+import { cleanPastedHtml } from "@/lib/seo/smartPaste";
 
 function ToolbarBtn({ onClick, active, disabled, title, children }) {
   return (
@@ -44,7 +49,7 @@ function ToolbarBtn({ onClick, active, disabled, title, children }) {
       title={title}
       className={`inline-flex h-8 w-8 items-center justify-center rounded-lg border text-slate-600 transition ${
         active
-          ? "border-blue-300 bg-blue-50 text-blue-700"
+          ? "border-blue-300 bg-blue-50 text-blue-700 font-bold"
           : "border-slate-200 bg-white hover:bg-slate-50"
       } ${disabled ? "cursor-not-allowed opacity-40" : ""}`}
     >
@@ -53,16 +58,21 @@ function ToolbarBtn({ onClick, active, disabled, title, children }) {
   );
 }
 
-export default function RichTextEditor({ value = "", onChange, placeholder = "Start writing your article…" }) {
+export default function RichTextEditor({
+  value = "",
+  onChange,
+  placeholder = "Start writing your article (paste from Docs/Word/AI for smart semantic conversion)…",
+}) {
   const [linkOpen, setLinkOpen] = useState(false);
   const [imagePickerOpen, setImagePickerOpen] = useState(false);
   const [youtubeUrl, setYoutubeUrl] = useState("");
   const [showYoutube, setShowYoutube] = useState(false);
+  const [pasteNotice, setPasteNotice] = useState(false);
 
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
-        heading: { levels: [1, 2, 3, 4, 5, 6] },
+        heading: { levels: [2, 3, 4, 5, 6] },
       }),
       Underline,
       Link.configure({
@@ -70,7 +80,7 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "St
         HTMLAttributes: { rel: "noopener noreferrer" },
       }),
       Image.configure({
-        HTMLAttributes: { class: "rounded-xl max-w-full h-auto" },
+        HTMLAttributes: { class: "rounded-xl max-w-full h-auto my-6 border border-slate-200" },
       }),
       Placeholder.configure({ placeholder }),
       Youtube.configure({
@@ -85,7 +95,12 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "St
     editorProps: {
       attributes: {
         class:
-          "prose prose-slate max-w-none min-h-[320px] px-4 py-3 focus:outline-none prose-headings:font-bold prose-a:text-blue-600 prose-img:rounded-xl",
+          "prose prose-slate max-w-none min-h-[360px] px-5 py-4 focus:outline-none prose-headings:font-bold prose-a:text-blue-600 prose-img:rounded-xl",
+      },
+      transformPastedHTML(html) {
+        setPasteNotice(true);
+        setTimeout(() => setPasteNotice(false), 3000);
+        return cleanPastedHtml(html);
       },
     },
     onUpdate: ({ editor: ed }) => {
@@ -134,10 +149,52 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "St
     setShowYoutube(false);
   }, [editor, youtubeUrl]);
 
+  const insertCallout = useCallback(() => {
+    if (!editor) return;
+    editor
+      .chain()
+      .focus()
+      .insertContent(
+        `<div class="p-4 my-4 rounded-xl border border-blue-200 bg-blue-50/70 text-slate-800"><p><strong>💡 Key Takeaway:</strong> Enter critical insight or recommendation here.</p></div>`
+      )
+      .run();
+  }, [editor]);
+
+  const insertFaqBlock = useCallback(() => {
+    if (!editor) return;
+    editor
+      .chain()
+      .focus()
+      .insertContent(
+        `<div class="p-4 my-4 rounded-xl border border-slate-200 bg-slate-50"><h3>Frequently Asked Question</h3><p>Clear, direct factual answer addressing search intent.</p></div>`
+      )
+      .run();
+  }, [editor]);
+
+  const insertCtaBlock = useCallback(() => {
+    if (!editor) return;
+    editor
+      .chain()
+      .focus()
+      .insertContent(
+        `<div class="p-6 my-6 text-center rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white"><h3>Need help optimizing your website?</h3><p>Get a free digital audit and practical roadmap from HD Web Studios.</p><p><a href="/contact" class="inline-block mt-3 px-5 py-2 bg-white text-blue-700 font-bold rounded-xl no-underline">Book a Free Consultation</a></p></div>`
+      )
+      .run();
+  }, [editor]);
+
   if (!editor) return null;
 
   return (
     <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+      {/* Top Smart Paste Notification Bar */}
+      {pasteNotice && (
+        <div className="flex items-center gap-2 border-b border-emerald-200 bg-emerald-50 px-4 py-1.5 text-xs font-semibold text-emerald-800 animate-fadeIn">
+          <Sparkles size={13} className="text-emerald-600" />
+          <span>Smart Paste active: Cleaned formatting, normalized headings to H2+, and sanitized dangerous attributes.</span>
+        </div>
+      )}
+
+      {/* Main Toolbar */}
       <div className="flex flex-wrap items-center gap-1 border-b border-slate-100 bg-slate-50 p-2">
         <ToolbarBtn onClick={() => editor.chain().focus().undo().run()} disabled={!editor.can().undo()} title="Undo">
           <Undo2 className="h-4 w-4" />
@@ -178,14 +235,14 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "St
         <ToolbarBtn
           onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
           active={editor.isActive("heading", { level: 2 })}
-          title="Heading 2"
+          title="Heading 2 (Primary Section)"
         >
           <Heading2 className="h-4 w-4" />
         </ToolbarBtn>
         <ToolbarBtn
           onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
           active={editor.isActive("heading", { level: 3 })}
-          title="Heading 3"
+          title="Heading 3 (Sub-section)"
         >
           <Heading3 className="h-4 w-4" />
         </ToolbarBtn>
@@ -225,11 +282,11 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "St
         >
           <Code className="h-4 w-4" />
         </ToolbarBtn>
-        <ToolbarBtn onClick={() => editor.chain().focus().setHorizontalRule().run()} title="Horizontal rule">
+        <ToolbarBtn onClick={() => editor.chain().focus().setHorizontalRule().run()} title="Horizontal divider">
           <Minus className="h-4 w-4" />
         </ToolbarBtn>
         <span className="mx-1 h-6 w-px bg-slate-200" />
-        <ToolbarBtn onClick={() => setLinkOpen(true)} active={editor.isActive("link")} title="Insert link">
+        <ToolbarBtn onClick={() => setLinkOpen(true)} active={editor.isActive("link")} title="Insert internal or external link">
           <Link2 className="h-4 w-4" />
         </ToolbarBtn>
         <ToolbarBtn
@@ -239,10 +296,10 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "St
         >
           <Unlink className="h-4 w-4" />
         </ToolbarBtn>
-        <ToolbarBtn onClick={() => setImagePickerOpen(true)} title="Insert image">
+        <ToolbarBtn onClick={() => setImagePickerOpen(true)} title="Insert image with alt text">
           <ImageIcon className="h-4 w-4" />
         </ToolbarBtn>
-        <ToolbarBtn onClick={() => setShowYoutube((v) => !v)} title="Embed YouTube">
+        <ToolbarBtn onClick={() => setShowYoutube((v) => !v)} title="Embed YouTube video">
           <YoutubeIcon className="h-4 w-4" />
         </ToolbarBtn>
         <ToolbarBtn
@@ -253,6 +310,18 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "St
         >
           <TableIcon className="h-4 w-4" />
         </ToolbarBtn>
+        <span className="mx-1 h-6 w-px bg-slate-200" />
+        {/* Custom Semantic Blocks */}
+        <ToolbarBtn onClick={insertCallout} title="Insert Highlight Callout Box">
+          <Info className="h-4 w-4 text-blue-600" />
+        </ToolbarBtn>
+        <ToolbarBtn onClick={insertFaqBlock} title="Insert FAQ Block">
+          <HelpCircle className="h-4 w-4 text-emerald-600" />
+        </ToolbarBtn>
+        <ToolbarBtn onClick={insertCtaBlock} title="Insert Conversion CTA Banner">
+          <Megaphone className="h-4 w-4 text-purple-600" />
+        </ToolbarBtn>
+        <span className="mx-1 h-6 w-px bg-slate-200" />
         <ToolbarBtn
           onClick={() => editor.chain().focus().clearNodes().unsetAllMarks().run()}
           title="Clear formatting"
@@ -268,7 +337,7 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "St
             value={youtubeUrl}
             onChange={(e) => setYoutubeUrl(e.target.value)}
             placeholder="https://www.youtube.com/watch?v=..."
-            className="flex-1 rounded-lg border border-slate-200 px-3 py-1.5 text-sm"
+            className="flex-1 rounded-lg border border-slate-200 px-3 py-1.5 text-sm bg-white"
           />
           <button
             type="button"
@@ -296,7 +365,7 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "St
             value=""
             label=""
             onChange={(url) => {
-              const alt = window.prompt("Alt text for this image (required for SEO):") || "";
+              const alt = window.prompt("Meaningful Alt Text for this image (critical for accessibility & SEO):") || "";
               insertImage(url, alt);
             }}
           />

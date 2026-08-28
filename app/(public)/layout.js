@@ -4,12 +4,15 @@ import WhatsAppFloat from "@/components/common/WhatsAppFloat";
 import { getPublishedServices } from "@/lib/services";
 import { absoluteUrl, siteConfig } from "@/config/site";
 import { getSiteSettings } from "@/lib/settings";
+import Script from "next/script";
 
 export default async function PublicLayout({ children }) {
   const [services, settings] = await Promise.all([
     getPublishedServices(),
     getSiteSettings(),
   ]);
+
+  const gaId = settings.analytics?.googleAnalyticsId || process.env.NEXT_PUBLIC_GA_ID;
 
   // Map services for navbar
   const navServices = services.map((s) => ({
@@ -113,6 +116,25 @@ export default async function PublicLayout({ children }) {
 
   return (
     <>
+      {gaId && (
+        <>
+          <Script
+            src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+            strategy="afterInteractive"
+          />
+          <Script id="google-analytics" strategy="afterInteractive">
+            {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${gaId}', {
+                page_path: window.location.pathname,
+              });
+            `}
+          </Script>
+        </>
+      )}
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

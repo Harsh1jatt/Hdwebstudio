@@ -6,6 +6,7 @@ import {
 import { getPublishedTestimonials } from "@/lib/testimonials";
 import { getServicePageData } from "@/lib/settings";
 import { absoluteUrl, siteConfig } from "@/config/site";
+import Breadcrumbs from "@/components/common/Breadcrumbs";
 
 import ServiceHero from "@/components/services/ServiceHero";
 import TrustStats from "@/components/services/TrustStats";
@@ -31,11 +32,11 @@ export async function generateMetadata({ params }) {
   }
 
   const title =
-    service.seoTitle || `${service.eyebrow} | HD Web Studios`;
+    service.seoTitle || `${service.eyebrow || service.title} | HD Web Studios`;
   const description = service.seoDescription || service.description;
   const ogImage = service.ogImage
     ? absoluteUrl(service.ogImage)
-    : undefined;
+    : absoluteUrl(siteConfig.assets.ogImage || "/logo.svg");
 
   return {
     title,
@@ -49,13 +50,13 @@ export async function generateMetadata({ params }) {
       url: absoluteUrl(`/services/${service.slug}`),
       siteName: siteConfig.name,
       type: "website",
-      ...(ogImage ? { images: [{ url: ogImage }] } : {}),
+      images: [{ url: ogImage, width: 1200, height: 630, alt: service.title }],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      ...(ogImage ? { images: [ogImage] } : {}),
+      images: [ogImage],
     },
   };
 }
@@ -74,41 +75,64 @@ export default async function ServiceDetailsPage({ params }) {
     getServicePageData(),
   ]);
 
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: siteConfig.url },
-      { "@type": "ListItem", position: 2, name: "Services", item: absoluteUrl("/services") },
-      { "@type": "ListItem", position: 3, name: service.title, item: absoluteUrl(`/services/${service.slug}`) },
-    ],
-  };
-
   const serviceJsonLd = {
     "@context": "https://schema.org",
     "@type": "Service",
+    "@id": `${siteConfig.url}/services/${service.slug}#service`,
     name: service.title,
     description: service.seoDescription || service.shortDescription || service.description || "",
-    provider: { "@type": "Organization", name: siteConfig.name, url: siteConfig.url },
+    provider: {
+      "@type": "Organization",
+      "@id": `${siteConfig.url}/#organization`,
+      name: siteConfig.name,
+      url: siteConfig.url,
+    },
     url: absoluteUrl(`/services/${service.slug}`),
-    areaServed: { "@type": "Country", name: "India" },
+    areaServed: [
+      { "@type": "City", name: "Ludhiana" },
+      { "@type": "State", name: "Punjab" },
+      { "@type": "Country", name: "India" },
+    ],
   };
 
-  const faqJsonLd = service.faq?.length ? {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: service.faq.map((item) => ({
-      "@type": "Question",
-      name: item.question || item.q,
-      acceptedAnswer: { "@type": "Answer", text: item.answer || item.a },
-    })),
-  } : null;
+  const faqJsonLd = service.faq?.length
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "@id": `${siteConfig.url}/services/${service.slug}#faq`,
+        mainEntity: service.faq.map((item) => ({
+          "@type": "Question",
+          name: item.question || item.q,
+          acceptedAnswer: { "@type": "Answer", text: item.answer || item.a },
+        })),
+      }
+    : null;
 
   return (
     <div className="relative overflow-x-clip bg-white">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }} />
-      {faqJsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
+      />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
+
+      {/* Top Breadcrumb Bar */}
+      <div className="border-b border-slate-100 bg-slate-50/70">
+        <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+          <Breadcrumbs
+            items={[
+              { label: "Services", href: "/services" },
+              { label: service.title },
+            ]}
+          />
+        </div>
+      </div>
+
       <ServiceHero service={service} />
       <TrustStats data={servicePageData.trustStats} />
       <ServiceOverview service={service} />
@@ -124,3 +148,4 @@ export default async function ServiceDetailsPage({ params }) {
     </div>
   );
 }
+

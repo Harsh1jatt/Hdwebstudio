@@ -12,6 +12,7 @@ import BlogSeoPanel from "@/components/Admin/blog/BlogSeoPanel";
 import BlogPreview from "@/components/Admin/blog/BlogPreview";
 import AiContentGenerator from "@/components/Admin/common/AiContentGenerator";
 import TagInput from "@/components/Admin/common/TagInput";
+import QualityGateModal, { validateContentQuality } from "@/components/Admin/common/QualityGateModal";
 import { slugify } from "@/lib/slugify";
 
 const emptyPost = {
@@ -183,18 +184,11 @@ export default function PostForm({
     return () => clearTimeout(timer);
   }, [form.slug, postId]);
 
-  async function handleSubmit(event, statusOverride) {
-    event?.preventDefault?.();
-    const payload = {
-      ...form,
-      slug: slugify(form.slug),
-      contentFormat: "html",
-      tags: (form.tags || []).map((t) => t.trim()).filter(Boolean),
-      secondaryKeywords: (form.secondaryKeywords || [])
-        .map((t) => t.trim())
-        .filter(Boolean),
-      status: statusOverride || form.status,
-    };
+  const [qualityGateOpen, setQualityGateOpen] = useState(false);
+  const [validationResult, setValidationResult] = useState(null);
+  const [pendingPayload, setPendingPayload] = useState(null);
+
+  async function executeSubmit(payload) {
     await onSubmit(payload);
     setDirty(false);
     try {
@@ -203,6 +197,45 @@ export default function PostForm({
     } catch {
       /* ignore */
     }
+  }
+
+  async function handleSubmit(event, statusOverride) {
+    event?.preventDefault?.();
+    const targetStatus = statusOverride || form.status;
+    const payload = {
+      ...form,
+      slug: slugify(form.slug),
+      contentFormat: "html",
+      tags: (form.tags || []).map((t) => t.trim()).filter(Boolean),
+      secondaryKeywords: (form.secondaryKeywords || [])
+        .map((t) => t.trim())
+        .filter(Boolean),
+      status: targetStatus,
+    };
+
+    if (targetStatus === "published") {
+      const val = validateContentQuality(payload, "post");
+      setValidationResult(val);
+      setPendingPayload(payload);
+
+      // If critical errors or warnings exist, open quality review modal
+      if (!val.isValid || val.warnings.length > 0) {
+        setQualityGateOpen(true);
+        return;
+      }
+    }
+
+    await executeSubmit(payload);
+  }
+
+  function handleInsertLink(url, anchor) {
+    if (!url) return;
+    const linkHtml = ` <a href="${url}">${anchor || url}</a> `;
+    setForm((prev) => ({
+      ...prev,
+      content: (prev.content || "") + linkHtml,
+    }));
+    setDirty(true);
   }
 
   return (
@@ -429,6 +462,7 @@ export default function PostForm({
             form={form}
             originalSlug={originalSlug.current}
             slugAvailable={slugAvailable}
+            onInsertLink={handleInsertLink}
           />
         </aside>
       </div>
@@ -444,6 +478,17 @@ export default function PostForm({
           Cancel
         </Link>
       </div>
+
+      <QualityGateModal
+        isOpen={qualityGateOpen}
+        onClose={() => setQualityGateOpen(false)}
+        validation={validationResult}
+        onConfirmPublish={() => {
+          if (pendingPayload) {
+            executeSubmit(pendingPayload);
+          }
+        }}
+      />
     </form>
   );
 }

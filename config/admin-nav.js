@@ -15,6 +15,10 @@ import {
   Bot,
   Activity,
   Search,
+  ArrowRight,
+  Link2,
+  TrendingUp,
+  Compass,
 } from "lucide-react";
 
 const adminNavGroups = [
@@ -36,10 +40,14 @@ const adminNavGroups = [
     ],
   },
   {
-    label: "Growth",
+    label: "Growth & SEO",
     items: [
       { href: "/admin/leads", label: "Leads", icon: Mail },
-      { href: "/admin/seo", label: "SEO & Audits", icon: BarChart3 },
+      { href: "/admin/seo", label: "SEO Dashboard", icon: BarChart3 },
+      { href: "/admin/seo/test", label: "Live Diagnostics", icon: Compass },
+      { href: "/admin/seo/redirects", label: "301 Redirects", icon: ArrowRight },
+      { href: "/admin/seo/backlinks", label: "Backlink CRM", icon: Link2 },
+      { href: "/admin/seo/keywords", label: "Keywords", icon: TrendingUp },
     ],
   },
   {

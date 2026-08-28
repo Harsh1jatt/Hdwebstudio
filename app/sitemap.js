@@ -12,16 +12,16 @@ export default async function sitemap() {
 
   const staticRoutes = [
     { path: "/", priority: 1.0, changeFrequency: "weekly" },
-    { path: "/about", priority: 0.8, changeFrequency: "monthly" },
     { path: "/services", priority: 0.9, changeFrequency: "weekly" },
-    { path: "/portfolio", priority: 0.9, changeFrequency: "weekly" },
-    { path: "/blog", priority: 0.7, changeFrequency: "weekly" },
-    { path: "/stories", priority: 0.7, changeFrequency: "weekly" },
-    { path: "/pricing", priority: 0.7, changeFrequency: "monthly" },
+    { path: "/work", priority: 0.9, changeFrequency: "weekly" },
+    { path: "/about", priority: 0.8, changeFrequency: "monthly" },
     { path: "/contact", priority: 0.9, changeFrequency: "monthly" },
+    { path: "/audit", priority: 0.8, changeFrequency: "monthly" },
+    { path: "/pricing", priority: 0.7, changeFrequency: "monthly" },
+    { path: "/blog", priority: 0.8, changeFrequency: "daily" },
+    { path: "/stories", priority: 0.7, changeFrequency: "weekly" },
     { path: "/privacy", priority: 0.3, changeFrequency: "yearly" },
     { path: "/terms", priority: 0.3, changeFrequency: "yearly" },
-    { path: "/thank-you", priority: 0.2, changeFrequency: "yearly" },
   ];
 
   try {
@@ -30,34 +30,34 @@ export default async function sitemap() {
     const [services, projects, posts, stories] = await Promise.all([
       Service.find({ published: true }).select("slug updatedAt").sort({ order: 1 }).lean(),
       Project.find({ published: true }).select("slug updatedAt").sort({ order: 1 }).lean(),
-      Post.find({ status: "published" }).select("slug updatedAt").sort({ publishedAt: -1 }).lean(),
-      Story.find({ status: "published" }).select("slug updatedAt").sort({ publishedAt: -1 }).lean(),
+      Post.find({ status: "published" }).select("slug updatedAt publishedAt").sort({ publishedAt: -1 }).lean(),
+      Story.find({ status: "published" }).select("slug updatedAt publishedAt").sort({ publishedAt: -1 }).lean(),
     ]);
 
     const serviceRoutes = services.map((s) => ({
       url: absoluteUrl(`/services/${s.slug}`),
-      lastModified: s.updatedAt || currentDate,
+      lastModified: s.updatedAt ? new Date(s.updatedAt) : currentDate,
       changeFrequency: "monthly",
       priority: 0.9,
     }));
 
-    const portfolioRoutes = projects.map((p) => ({
-      url: absoluteUrl(`/portfolio/${p.slug}`),
-      lastModified: p.updatedAt || currentDate,
+    const workRoutes = projects.map((p) => ({
+      url: absoluteUrl(`/work/${p.slug}`),
+      lastModified: p.updatedAt ? new Date(p.updatedAt) : currentDate,
       changeFrequency: "monthly",
       priority: 0.8,
     }));
 
     const blogRoutes = posts.map((p) => ({
       url: absoluteUrl(`/blog/${p.slug}`),
-      lastModified: p.updatedAt || currentDate,
-      changeFrequency: "monthly",
-      priority: 0.7,
+      lastModified: p.updatedAt || p.publishedAt ? new Date(p.updatedAt || p.publishedAt) : currentDate,
+      changeFrequency: "weekly",
+      priority: 0.8,
     }));
 
     const storyRoutes = stories.map((s) => ({
       url: absoluteUrl(`/stories/${s.slug}`),
-      lastModified: s.updatedAt || currentDate,
+      lastModified: s.updatedAt || s.publishedAt ? new Date(s.updatedAt || s.publishedAt) : currentDate,
       changeFrequency: "monthly",
       priority: 0.7,
     }));
@@ -69,7 +69,7 @@ export default async function sitemap() {
       priority,
     }));
 
-    return [...staticMapped, ...serviceRoutes, ...portfolioRoutes, ...blogRoutes, ...storyRoutes];
+    return [...staticMapped, ...serviceRoutes, ...workRoutes, ...blogRoutes, ...storyRoutes];
   } catch (error) {
     console.error("[sitemap] Failed to fetch dynamic routes:", error);
     return staticRoutes.map(({ path, priority, changeFrequency }) => ({
@@ -80,3 +80,4 @@ export default async function sitemap() {
     }));
   }
 }
+
