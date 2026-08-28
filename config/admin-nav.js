@@ -13,6 +13,8 @@ import {
   ImageIcon,
   Settings,
   Bot,
+  Activity,
+  Search,
 } from "lucide-react";
 
 const adminNavGroups = [
@@ -20,33 +22,38 @@ const adminNavGroups = [
     label: "Overview",
     items: [
       { href: "/admin", label: "Dashboard", icon: Home },
-      { href: "/admin/leads", label: "Leads", icon: Mail },
-      { href: "/admin/seo", label: "SEO", icon: BarChart3 },
-      { href: "/admin/chat", label: "AI Assistant", icon: Bot },
     ],
   },
   {
     label: "Content",
     items: [
-      { href: "/admin/blog", label: "Blog", icon: BookOpen },
       { href: "/admin/services", label: "Services", icon: Sparkles },
-      { href: "/admin/projects", label: "Projects", icon: Layers },
+      { href: "/admin/blog", label: "Blog", icon: BookOpen },
+      { href: "/admin/projects", label: "Work", icon: Layers },
       { href: "/admin/stories", label: "Stories", icon: Play },
+      { href: "/admin/faqs", label: "FAQs", icon: HelpCircle },
+      { href: "/admin/testimonials", label: "Testimonials", icon: MessageSquare },
     ],
   },
   {
-    label: "Business",
+    label: "Growth",
     items: [
-      { href: "/admin/testimonials", label: "Testimonials", icon: MessageSquare },
-      { href: "/admin/faqs", label: "FAQs", icon: HelpCircle },
-      { href: "/admin/pricing", label: "Pricing", icon: DollarSign },
-      { href: "/admin/team", label: "Team", icon: Users },
+      { href: "/admin/leads", label: "Leads", icon: Mail },
+      { href: "/admin/seo", label: "SEO & Audits", icon: BarChart3 },
+    ],
+  },
+  {
+    label: "AI",
+    items: [
+      { href: "/admin/chat", label: "HD AI Command", icon: Bot },
     ],
   },
   {
     label: "System",
     items: [
       { href: "/admin/media", label: "Media", icon: ImageIcon },
+      { href: "/admin/pricing", label: "Pricing", icon: DollarSign },
+      { href: "/admin/team", label: "Team", icon: Users },
       { href: "/admin/settings", label: "Settings", icon: Settings },
     ],
   },

@@ -6,9 +6,20 @@ import { parse } from 'url';
 let xlsx = null;
 try{ xlsx = require('xlsx'); }catch(e){ xlsx = null; }
 
-function csvEscape(v){
-  if (v==null) return '';
-  return '"'+String(v).replace(/"/g,'""')+'"';
+function sanitizeFormula(v) {
+  if (v == null) return '';
+  const str = String(v);
+  // Neutralize CSV/Formula injection triggers (=, +, -, @, tab, CR)
+  if (/^[=+\-@\t\r]/.test(str)) {
+    return "'" + str;
+  }
+  return str;
+}
+
+function csvEscape(v) {
+  if (v == null) return '""';
+  const clean = sanitizeFormula(v);
+  return '"' + clean.replace(/"/g, '""') + '"';
 }
 
 export async function GET(req) {
@@ -19,20 +30,42 @@ export async function GET(req) {
     const leads = await Contact.find().sort({ createdAt: -1 }).lean();
     const url = new URL(req.url);
     const format = url.searchParams.get('format');
-    const header = ['Name','Phone','Email','Business','Message','Received'];
+    const header = ['Name', 'Phone', 'Email', 'Business', 'Website', 'Service', 'Budget', 'Status', 'Priority', 'Source', 'Message', 'Notes', 'Received'];
     const rows = leads.map(l => [
       csvEscape(l.name),
       csvEscape(l.phone),
       csvEscape(l.email),
       csvEscape(l.business),
+      csvEscape(l.website),
+      csvEscape(l.service),
+      csvEscape(l.budget),
+      csvEscape(l.status || 'new'),
+      csvEscape(l.priority || 'normal'),
+      csvEscape(l.source || 'website'),
       csvEscape(l.message),
-      csvEscape(new Date(l.createdAt).toISOString()),
+      csvEscape(l.notes),
+      csvEscape(l.createdAt ? new Date(l.createdAt).toISOString() : ''),
     ]);
 
     const csv = [header.map(csvEscape).join(','), ...rows.map(r=>r.join(','))].join('\n');
 
     if (format === 'xlsx' && xlsx){
-      const ws = xlsx.utils.aoa_to_sheet([header, ...leads.map(l=>[l.name,l.phone,l.email,l.business,l.message,new Date(l.createdAt).toISOString()])]);
+      const rawRows = leads.map(l => [
+        sanitizeFormula(l.name || ''),
+        sanitizeFormula(l.phone || ''),
+        sanitizeFormula(l.email || ''),
+        sanitizeFormula(l.business || ''),
+        sanitizeFormula(l.website || ''),
+        sanitizeFormula(l.service || ''),
+        sanitizeFormula(l.budget || ''),
+        sanitizeFormula(l.status || 'new'),
+        sanitizeFormula(l.priority || 'normal'),
+        sanitizeFormula(l.source || 'website'),
+        sanitizeFormula(l.message || ''),
+        sanitizeFormula(l.notes || ''),
+        l.createdAt ? new Date(l.createdAt).toISOString() : '',
+      ]);
+      const ws = xlsx.utils.aoa_to_sheet([header, ...rawRows]);
       const wb = { Sheets: { data: ws }, SheetNames: ['data'] };
       const buf = xlsx.write(wb, { type: 'buffer', bookType: 'xlsx' });
       return new Response(buf, { headers: { 'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'Content-Disposition': 'attachment; filename="leads.xlsx"' } });

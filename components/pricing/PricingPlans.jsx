@@ -1,139 +1,171 @@
-"use client";
+import Link from "next/link";
+import { Check, Sparkles, ArrowRight, ShieldCheck, HelpCircle } from "lucide-react";
+import { whatsAppUrl } from "@/config/site";
 
-import { motion } from "framer-motion";
-import { fadeUp, staggerContainer } from "@/lib/motion";
-import { resolveIcon } from "@/lib/icons";
-
-function WordpressIcon({ className }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
-      <path fill="currentColor" d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm5.894 6.111l-1.97 9.285c-.146.658-.537.818-1.084.508l-2.998-2.211-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.334-.374-.121L7.668 14.5l-2.966-.924c-.646-.203-.658-.646.135-.954l11.59-4.467c.538-.193 1.006.132.83.924l-.117-.068z"/>
-    </svg>
-  );
-}
-
-function PlanIcon({ name, className }) {
-  if (name === "Wordpress") {
-    return <WordpressIcon className={className} />;
-  }
-
-  const Icon = resolveIcon(name);
-  return <Icon className={className} />;
-}
+const DEFAULT_PLANS = [
+  {
+    name: "Starter Website",
+    badge: "Fast Launch",
+    price: "₹14,999",
+    period: "one-time",
+    description: "Ideal for local service businesses and professionals needing a high-speed, authoritative online presence.",
+    features: [
+      "Custom responsive design (up to 5 pages)",
+      "Next.js App Router sub-second speed",
+      "Mobile-first UI & touch-optimized UX",
+      "Google Search Console & on-page SEO setup",
+      "Spam-protected contact & WhatsApp lead capture",
+      "7–10 business days delivery",
+      "100% full source code ownership",
+    ],
+    cta: "Choose Starter",
+    href: "/contact",
+    highlight: false,
+  },
+  {
+    name: "Business Acquisition",
+    badge: "Most Popular",
+    price: "₹29,999",
+    period: "one-time",
+    description: "For growing companies and manufacturers that need active customer acquisition, local SEO dominance, and blog CMS.",
+    features: [
+      "Complete bespoke website (up to 10+ pages)",
+      "Full CMS for blog & service management",
+      "LocalBusiness Schema & Google Maps optimization",
+      "Conversion-engineered lead capture funnels",
+      "GA4 custom event & conversion tracking",
+      "Speed optimization for Core Web Vitals",
+      "30 days post-launch priority support",
+    ],
+    cta: "Choose Business",
+    href: "/contact",
+    highlight: true,
+  },
+  {
+    name: "Custom Software & Ecommerce",
+    badge: "Tailored Scope",
+    price: "Custom Quote",
+    period: "milestone-based",
+    description: "For D2C ecommerce stores, multi-role web apps, SaaS portals, and custom business management software.",
+    features: [
+      "Full-stack Next.js, Node.js & MongoDB architecture",
+      "Payment gateway integration (Razorpay, UPI, Stripe)",
+      "Role-based user permissions & admin controls",
+      "Custom database models & automated workflows",
+      "Third-party API & webhook integrations",
+      "Dedicated staging & production deployment",
+      "Comprehensive SLA & technical maintenance",
+    ],
+    cta: "Request Scoping Call",
+    href: "/contact",
+    highlight: false,
+  },
+];
 
 export default function PricingPlans({ plans = [] }) {
+  const displayPlans = plans.length >= 3 ? plans : DEFAULT_PLANS;
+
   return (
-    <section className="relative bg-gradient-to-b from-slate-50 via-white to-slate-100 px-6 py-24">
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-blue-200/40 via-emerald-100/30 to-transparent blur-3xl" />
+    <div className="bg-white">
+      {/* Header */}
+      <section className="relative border-b border-slate-100 bg-slate-50/50 py-16 sm:py-24 text-center">
+        <div className="mx-auto max-w-4xl px-5 sm:px-6">
+          <div className="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50/80 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-blue-700">
+            <Sparkles size={13} className="text-blue-600" />
+            Transparent Investment
+          </div>
+          <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-slate-950 sm:text-5xl">
+            Simple, Transparent Pricing
+          </h1>
+          <p className="mt-4 text-base leading-7 text-slate-600 sm:text-lg max-w-2xl mx-auto">
+            Clear packages with zero hidden fees. Every project includes full code ownership, modern Next.js performance, and direct founder communication.
+          </p>
+        </div>
+      </section>
 
-      <div className="relative mx-auto max-w-7xl text-center">
-        <motion.h1
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          className="mb-6 bg-gradient-to-r from-blue-600 to-emerald-500 bg-clip-text text-4xl font-extrabold text-transparent md:text-5xl"
-        >
-          Transparent Pricing, Maximum Value
-        </motion.h1>
-        <motion.p
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          className="mx-auto mb-14 max-w-2xl text-lg text-gray-600"
-        >
-          Invest in your growth. Every package is designed to maximize your ROI
-          — clear pricing, no hidden costs, only results.
-        </motion.p>
-
-        <motion.div
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          className="grid gap-10 md:grid-cols-3"
-        >
-          {plans.map((plan) => (
-            <motion.div
-              key={plan.name || plan.title}
-              variants={fadeUp}
-              whileHover={{ scale: 1.05 }}
-              className={`group relative flex flex-col rounded-2xl border bg-white p-8 shadow-lg transition hover:shadow-2xl ${
-                plan.highlighted || plan.popular
-                  ? "border-blue-500 shadow-blue-200"
-                  : "border-slate-200"
-              }`}
-            >
-              {(plan.highlighted || plan.popular) && (
-                <span className="absolute -top-3 right-4 rounded-full bg-gradient-to-r from-blue-600 to-emerald-500 px-3 py-1 text-sm font-semibold text-white shadow-md">
-                  {plan.badge || "Most Popular"}
-                </span>
-              )}
-
-              <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-tr from-blue-500/10 to-emerald-500/10">
-                <PlanIcon
-                  name={plan.icon}
-                  className="h-10 w-10 text-blue-600"
-                />
-              </div>
-
-              <h2 className="mb-2 text-xl font-bold text-gray-900">
-                {plan.name || plan.title}
-              </h2>
-              <div className="mb-6">
-                <p className="text-lg text-gray-500 line-through">
-                  {plan.price}
-                </p>
-                <p className="text-2xl font-semibold text-blue-600">
-                  {plan.discountPrice}
-                </p>
-              </div>
-
-              <ul className="flex-1 space-y-2 text-left text-gray-600">
-                {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-2">
-                    <span className="font-bold text-emerald-500">✓</span>
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-
-              <p className="mt-4 text-sm italic text-gray-500">{plan.note}</p>
-
-              <a
-                href={plan.ctaUrl || "/contact"}
-                className="mt-8 block w-full rounded-xl bg-gradient-to-r from-blue-600 to-emerald-500 py-3 text-center font-medium text-white shadow-md transition hover:scale-105 hover:shadow-lg"
+      {/* Plans Grid */}
+      <section className="py-16 sm:py-20">
+        <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+          <div className="grid gap-8 lg:grid-cols-3">
+            {displayPlans.map((plan) => (
+              <div
+                key={plan.name}
+                className={`relative flex flex-col justify-between rounded-3xl border p-8 shadow-sm transition-all duration-300 ${
+                  plan.highlight
+                    ? "border-blue-600 ring-2 ring-blue-600/10 shadow-lg bg-white"
+                    : "border-slate-200/80 bg-slate-50/30 hover:bg-white hover:border-slate-300"
+                }`}
               >
-                {plan.ctaText || "Get Started"}
-              </a>
-            </motion.div>
-          ))}
-        </motion.div>
+                {plan.highlight && (
+                  <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-blue-600 px-4 py-1 text-xs font-bold uppercase tracking-wider text-white shadow-sm">
+                    {plan.badge || "Recommended"}
+                  </span>
+                )}
 
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          className="mx-auto mt-20 max-w-3xl rounded-xl border border-yellow-200 bg-yellow-50 p-6 text-left shadow-sm"
-        >
-          <h3 className="mb-2 text-xl font-semibold text-yellow-700">
-            Important Note
-          </h3>
-          <p className="mb-3 text-gray-700">
-            Work begins only after an{" "}
-            <span className="font-semibold">advance payment</span>. Once you book
-            a service, you will receive a confirmation call where we&apos;ll
-            discuss your exact requirements.
-          </p>
-          <p className="text-gray-700">
-            Based on the discussion, we&apos;ll confirm the scope and timeline
-            of the project. This ensures complete clarity before starting — no
-            surprises, only results.
-          </p>
-        </motion.div>
-      </div>
-    </section>
+                <div>
+                  {!plan.highlight && plan.badge && (
+                    <span className="inline-block rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
+                      {plan.badge}
+                    </span>
+                  )}
+                  <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-950">
+                    {plan.name}
+                  </h2>
+                  <p className="mt-2 text-xs leading-5 text-slate-600">
+                    {plan.description}
+                  </p>
+
+                  {/* Price */}
+                  <div className="mt-6 border-y border-slate-100 py-4">
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-3xl font-extrabold tracking-tight text-slate-950 sm:text-4xl">
+                        {plan.price}
+                      </span>
+                      {plan.period && (
+                        <span className="text-xs text-slate-400">/{plan.period}</span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Feature Checklist */}
+                  <ul className="mt-6 space-y-3">
+                    {(plan.features || []).map((feat, i) => (
+                      <li key={i} className="flex items-start gap-2.5 text-xs leading-5 text-slate-700">
+                        <Check size={16} className="mt-0.5 shrink-0 text-blue-600" />
+                        <span>{typeof feat === "string" ? feat : feat.name || feat.text}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="mt-8 border-t border-slate-100 pt-6">
+                  <Link
+                    href={plan.href || "/contact"}
+                    className={`inline-flex w-full items-center justify-center rounded-full px-5 py-3 text-xs font-bold uppercase tracking-wider transition ${
+                      plan.highlight
+                        ? "bg-blue-600 text-white hover:bg-blue-700 shadow-sm"
+                        : "border border-slate-300 bg-white text-slate-800 hover:bg-slate-50"
+                    }`}
+                  >
+                    {plan.cta || "Get Started"}
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Scope Note */}
+          <div className="mt-12 rounded-2xl border border-slate-200 bg-slate-50/60 p-6 text-center max-w-3xl mx-auto">
+            <div className="flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-700">
+              <ShieldCheck size={16} className="text-blue-600" />
+              Custom Project Scoping
+            </div>
+            <p className="mt-2 text-xs leading-5 text-slate-600">
+              Custom web applications, ERPs, examination portals, and large ecommerce platforms are scoped individually based on database requirements, integration points, and user roles. Contact us for a fixed milestone estimate.
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }

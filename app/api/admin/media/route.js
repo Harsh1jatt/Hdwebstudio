@@ -115,9 +115,12 @@ export async function GET(req) {
     }
 
     if (q) {
-      filter.$text = {
-        $search: q,
-      };
+      const escaped = q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      filter.$or = [
+        { filename: { $regex: escaped, $options: "i" } },
+        { originalName: { $regex: escaped, $options: "i" } },
+        { alt: { $regex: escaped, $options: "i" } },
+      ];
     }
 
     const [docs, total] = await Promise.all([

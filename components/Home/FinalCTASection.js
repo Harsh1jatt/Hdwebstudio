@@ -27,8 +27,8 @@ export default function FinalCTASection() {
         </p>
 
         <div className="mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <PrimaryCTA href="/contact" dark className="w-full sm:w-auto">
-            Get a Free Digital Audit
+          <PrimaryCTA href="/audit" dark className="w-full sm:w-auto">
+            Get Free Website Audit
           </PrimaryCTA>
 
           <a

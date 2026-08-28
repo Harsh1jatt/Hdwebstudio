@@ -3,6 +3,7 @@ import connectDB from "@/lib/db";
 import Project from "@/models/Project";
 import { requireAdminApi } from "@/lib/auth";
 import { parseProjectPayload } from "@/utils/projectValidation";
+import { revalidateEntityRoutes } from "@/lib/revalidation";
 
 function serializeProject(doc) {
   return {
@@ -118,6 +119,7 @@ export async function POST(req) {
     }
 
     const project = await Project.create(parsed.data);
+    revalidateEntityRoutes("project", project.slug);
     return NextResponse.json({ success: true, project: serializeProject(project) }, { status: 201 });
   } catch (error) {
     console.error("admin projects create error:", error);

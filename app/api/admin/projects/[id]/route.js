@@ -4,6 +4,7 @@ import connectDB from "@/lib/db";
 import Project from "@/models/Project";
 import { requireAdminApi } from "@/lib/auth";
 import { parseProjectPayload } from "@/utils/projectValidation";
+import { revalidateEntityRoutes } from "@/lib/revalidation";
 
 function serializeProject(doc) {
   return {
@@ -103,6 +104,7 @@ export async function PUT(req, { params }) {
       return NextResponse.json({ success: false, error: "Project not found" }, { status: 404 });
     }
 
+    revalidateEntityRoutes("project", project.slug);
     return NextResponse.json({ success: true, project: serializeProject(project) });
   } catch (error) {
     console.error("admin project update error:", error);
@@ -153,6 +155,7 @@ export async function PATCH(req, { params }) {
     if (!project) {
       return NextResponse.json({ success: false, error: "Project not found" }, { status: 404 });
     }
+    revalidateEntityRoutes("project", project.slug);
     return NextResponse.json({ success: true, project: serializeProject(project) });
   } catch (error) {
     console.error("admin project patch error:", error);
@@ -174,6 +177,7 @@ export async function DELETE(req, { params }) {
     if (!deleted) {
       return NextResponse.json({ success: false, error: "Project not found" }, { status: 404 });
     }
+    revalidateEntityRoutes("project", deleted.slug);
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("admin project delete error:", error);

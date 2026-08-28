@@ -15,9 +15,10 @@ import {
 
 const company = [
   { label: "About", href: "/about" },
-  { label: "Work", href: "/portfolio" },
+  { label: "Work", href: "/work" },
   { label: "Pricing", href: "/pricing" },
   { label: "Blog", href: "/blog" },
+  { label: "Free Audit", href: "/audit" },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -131,10 +132,10 @@ export default function Footer({ services = [], site = null }) {
               enquiries.
             </p>
             <Link
-              href="/contact"
+              href="/audit"
               className="mt-4 inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700"
             >
-              Request Free Audit
+              Get Free Audit
               <ArrowRight size={15} aria-hidden="true" />
             </Link>
           </div>

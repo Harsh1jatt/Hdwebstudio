@@ -172,11 +172,11 @@ export default function MobileNav({ links, services, pathname, open, onClose }) 
                 {/* Mobile CTA */}
                 <li className="mt-3">
                   <Link
-                    href="/contact"
+                    href="/audit"
                     onClick={onClose}
-                    className="inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 px-5 py-3 text-sm font-semibold text-white shadow-md shadow-blue-500/25 transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                    className="inline-flex w-full items-center justify-center rounded-full bg-blue-600 px-5 py-3 text-sm font-bold uppercase tracking-wider text-white shadow-md shadow-blue-500/20 transition-all duration-200 hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                   >
-                    Free Digital Audit
+                    Free Website Audit
                   </Link>
                 </li>
               </ul>

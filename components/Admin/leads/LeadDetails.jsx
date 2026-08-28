@@ -5,6 +5,7 @@ import {
   CalendarDays,
   MessageSquare,
 } from "lucide-react";
+import LeadStatusBadge from "./LeadStatusBadge";
 
 export default function LeadDetails({ lead }) {
   if (!lead) {
@@ -44,9 +45,7 @@ export default function LeadDetails({ lead }) {
             </p>
           </div>
 
-          <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-600">
-            New
-          </span>
+          <LeadStatusBadge status={lead.status || 'new'} />
         </div>
       </div>
 
@@ -84,6 +83,13 @@ export default function LeadDetails({ lead }) {
             {lead.business || "Not provided"}
           </p>
         </div>
+
+        {lead.source && (
+          <div className="rounded-xl border border-slate-100 bg-slate-50 p-4 sm:col-span-2">
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Source</p>
+            <p className="mt-2 text-sm font-medium text-slate-800">{lead.source}</p>
+          </div>
+        )}
       </div>
 
       {/* Message */}

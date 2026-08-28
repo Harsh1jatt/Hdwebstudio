@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { ExternalLink, Pencil, Plus, Trash2 } from "lucide-react";
+import { ExternalLink, Pencil, Plus, Trash2, Sparkles } from "lucide-react";
 import AdminButton from "@/components/Admin/common/AdminButton";
 import AdminInput from "@/components/Admin/common/AdminInput";
 import AdminLoader from "@/components/Admin/common/AdminLoader";
@@ -110,7 +110,19 @@ export default function ProjectsManager() {
       {!loading && projects.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-12 text-center">
           <h3 className="text-lg font-semibold text-slate-900">No projects yet</h3>
-          <p className="mt-2 text-sm text-slate-500">Create one, or import with <code className="rounded bg-slate-100 px-1.5 py-0.5 text-xs">npm run seed:projects</code>.</p>
+          <p className="mt-2 text-sm text-slate-500">Create a case study or import sample data.</p>
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <Link href="/admin/projects/new">
+              <AdminButton>New Project</AdminButton>
+            </Link>
+            <Link
+              href={`/admin/chat?prompt=${encodeURIComponent("Create a case study for...")}`}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition"
+            >
+              <Sparkles className="h-4 w-4 text-blue-600" />
+              Ask HD AI
+            </Link>
+          </div>
         </div>
       ) : null}
 
@@ -143,7 +155,7 @@ export default function ProjectsManager() {
                       <div className="flex flex-wrap items-center gap-2">
                         <Link href={`/admin/projects/${project.id}`} className="inline-flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1.5 text-xs font-semibold text-slate-700"><Pencil className="h-3.5 w-3.5" />Edit</Link>
                         <button type="button" onClick={() => handlePatch(project, { published: !project.published })} className="rounded-lg border border-slate-200 px-2.5 py-1.5 text-xs font-semibold text-slate-700">{project.published ? "Unpublish" : "Publish"}</button>
-                        {project.published ? <a href={`/portfolio/${project.slug}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1.5 text-xs font-semibold text-slate-700"><ExternalLink className="h-3.5 w-3.5" />View</a> : null}
+                        {project.published ? <a href={`/work/${project.slug}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1.5 text-xs font-semibold text-slate-700"><ExternalLink className="h-3.5 w-3.5" />View</a> : null}
                         <button type="button" onClick={() => handleDelete(project)} className="inline-flex items-center gap-1 rounded-lg border border-red-200 px-2.5 py-1.5 text-xs font-semibold text-red-600"><Trash2 className="h-3.5 w-3.5" />Delete</button>
                       </div>
                     </td>

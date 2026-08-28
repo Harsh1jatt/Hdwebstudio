@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { ArrowRight, CheckCircle2, Globe2, MessageCircle, ShieldCheck } from "lucide-react";
 import { defaultWhatsAppMessage, whatsAppUrl } from "@/config/site";
+import { trackEvent, AnalyticsEvents } from "@/lib/analytics";
 import { CONTAINER, SECTION_Y } from "./ui";
 
 const fadeUp = {
@@ -64,7 +65,7 @@ export default function AuditFormSection() {
     return "";
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     const validationError = validateForm();
     if (validationError) {
@@ -81,7 +82,33 @@ export default function AuditFormSection() {
         : `https://${form.website}`
       : "Not provided";
 
+    // Store lead in database
+    try {
+      await fetch('/api/contacts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: form.name.trim(),
+          phone: form.phone.trim(),
+          business: form.business || '',
+          message: `Free Audit Request - Business: ${form.business || 'Not specified'}, Website: ${websiteUrl}`,
+          source: 'audit-form',
+        }),
+      });
+    } catch {
+      // Best-effort — don't block WhatsApp flow
+    }
+
     const message = `Hi Harshdeep, I'd like to request a Free Website Audit.\n\nName: ${form.name.trim()}\nWhatsApp: ${form.phone.trim()}\nBusiness Type: ${form.business || "Not specified"}\nWebsite: ${websiteUrl}\n\nI'd like to understand how my website can be improved.`;
+
+    trackEvent(AnalyticsEvents.AUDIT_REQUESTED, {
+      business_type: form.business || "Not specified",
+      has_website: Boolean(form.website.trim()),
+    });
+
+    trackEvent(AnalyticsEvents.WHATSAPP_CLICKED, {
+      location: "audit_form",
+    });
 
     window.open(whatsAppUrl(message), "_blank", "noopener,noreferrer");
 

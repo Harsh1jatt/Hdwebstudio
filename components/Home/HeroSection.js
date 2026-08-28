@@ -19,10 +19,10 @@ export default function HeroSection({ settings = {} }) {
   const heroHeading1 = hero.heading1 || "We Build Websites That";
   const heroHeading2 = hero.heading2 || "Grow Businesses.";
   const heroDescription = hero.description || "Professional website development, local SEO, and digital growth solutions for businesses in Ludhiana, Punjab and across India. We help you get discovered, build trust, and get contacted.";
-  const heroCtaText = hero.ctaText || "Get a Free Digital Audit";
-  const heroCtaLink = hero.ctaLink || "/contact";
+  const heroCtaText = hero.ctaText || "Get Free Website Audit";
+  const heroCtaLink = hero.ctaLink || "/audit";
   const heroSecondaryText = hero.secondaryText || "View Our Work";
-  const heroSecondaryLink = hero.secondaryLink || "/portfolio";
+  const heroSecondaryLink = hero.secondaryLink || "/work";
   return (
     <section className="relative isolate overflow-hidden bg-white">
       {/* Background */}

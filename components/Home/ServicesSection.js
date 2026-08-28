@@ -1,129 +1,116 @@
-"use client";
-
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
-import ServiceIcon from "@/components/common/ServiceIcon";
-import { CONTAINER, SECTION_Y, SectionHeading, PrimaryCTA, CheckItem } from "./ui";
+import { ArrowRight, Globe, ShoppingBag, Code, TrendingUp, CheckCircle2 } from "lucide-react";
+import { CONTAINER, SECTION_Y, SectionHeading } from "./ui";
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
-};
+const PILLARS = [
+  {
+    key: "Websites",
+    icon: Globe,
+    title: "Websites & Redesigns",
+    description: "High-performance business websites and redesigns engineered for speed, mobile responsiveness, and continuous lead conversion.",
+    matchCats: ["Web Development", "Websites", "Maintenance"],
+  },
+  {
+    key: "Ecommerce",
+    icon: ShoppingBag,
+    title: "Ecommerce & D2C",
+    description: "Lightning-fast online stores with payment gateway integrations (Razorpay, UPI, Stripe) and friction-free 1-click mobile checkout.",
+    matchCats: ["E-Commerce", "Ecommerce"],
+  },
+  {
+    key: "Software",
+    icon: Code,
+    title: "Custom Software & Web Apps",
+    description: "Full-stack Next.js & MERN SaaS applications, client portals, and administrative business automation platforms.",
+    matchCats: ["Web Applications", "Custom Software"],
+  },
+  {
+    key: "Growth",
+    icon: TrendingUp,
+    title: "Local SEO & Acquisition",
+    description: "Google Business Profile optimization, localized search ranking, and conversion funnels to capture nearby buyers in your region.",
+    matchCats: ["SEO & Growth", "SEO", "Lead Generation"],
+  },
+];
 
-const staggerContainer = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.08 } },
-};
-
-const accentMap = {
-  blue: { wrapper: "bg-blue-50 text-blue-600 group-hover:bg-blue-100", icon: "text-blue-600" },
-  emerald: { wrapper: "bg-emerald-50 text-emerald-600 group-hover:bg-emerald-100", icon: "text-emerald-600" },
-  purple: { wrapper: "bg-purple-50 text-purple-600 group-hover:bg-purple-100", icon: "text-purple-600" },
-  orange: { wrapper: "bg-orange-50 text-orange-600 group-hover:bg-orange-100", icon: "text-orange-600" },
-};
-
-export default function ServicesSection({ services }) {
-  const shouldReduceMotion = useReducedMotion();
-
+export default function ServicesSection({ services = [] }) {
   return (
-    <section id="services" className={`relative overflow-hidden bg-white ${SECTION_Y}`}>
+    <section id="services" className={`relative overflow-hidden bg-slate-50/50 ${SECTION_Y}`}>
       <div className={CONTAINER}>
         <SectionHeading
-          eyebrow="What We Do"
+          eyebrow="What We Build"
           title={
             <>
-              Websites & Web Experiences
+              Modern Web Experiences
               <br className="hidden md:block" />
-              <span className="text-slate-500"> Built Around Your Business.</span>
+              <span className="text-slate-500"> Engineered For Measurable Growth.</span>
             </>
           }
-          description="From professional business websites to custom web applications, we build fast, modern digital experiences that help businesses establish credibility, reach more customers, and operate better online."
+          description="We focus on four core digital engineering pillars to help businesses establish authority, attract buyers, and operate efficiently online."
         />
 
-        <motion.div
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, amount: 0.1 }}
-          className="mt-14 grid gap-6 md:grid-cols-2 lg:mt-16"
-        >
-          {services.map((service, index) => {
-            const accent = accentMap[service.accent || "blue"] || accentMap.blue;
-            const outcomes = service.whatYouGet?.slice(0, 4).map((item) => item.title);
+        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:mt-16">
+          {PILLARS.map((pillar) => {
+            const Icon = pillar.icon;
+            const matchingServices = services.filter((s) =>
+              pillar.matchCats.some((cat) => (s.category || "").toLowerCase() === cat.toLowerCase())
+            );
 
             return (
-              <motion.article
-                key={service.slug}
-                variants={fadeUp}
-                whileHover={shouldReduceMotion ? undefined : { y: -4 }}
-                className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-7 shadow-sm transition-shadow duration-300 hover:shadow-xl hover:shadow-slate-900/5 sm:p-8"
+              <div
+                key={pillar.key}
+                className="group flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-md"
               >
-                <div className="flex items-start justify-between gap-5">
-                  <div className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-xl transition-colors duration-300 ${accent.wrapper}`}>
-                    <ServiceIcon name={service.icon} className={`h-7 w-7 ${accent.icon}`} size={28} strokeWidth={1.8} />
+                <div>
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-200">
+                    <Icon size={22} />
                   </div>
-                  <span className="text-xs font-bold tracking-widest text-slate-300">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
+                  <h3 className="mt-5 text-lg font-bold tracking-tight text-slate-950">
+                    {pillar.title}
+                  </h3>
+                  <p className="mt-2 text-xs leading-5 text-slate-600">
+                    {pillar.description}
+                  </p>
+
+                  {/* Sample Service Badges */}
+                  {matchingServices.length > 0 && (
+                    <div className="mt-4 space-y-1.5 border-t border-slate-100 pt-3">
+                      {matchingServices.slice(0, 2).map((s) => (
+                        <Link
+                          key={s.slug}
+                          href={`/services/${s.slug}`}
+                          className="block text-[11px] font-medium text-slate-500 hover:text-blue-600 transition-colors"
+                        >
+                          • {s.title}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
-                <h3 className="mt-6 text-xl font-bold tracking-tight text-slate-950 sm:text-2xl">{service.eyebrow}</h3>
-                <p className="mt-2 text-sm font-semibold text-blue-600">{service.tagline}</p>
-                <p className="mt-4 text-sm leading-6 text-slate-600">{service.description}</p>
-
-                {outcomes?.length > 0 && (
-                  <div className="mt-7 border-t border-slate-100 pt-6">
-                    <p className="text-xs font-bold uppercase tracking-wider text-slate-400">What You Get</p>
-                    <ul className="mt-3 space-y-2.5">
-                      {outcomes.map((outcome) => (
-                        <CheckItem key={outcome}>{outcome}</CheckItem>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                <Link
-                  href={`/services/${service.slug}`}
-                  className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-blue-600 transition hover:text-blue-800"
-                >
-                  Learn more
-                  <ArrowRight size={16} />
-                </Link>
-
-                <div className="pointer-events-none absolute bottom-0 left-0 h-1 w-0 bg-blue-600 transition-all duration-500 group-hover:w-full" />
-              </motion.article>
+                <div className="mt-6 border-t border-slate-100 pt-3">
+                  <Link
+                    href="/services"
+                    className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-blue-600 group-hover:text-blue-700"
+                  >
+                    View Capabilities <ArrowRight size={13} />
+                  </Link>
+                </div>
+              </div>
             );
           })}
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          variants={fadeUp}
-          className="mt-16 text-center lg:mt-20"
-        >
-          <p className="text-sm font-medium text-slate-500">Not sure what your business needs?</p>
-          <h3 className="mx-auto mt-2 max-w-2xl text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl">
-            Tell us what you&apos;re trying to achieve.
-          </h3>
-          <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-slate-500">
-            We&apos;ll help you figure out whether you need a website, web application, SEO, or ongoing support.
-          </p>
-
-          <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
-            <PrimaryCTA href="/contact">Get a Free Audit</PrimaryCTA>
-            <Link
-              href="/services"
-              className="inline-flex min-h-12 items-center justify-center rounded-xl border border-slate-200 bg-white px-6 py-3.5 text-sm font-semibold text-slate-700 transition-colors duration-200 hover:border-slate-300 hover:bg-slate-50"
-            >
-              View All Services
-            </Link>
-          </div>
-
-          <p className="mt-5 text-xs text-slate-400">Fast Delivery · Direct Developer Support · Transparent Pricing</p>
-        </motion.div>
+        {/* Bottom prompt */}
+        <div className="mt-12 text-center">
+          <Link
+            href="/services"
+            className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-6 py-3 text-xs font-bold uppercase tracking-wider text-slate-700 shadow-xs transition hover:bg-slate-50 hover:border-slate-400"
+          >
+            Explore Complete Service Catalog
+            <ArrowRight size={14} />
+          </Link>
+        </div>
       </div>
     </section>
   );

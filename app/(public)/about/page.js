@@ -95,9 +95,27 @@ const values = [
   },
 ];
 
+const aboutJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  name: "About HD Web Studios",
+  description: "HD Web Studios is a founder-led digital agency in Ludhiana, Punjab. We build professional websites, local SEO, and digital growth solutions for businesses across India.",
+  url: absoluteUrl("/about"),
+  mainEntity: {
+    "@type": "Person",
+    name: "Harshdeep",
+    jobTitle: "Founder & Developer",
+    worksFor: {
+      "@type": "Organization",
+      name: "HD Web Studios",
+    },
+  },
+};
+
 export default function AboutPage() {
   return (
     <div className="bg-white">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutJsonLd) }} />
       {/* Hero */}
       <section className="border-b border-slate-100 bg-slate-50">
         <div className="mx-auto max-w-7xl px-5 py-20 sm:px-6 sm:py-28">
@@ -123,7 +141,7 @@ export default function AboutPage() {
                 <ArrowRight size={17} className="transition-transform duration-200 group-hover:translate-x-1" />
               </Link>
               <Link
-                href="/portfolio"
+                href="/work"
                 className="inline-flex min-h-12 items-center justify-center rounded-xl border border-slate-200 bg-white px-6 py-3.5 text-sm font-semibold text-slate-700 transition-colors duration-200 hover:border-slate-300 hover:bg-slate-50"
               >
                 View Our Work
@@ -257,10 +275,10 @@ export default function AboutPage() {
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
-              href="/contact"
+              href="/audit"
               className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-slate-950 px-6 py-3.5 text-sm font-bold text-white shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:bg-blue-600"
             >
-              Get a Free Digital Audit
+              Get Free Website Audit
               <ArrowRight size={17} className="transition-transform duration-200 group-hover:translate-x-1" />
             </Link>
             <a

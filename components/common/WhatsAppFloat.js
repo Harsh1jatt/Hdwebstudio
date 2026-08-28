@@ -3,6 +3,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { defaultWhatsAppMessage, whatsAppUrl } from "@/config/site";
+import { trackEvent, AnalyticsEvents } from "@/lib/analytics";
 
 const WHATSAPP_URL = whatsAppUrl(defaultWhatsAppMessage);
 
@@ -79,6 +80,7 @@ pointerEvents: visible ? "auto" : "none",
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Discuss your project on WhatsApp"
+      onClick={() => trackEvent(AnalyticsEvents.WHATSAPP_CLICKED, { location: "float_button" })}
       onMouseEnter={() => setShowTooltip(true)}
       onMouseLeave={() => setShowTooltip(false)}
       onFocus={() => setShowTooltip(true)}

@@ -22,5 +22,26 @@ export const metadata = {
 export default async function ServicesPage() {
   const services = await getPublishedServices();
 
-  return <ServicesListing services={services} />;
+  const serviceListJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "HD Web Studios Services",
+    description: "Professional website development, web applications, SEO, and digital growth solutions for businesses in Ludhiana, Punjab and across India.",
+    numberOfItems: services.length,
+    itemListElement: services.map((s, i) => (
+      {
+        "@type": "ListItem",
+        position: i + 1,
+        url: absoluteUrl(`/services/${s.slug}`),
+        name: s.title,
+      }
+    )),
+  };
+
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceListJsonLd) }} />
+      <ServicesListing services={services} />
+    </>
+  );
 }

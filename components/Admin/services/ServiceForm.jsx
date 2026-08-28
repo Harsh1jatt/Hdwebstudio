@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Plus, Trash2 } from "lucide-react";
 import AdminButton from "../common/AdminButton";
 import AdminInput from "../common/AdminInput";
+import AiContentGenerator from "../common/AiContentGenerator";
 import MediaPicker from "@/components/Admin/media/MediaPicker";
 import { slugify } from "@/lib/slugify";
 import { availableIconNames } from "@/lib/icons";
@@ -211,6 +212,29 @@ export default function ServiceForm({
           {success}
         </div>
       ) : null}
+
+      <AiContentGenerator
+        type="service"
+        onGenerated={(data) => {
+          setForm((prev) => ({
+            ...prev,
+            ...data,
+            overview: {
+              ...prev.overview,
+              ...(data.overview || {}),
+              paragraphs:
+                data.overview?.paragraphs?.length > 0
+                  ? data.overview.paragraphs
+                  : prev.overview.paragraphs,
+              highlights: data.overview?.highlights || prev.overview.highlights,
+            },
+            whatYouGet: data.whatYouGet || prev.whatYouGet,
+            faq: data.faq || prev.faq,
+            heroStats: data.heroStats || prev.heroStats,
+          }));
+          setSlugTouched(true);
+        }}
+      />
 
       <Section
         title="Basic information"

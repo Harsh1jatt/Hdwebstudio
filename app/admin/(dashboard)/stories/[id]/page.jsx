@@ -3,7 +3,8 @@ import StoryEditClient from "./StoryEditClient";
 
 export const metadata = { title: "Edit Story" };
 
-export default async function EditStoryPage() {
+export default async function EditStoryPage({ params }) {
   await requireAdmin();
-  return <StoryEditClient />;
+  const { id } = await params;
+  return <StoryEditClient storyId={id} />;
 }

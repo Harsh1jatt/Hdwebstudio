@@ -1,15 +1,21 @@
 import { Quote } from "lucide-react";
 import { CONTAINER, SECTION_Y, SectionHeading } from "./ui";
 
-function ClientAvatar({ initials }) {
+function getInitials(name) {
+  if (!name) return "?";
+  return name.split(' ').map((w) => w[0]).join('').toUpperCase().slice(0, 2);
+}
+
+function ClientAvatar({ name }) {
   return (
     <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-slate-900 text-sm font-bold text-white">
-      {initials}
+      {getInitials(name)}
     </div>
   );
 }
 
-export default function TestimonialsSection({ testimonials }) {
+export default function TestimonialsSection({ testimonials = [] }) {
+  if (!testimonials.length) return null;
   return (
     <section className={`bg-white ${SECTION_Y}`}>
       <div className={CONTAINER}>
@@ -40,7 +46,7 @@ export default function TestimonialsSection({ testimonials }) {
               </blockquote>
 
               <footer className="mt-8 flex items-center gap-3 border-t border-slate-200 pt-6">
-                <ClientAvatar initials={testimonial.initials} />
+                <ClientAvatar name={testimonial.name} />
                 <div className="min-w-0">
                   <p className="truncate text-sm font-bold text-slate-950">{testimonial.name}</p>
                   <p className="mt-0.5 text-xs text-slate-500">{testimonial.role}</p>

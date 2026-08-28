@@ -5,17 +5,19 @@ import { useEffect, useState } from "react";
 import StoryForm from "@/components/Admin/stories/StoryForm";
 import AdminLoader from "@/components/Admin/common/AdminLoader";
 
-export default function StoryEditClient() {
+export default function StoryEditClient({ storyId }) {
   const router = useRouter();
   const params = useParams();
+  const id = storyId || params?.id;
   const [story, setStory] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
     async function load() {
+      if (!id) return;
       try {
-        const res = await fetch(`/api/admin/stories/${params.id}`);
+        const res = await fetch(`/api/admin/stories/${id}`);
         const data = await res.json();
         if (!res.ok) throw new Error(data?.error || "Failed to load story.");
         setStory(data.story);
@@ -26,10 +28,11 @@ export default function StoryEditClient() {
       }
     }
     load();
-  }, [params.id]);
+  }, [id]);
 
   async function handleSubmit(payload) {
-    const res = await fetch(`/api/admin/stories/${params.id}`, {
+    if (!id) return;
+    const res = await fetch(`/api/admin/stories/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
@@ -44,5 +47,5 @@ export default function StoryEditClient() {
   if (error) return <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-center text-sm text-red-700">{error}</div>;
   if (!story) return <div className="rounded-xl border border-slate-200 bg-white p-6 text-center text-sm text-slate-500">Story not found.</div>;
 
-  return <StoryForm initialData={story} storyId={params.id} mode="edit" onSubmit={handleSubmit} />;
+  return <StoryForm initialData={story} storyId={id} mode="edit" onSubmit={handleSubmit} />;
 }

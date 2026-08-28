@@ -45,7 +45,7 @@ function ProjectActions({ project, featured = false }) {
         <ExternalLink size={featured ? 16 : 15} />
       </a>
       <Link
-        href={`/portfolio/${project.slug}`}
+        href={`/work/${project.slug}`}
         className={
           featured
             ? "inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-800 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
@@ -70,7 +70,7 @@ function FeaturedProject({ project, shouldReduceMotion }) {
     >
       <div className="grid lg:grid-cols-[1.15fr_0.85fr]">
         <a
-          href={project.link}
+          href={project.liveUrl || project.demoUrl || `/portfolio/${project.slug}`}
           target="_blank"
           rel="noopener noreferrer"
           aria-label={`View ${project.title} live website`}
@@ -101,21 +101,23 @@ function FeaturedProject({ project, shouldReduceMotion }) {
 
         <div className="flex flex-col justify-center p-7 sm:p-9 lg:p-10">
           <ProjectTag>{project.category}</ProjectTag>
-          <h3 className="mt-5 text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl">{project.title}</h3>
+          <h3 className="mt-5 text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl">{project.title}</h3>              {(project.shortDescription || project.challenge) && (
+            <div className="mt-6">
+              <p className="text-xs font-bold uppercase tracking-wider text-slate-400">The Challenge</p>
+              <p className="mt-2 text-sm leading-6 text-slate-600">{project.shortDescription || project.challenge}</p>
+            </div>
+          )}
 
-          <div className="mt-6">
-            <p className="text-xs font-bold uppercase tracking-wider text-slate-400">The Challenge</p>
-            <p className="mt-2 text-sm leading-6 text-slate-600">{project.shortDescription || project.challenge}</p>
-          </div>
-
-          <div className="mt-6">
-            <p className="text-xs font-bold uppercase tracking-wider text-slate-400">What We Built</p>
-            <ul className="mt-3 space-y-3">
-              {(project.results || project.outcomes || []).map((outcome) => (
-                <CheckItem key={outcome}>{outcome}</CheckItem>
-              ))}
-            </ul>
-          </div>
+          {(project.results || project.outcomes || []).length > 0 && (
+            <div className="mt-6">
+              <p className="text-xs font-bold uppercase tracking-wider text-slate-400">What We Built</p>
+              <ul className="mt-3 space-y-3">
+                {(project.results || project.outcomes || []).map((outcome) => (
+                  <CheckItem key={outcome}>{outcome}</CheckItem>
+                ))}
+              </ul>
+            </div>
+          )}
 
           <div className="mt-7 flex flex-wrap gap-2">
             {(project.technologies || []).map((technology) => (
@@ -165,17 +167,21 @@ function ProjectCard({ project, shouldReduceMotion }) {
         <h3 className="mt-2 text-xl font-bold tracking-tight text-slate-950">{project.title}</h3>
         <p className="mt-3 text-sm leading-6 text-slate-600">{project.shortDescription || project.challenge}</p>
 
-        <ul className="mt-5 space-y-2.5">
-          {(project.results || project.outcomes || []).slice(0, 2).map((outcome) => (
-            <CheckItem key={outcome}>{outcome}</CheckItem>
-          ))}
-        </ul>
+        {(project.results || project.outcomes || []).length > 0 && (
+          <ul className="mt-5 space-y-2.5">
+            {(project.results || project.outcomes || []).slice(0, 2).map((outcome) => (
+              <CheckItem key={outcome}>{outcome}</CheckItem>
+            ))}
+          </ul>
+        )}
 
-        <div className="mt-6 flex flex-wrap gap-1.5">
-          {(project.technologies || []).slice(0, 3).map((technology) => (
-            <TechnologyTag key={technology}>{technology}</TechnologyTag>
-          ))}
-        </div>
+        {(project.technologies || []).length > 0 && (
+          <div className="mt-6 flex flex-wrap gap-1.5">
+            {(project.technologies || []).slice(0, 3).map((technology) => (
+              <TechnologyTag key={technology}>{technology}</TechnologyTag>
+            ))}
+          </div>
+        )}
 
         <ProjectActions project={project} />
       </div>
@@ -183,8 +189,9 @@ function ProjectCard({ project, shouldReduceMotion }) {
   );
 }
 
-export default function PortfolioSection({ projects }) {
+export default function PortfolioSection({ projects = [] }) {
   const shouldReduceMotion = useReducedMotion();
+  if (!projects.length) return null;
   const featuredProject = projects.find((project) => project.featured) || projects[0] || null;
   const otherProjects = projects.filter((project) => project.slug !== featuredProject?.slug);
 
@@ -215,7 +222,7 @@ export default function PortfolioSection({ projects }) {
             Let&apos;s build something that moves your business forward.
           </h3>
           <div className="mt-6 flex justify-center">
-            <PrimaryCTA href="/contact">Get a Free Audit</PrimaryCTA>
+            <PrimaryCTA href="/audit">Get Free Website Audit</PrimaryCTA>
           </div>
           <p className="mt-4 text-xs text-slate-400">Websites · Software · SEO · Digital Growth</p>
         </div>

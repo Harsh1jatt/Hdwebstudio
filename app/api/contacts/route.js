@@ -4,13 +4,23 @@ import Contact from '../../../models/Contact';
 import { contactSchema } from '../../../utils/validation';
 import { sendLeadEmail } from '../../../lib/mail';
 
-// Simple in-memory rate limiter (per IP) — suitable for initial rollout
+// Rate limiter per IP with automatic stale cleanup
 const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
 const MAX_PER_WINDOW = 6;
 const ipMap = new Map();
 
 function isRateLimited(ip) {
   const now = Date.now();
+
+  // Periodic cleanup if map grows
+  if (ipMap.size > 2000) {
+    for (const [key, entry] of ipMap.entries()) {
+      if (now - entry.first > RATE_LIMIT_WINDOW) {
+        ipMap.delete(key);
+      }
+    }
+  }
+
   const entry = ipMap.get(ip) || { count: 0, first: now };
   if (now - entry.first > RATE_LIMIT_WINDOW) {
     ipMap.set(ip, { count: 1, first: now });
@@ -23,12 +33,17 @@ function isRateLimited(ip) {
 
 export async function POST(req) {
   try {
-    const ip = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown';
+    const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || req.headers.get('x-real-ip') || 'unknown';
     if (isRateLimited(ip)) {
-      return NextResponse.json({ success: false, data: null, message: 'Too many requests' }, { status: 429 });
+      return NextResponse.json({ success: false, data: null, message: 'Too many requests. Please try again in a few minutes.' }, { status: 429 });
     }
 
-    const body = await req.json();
+    let body;
+    try {
+      body = await req.json();
+    } catch {
+      return NextResponse.json({ success: false, data: null, message: 'Invalid JSON payload' }, { status: 400 });
+    }
 
     // Honeypot check
     if (body.honeypot) {
@@ -44,11 +59,14 @@ export async function POST(req) {
 
     const contact = await Contact.create({
       name: parsed.data.name,
-      email: parsed.data.email || null,
+      email: parsed.data.email || '',
       phone: parsed.data.phone,
-      business: parsed.data.business || null,
+      business: parsed.data.business || '',
+      website: parsed.data.website || '',
+      service: parsed.data.service || '',
+      budget: parsed.data.budget || '',
       message: parsed.data.message,
-      source: body.source || 'website',
+      source: parsed.data.source || body.source || 'website',
     });
 
     // try to send email notification (best-effort)
@@ -58,7 +76,7 @@ export async function POST(req) {
       console.error('Email send failed', e);
     }
 
-    return NextResponse.json({ success: true, data: contact, message: 'Lead saved' }, { status: 201 });
+    return NextResponse.json({ success: true, data: contact, message: 'Lead saved successfully' }, { status: 201 });
   } catch (err) {
     console.error('contacts POST error', err);
     return NextResponse.json({ success: false, data: null, message: 'Server error' }, { status: 500 });

@@ -4,8 +4,8 @@
 // HomeClient composes the remaining sections (mix of Server + Client).
 // ─────────────────────────────────────────────────────────────────────────────
 
-import { getPublishedServices } from "@/lib/services";
-import { getPublishedProjects } from "@/lib/projects";
+import { getPublishedServices, getPublishedServicesCount } from "@/lib/services";
+import { getPublishedProjects, getPublishedProjectsCount } from "@/lib/projects";
 import { getPublishedTestimonials } from "@/lib/testimonials";
 import { getPublishedFaqs } from "@/lib/faqs";
 import { getSiteSettings } from "@/lib/settings";
@@ -52,18 +52,20 @@ export const metadata = {
 };
 
 export default async function HomePage() {
-  const [services, projects, testimonials, faqs, settings] = await Promise.all([
+  const [services, projects, testimonials, faqs, settings, projectCount, serviceCount] = await Promise.all([
     getPublishedServices(),
     getPublishedProjects(),
     getPublishedTestimonials(),
     getPublishedFaqs(),
     getSiteSettings(),
+    getPublishedProjectsCount(),
+    getPublishedServicesCount(),
   ]);
 
   return (
     <>
       <HeroSection settings={settings} />
-      <TrustBarSection />
+      <TrustBarSection projectCount={projectCount} serviceCount={serviceCount} />
       <HomeClient
         services={services}
         projects={projects}

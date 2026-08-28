@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, ExternalLink, Sparkles } from "lucide-react";
 import AdminButton from "@/components/Admin/common/AdminButton";
 import AdminInput from "@/components/Admin/common/AdminInput";
 import MediaPicker from "@/components/Admin/media/MediaPicker";
+import TagInput from "@/components/Admin/common/TagInput";
+import AiContentGenerator from "@/components/Admin/common/AiContentGenerator";
 import { slugify } from "@/lib/slugify";
 
 const emptyProject = {
@@ -14,20 +16,20 @@ const emptyProject = {
   shortDescription: "",
   description: "",
   client: "",
-  category: "",
+  category: "Web Development",
   industry: "",
-  location: "",
+  location: "Ludhiana, Punjab",
   projectType: "client",
-  year: "",
+  year: new Date().getFullYear().toString(),
   challenge: "",
   solution: "",
-  results: [""],
-  features: [""],
-  technologies: [""],
-  services: [""],
+  results: [],
+  features: [],
+  technologies: [],
+  services: [],
   featuredImage: "",
   thumbnail: "",
-  gallery: [""],
+  gallery: [],
   demoUrl: "",
   liveUrl: "",
   githubUrl: "",
@@ -41,23 +43,36 @@ const emptyProject = {
   ogImage: "",
 };
 
-function Section({ title, children }) {
+function Section({ title, description, children }) {
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6">
-      <h3 className="mb-4 text-lg font-semibold text-slate-900">{title}</h3>
+    <section className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 shadow-xs">
+      <div className="mb-4">
+        <h3 className="text-base font-bold text-slate-900">{title}</h3>
+        {description ? <p className="mt-0.5 text-xs text-slate-500">{description}</p> : null}
+      </div>
       <div className="space-y-4">{children}</div>
     </section>
   );
 }
 
-function TextArea({ value, onChange, rows = 4 }) {
+function TextArea({ label, id, value, onChange, rows = 4, placeholder, helperText }) {
   return (
-    <textarea
-      value={value}
-      onChange={onChange}
-      rows={rows}
-      className="w-full rounded-xl border border-slate-200 px-3.5 py-3 text-sm outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
-    />
+    <div className="space-y-1.5">
+      {label && (
+        <label htmlFor={id} className="block text-xs font-semibold uppercase tracking-wider text-slate-700">
+          {label}
+        </label>
+      )}
+      <textarea
+        id={id}
+        value={value}
+        onChange={onChange}
+        rows={rows}
+        placeholder={placeholder}
+        className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-3 text-sm text-slate-900 placeholder:text-slate-400 shadow-xs outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+      />
+      {helperText && <p className="text-[11px] text-slate-500">{helperText}</p>}
+    </div>
   );
 }
 
@@ -77,11 +92,11 @@ export default function ProjectForm({
     setForm({
       ...emptyProject,
       ...initialData,
-      results: initialData.results?.length ? initialData.results : [""],
-      features: initialData.features?.length ? initialData.features : [""],
-      technologies: initialData.technologies?.length ? initialData.technologies : [""],
-      services: initialData.services?.length ? initialData.services : [""],
-      gallery: initialData.gallery?.length ? initialData.gallery : [""],
+      results: Array.isArray(initialData.results) ? initialData.results : [],
+      features: Array.isArray(initialData.features) ? initialData.features : [],
+      technologies: Array.isArray(initialData.technologies) ? initialData.technologies : [],
+      services: Array.isArray(initialData.services) ? initialData.services : [],
+      gallery: Array.isArray(initialData.gallery) ? initialData.gallery : [],
       testimonial: initialData.testimonial || { quote: "", author: "", role: "" },
     });
   }, [initialData]);
@@ -92,25 +107,6 @@ export default function ProjectForm({
       if (key === "title" && !slugTouched) next.slug = slugify(value);
       return next;
     });
-  }
-
-  function updateList(key, index, value) {
-    setForm((prev) => {
-      const list = [...prev[key]];
-      list[index] = value;
-      return { ...prev, [key]: list };
-    });
-  }
-
-  function addListItem(key) {
-    setForm((prev) => ({ ...prev, [key]: [...prev[key], ""] }));
-  }
-
-  function removeListItem(key, index) {
-    setForm((prev) => ({
-      ...prev,
-      [key]: prev[key].filter((_, i) => i !== index),
-    }));
   }
 
   async function handleSubmit(event) {
@@ -128,12 +124,39 @@ export default function ProjectForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {error ? <div className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">{error}</div> : null}
-      {success ? <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-700">{success}</div> : null}
+      {error ? (
+        <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">{error}</div>
+      ) : null}
+      {success ? (
+        <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-700">
+          {success}
+        </div>
+      ) : null}
 
-      <Section title="Basic Information">
+      <AiContentGenerator
+        type="project"
+        onGenerated={(data) => {
+          setForm((prev) => ({
+            ...prev,
+            ...data,
+            results: data.results || prev.results,
+            features: data.features || prev.features,
+            technologies: data.technologies || prev.technologies,
+            services: data.services || prev.services,
+          }));
+          setSlugTouched(true);
+        }}
+      />
+
+      <Section title="Basic Information" description="Primary client and case study details.">
         <div className="grid gap-4 md:grid-cols-2">
-          <AdminInput label="Title" id="title" value={form.title} onChange={(e) => updateField("title", e.target.value)} />
+          <AdminInput
+            label="Project Title"
+            id="title"
+            value={form.title}
+            onChange={(e) => updateField("title", e.target.value)}
+            placeholder="e.g. Next.js Solar Energy Customer Portal"
+          />
           <AdminInput
             label="Slug"
             id="slug"
@@ -142,100 +165,304 @@ export default function ProjectForm({
               setSlugTouched(true);
               updateField("slug", slugify(e.target.value));
             }}
+            helperText="/work/your-slug"
           />
-          <AdminInput label="Client" id="client" value={form.client} onChange={(e) => updateField("client", e.target.value)} />
-          <AdminInput label="Category" id="category" value={form.category} onChange={(e) => updateField("category", e.target.value)} />
-          <AdminInput label="Industry" id="industry" value={form.industry} onChange={(e) => updateField("industry", e.target.value)} />
-          <AdminInput label="Year" id="year" value={form.year} onChange={(e) => updateField("year", e.target.value)} />
-          <AdminInput label="Project Type" id="projectType" value={form.projectType} onChange={(e) => updateField("projectType", e.target.value)} />
-          <AdminInput label="Location" id="location" value={form.location} onChange={(e) => updateField("location", e.target.value)} />
+          <AdminInput
+            label="Client / Business Name"
+            id="client"
+            value={form.client}
+            onChange={(e) => updateField("client", e.target.value)}
+            placeholder="e.g. SunPower Punjab"
+          />
+          <AdminInput
+            label="Category"
+            id="category"
+            value={form.category}
+            onChange={(e) => updateField("category", e.target.value)}
+            placeholder="e.g. Web Development, Custom Web App"
+          />
+          <AdminInput
+            label="Industry / Niche"
+            id="industry"
+            value={form.industry}
+            onChange={(e) => updateField("industry", e.target.value)}
+            placeholder="e.g. Renewable Energy, Education, Retail"
+          />
+          <AdminInput
+            label="Year"
+            id="year"
+            value={form.year}
+            onChange={(e) => updateField("year", e.target.value)}
+            placeholder="e.g. 2025"
+          />
+          <AdminInput
+            label="Location"
+            id="location"
+            value={form.location}
+            onChange={(e) => updateField("location", e.target.value)}
+            placeholder="e.g. Ludhiana, Punjab"
+          />
+          <AdminInput
+            label="Project Type"
+            id="projectType"
+            value={form.projectType}
+            onChange={(e) => updateField("projectType", e.target.value)}
+            placeholder="client | internal | open-source"
+          />
         </div>
       </Section>
 
-      <Section title="Description">
-        <AdminInput label="Short description" id="shortDescription" value={form.shortDescription} onChange={(e) => updateField("shortDescription", e.target.value)} />
-        <TextArea value={form.description} onChange={(e) => updateField("description", e.target.value)} rows={4} />
+      <Section title="Overview & Descriptions" description="Summary and comprehensive case study copy.">
+        <AdminInput
+          label="Short Description"
+          id="shortDescription"
+          value={form.shortDescription}
+          onChange={(e) => updateField("shortDescription", e.target.value)}
+          placeholder="Brief 1-2 sentence overview for cards and listings."
+        />
+        <TextArea
+          label="Full Description"
+          id="description"
+          value={form.description}
+          onChange={(e) => updateField("description", e.target.value)}
+          rows={4}
+          placeholder="Detailed narrative of the project context and objectives."
+        />
       </Section>
 
-      <Section title="Challenge">
-        <TextArea value={form.challenge} onChange={(e) => updateField("challenge", e.target.value)} rows={4} />
-      </Section>
-      <Section title="Solution">
-        <TextArea value={form.solution} onChange={(e) => updateField("solution", e.target.value)} rows={4} />
-      </Section>
-
-      {["results", "features", "technologies", "services", "gallery"].map((key) => (
-        <Section key={key} title={key.charAt(0).toUpperCase() + key.slice(1)}>
-          {form[key].map((item, index) => (
-            <div key={`${key}-${index}`} className="flex gap-2">
-              <AdminInput
-                label={`${key.slice(0, -1)} ${index + 1}`}
-                id={`${key}-${index}`}
-                value={item}
-                onChange={(e) => updateList(key, index, e.target.value)}
-              />
-              <button type="button" onClick={() => removeListItem(key, index)} className="mt-8 h-10 rounded-lg border border-red-200 px-3 text-red-600">
-                <Trash2 className="h-4 w-4" />
-              </button>
-            </div>
-          ))}
-          <button type="button" onClick={() => addListItem(key)} className="inline-flex items-center gap-2 text-sm font-semibold text-blue-600">
-            <Plus className="h-4 w-4" /> Add item
-          </button>
-        </Section>
-      ))}
-
-      <Section title="Images">
+      <Section title="Problem & Solution" description="Explain the core challenge and your technical approach.">
         <div className="grid gap-4 md:grid-cols-2">
-          <MediaPicker label="Featured image" value={form.featuredImage} onChange={(url) => updateField("featuredImage", url)} />
-          <MediaPicker label="Thumbnail" value={form.thumbnail} onChange={(url) => updateField("thumbnail", url)} />
+          <TextArea
+            label="Client Challenge"
+            id="challenge"
+            value={form.challenge}
+            onChange={(e) => updateField("challenge", e.target.value)}
+            rows={4}
+            placeholder="What problems was the client facing with their previous website?"
+          />
+          <TextArea
+            label="Our Solution"
+            id="solution"
+            value={form.solution}
+            onChange={(e) => updateField("solution", e.target.value)}
+            rows={4}
+            placeholder="How did HD Web Studios engineer a solution to solve their challenge?"
+          />
         </div>
       </Section>
 
-      <Section title="Links">
+      <Section title="Technologies & Services" description="Tag all tools, frameworks, and services provided.">
         <div className="grid gap-4 md:grid-cols-2">
-          <AdminInput label="Live URL" id="liveUrl" value={form.liveUrl} onChange={(e) => updateField("liveUrl", e.target.value)} />
-          <AdminInput label="GitHub URL" id="githubUrl" value={form.githubUrl} onChange={(e) => updateField("githubUrl", e.target.value)} />
-          <AdminInput label="Demo URL" id="demoUrl" value={form.demoUrl} onChange={(e) => updateField("demoUrl", e.target.value)} />
-          <AdminInput label="Case study URL" id="caseStudyUrl" value={form.caseStudyUrl} onChange={(e) => updateField("caseStudyUrl", e.target.value)} />
+          <TagInput
+            label="Technologies Used"
+            tags={form.technologies}
+            onChange={(tags) => updateField("technologies", tags)}
+            placeholder="Type tech (e.g. Next.js) and press Enter..."
+            suggestions={["Next.js", "React", "Node.js", "MongoDB", "Tailwind CSS", "Cloudinary", "TypeScript"]}
+          />
+          <TagInput
+            label="Services Provided"
+            tags={form.services}
+            onChange={(tags) => updateField("services", tags)}
+            placeholder="Type service and press Enter..."
+            suggestions={["Business Website Development", "Local SEO", "Custom Web Application", "E-Commerce"]}
+          />
         </div>
       </Section>
 
-      <Section title="Testimonial">
-        <TextArea value={form.testimonial.quote} onChange={(e) => setForm((prev) => ({ ...prev, testimonial: { ...prev.testimonial, quote: e.target.value } }))} rows={3} />
+      <Section title="Outcomes & Key Features" description="Highlight measurable results and key delivered features.">
         <div className="grid gap-4 md:grid-cols-2">
-          <AdminInput label="Author" id="testimonialAuthor" value={form.testimonial.author} onChange={(e) => setForm((prev) => ({ ...prev, testimonial: { ...prev.testimonial, author: e.target.value } }))} />
-          <AdminInput label="Role" id="testimonialRole" value={form.testimonial.role} onChange={(e) => setForm((prev) => ({ ...prev, testimonial: { ...prev.testimonial, role: e.target.value } }))} />
+          <TagInput
+            label="Key Results / Outcomes"
+            tags={form.results}
+            onChange={(tags) => updateField("results", tags)}
+            placeholder="Type result (e.g. 100% Core Web Vitals) and press Enter..."
+            suggestions={["Sub-second load times", "100% Core Web Vitals", "WhatsApp lead integration"]}
+          />
+          <TagInput
+            label="Delivered Features"
+            tags={form.features}
+            onChange={(tags) => updateField("features", tags)}
+            placeholder="Type feature (e.g. Live Inquiry Form) and press Enter..."
+            suggestions={["Mobile-first UI", "Honeypot spam filter", "Schema markup", "Admin dashboard"]}
+          />
         </div>
       </Section>
 
-      <Section title="Publishing">
+      <Section title="Media & Visual Assets" description="Select featured cover and thumbnail images.">
+        <div className="grid gap-4 md:grid-cols-2">
+          <MediaPicker
+            label="Featured Cover Image"
+            value={form.featuredImage}
+            onChange={(url) => updateField("featuredImage", url)}
+          />
+          <MediaPicker
+            label="Card Thumbnail"
+            value={form.thumbnail}
+            onChange={(url) => updateField("thumbnail", url)}
+          />
+        </div>
+      </Section>
+
+      <Section title="Links & URLs" description="Live site and demo references.">
+        <div className="grid gap-4 md:grid-cols-2">
+          <AdminInput
+            label="Live Website URL"
+            id="liveUrl"
+            value={form.liveUrl}
+            onChange={(e) => updateField("liveUrl", e.target.value)}
+            placeholder="https://example.com"
+          />
+          <AdminInput
+            label="Demo / Staging URL"
+            id="demoUrl"
+            value={form.demoUrl}
+            onChange={(e) => updateField("demoUrl", e.target.value)}
+            placeholder="https://staging.example.com"
+          />
+          <AdminInput
+            label="GitHub / Source URL (Optional)"
+            id="githubUrl"
+            value={form.githubUrl}
+            onChange={(e) => updateField("githubUrl", e.target.value)}
+          />
+          <AdminInput
+            label="External Case Study URL (Optional)"
+            id="caseStudyUrl"
+            value={form.caseStudyUrl}
+            onChange={(e) => updateField("caseStudyUrl", e.target.value)}
+          />
+        </div>
+      </Section>
+
+      <Section title="Client Testimonial (Optional)" description="Quote from the business owner or stakeholder.">
+        <TextArea
+          label="Testimonial Quote"
+          id="testimonialQuote"
+          value={form.testimonial?.quote || ""}
+          onChange={(e) =>
+            setForm((prev) => ({
+              ...prev,
+              testimonial: { ...prev.testimonial, quote: e.target.value },
+            }))
+          }
+          rows={3}
+          placeholder="e.g. HD Web Studios delivered our portal ahead of schedule with flawless mobile speed."
+        />
+        <div className="grid gap-4 md:grid-cols-2">
+          <AdminInput
+            label="Author Name"
+            id="testimonialAuthor"
+            value={form.testimonial?.author || ""}
+            onChange={(e) =>
+              setForm((prev) => ({
+                ...prev,
+                testimonial: { ...prev.testimonial, author: e.target.value },
+              }))
+            }
+            placeholder="e.g. Gurpreet Singh"
+          />
+          <AdminInput
+            label="Author Role & Company"
+            id="testimonialRole"
+            value={form.testimonial?.role || ""}
+            onChange={(e) =>
+              setForm((prev) => ({
+                ...prev,
+                testimonial: { ...prev.testimonial, role: e.target.value },
+              }))
+            }
+            placeholder="e.g. Managing Director"
+          />
+        </div>
+      </Section>
+
+      <Section title="SEO & OpenGraph" description="Search engine optimization and social preview.">
+        <AdminInput
+          label="SEO Title"
+          id="seoTitle"
+          value={form.seoTitle}
+          onChange={(e) => updateField("seoTitle", e.target.value)}
+          placeholder="e.g. Solar Customer Portal Case Study | HD Web Studios"
+        />
+        <TextArea
+          label="SEO Meta Description"
+          id="seoDescription"
+          value={form.seoDescription}
+          onChange={(e) => updateField("seoDescription", e.target.value)}
+          rows={2}
+          placeholder="e.g. Discover how HD Web Studios built a high-speed customer portal for SunPower Punjab."
+        />
+        <MediaPicker
+          label="OpenGraph Social Image"
+          value={form.ogImage}
+          onChange={(url) => updateField("ogImage", url)}
+        />
+      </Section>
+
+      <Section title="Publishing & Visibility">
         <div className="grid gap-4 md:grid-cols-3">
-          <AdminInput label="Order" id="order" type="number" min="0" value={form.order} onChange={(e) => updateField("order", Number(e.target.value) || 0)} />
-          <label className="mt-8 flex items-center gap-2 text-sm">
-            <input type="checkbox" checked={form.published} onChange={(e) => updateField("published", e.target.checked)} />
-            Published
-          </label>
-          <label className="mt-8 flex items-center gap-2 text-sm">
-            <input type="checkbox" checked={form.featured} onChange={(e) => updateField("featured", e.target.checked)} />
-            Featured on homepage
-          </label>
+          <AdminInput
+            label="Sort Order"
+            id="order"
+            type="number"
+            min="0"
+            value={form.order}
+            onChange={(e) => updateField("order", Number(e.target.value) || 0)}
+          />
+          <div className="flex items-center gap-2 pt-6">
+            <input
+              type="checkbox"
+              id="published"
+              checked={form.published}
+              onChange={(e) => updateField("published", e.target.checked)}
+              className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+            />
+            <label htmlFor="published" className="text-sm font-semibold text-slate-700">
+              Published (Visible on site)
+            </label>
+          </div>
+          <div className="flex items-center gap-2 pt-6">
+            <input
+              type="checkbox"
+              id="featured"
+              checked={form.featured}
+              onChange={(e) => updateField("featured", e.target.checked)}
+              className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+            />
+            <label htmlFor="featured" className="text-sm font-semibold text-slate-700">
+              Featured on Homepage
+            </label>
+          </div>
         </div>
       </Section>
 
-      <Section title="SEO">
-        <AdminInput label="SEO title" id="seoTitle" value={form.seoTitle} onChange={(e) => updateField("seoTitle", e.target.value)} />
-        <TextArea value={form.seoDescription} onChange={(e) => updateField("seoDescription", e.target.value)} rows={3} />
-        <MediaPicker label="OG image" value={form.ogImage} onChange={(url) => updateField("ogImage", url)} />
-      </Section>
+      {/* Sticky Save / Actions Bar */}
+      <div className="sticky bottom-4 z-20 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-lg backdrop-blur-md">
+        <div className="flex items-center gap-2">
+          {form.slug && (
+            <a
+              href={`/work/${form.slug}`}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2 text-xs font-bold text-slate-700 hover:bg-slate-100 transition"
+            >
+              <ExternalLink size={13} /> View Live
+            </a>
+          )}
+        </div>
 
-      <div className="flex gap-3">
-        <AdminButton type="submit" loading={submitting} loadingText="Saving...">
-          {mode === "create" ? "Create project" : "Save changes"}
-        </AdminButton>
-        <Link href="/admin/projects" className="inline-flex items-center rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-700">
-          Cancel
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link
+            href="/admin/projects"
+            className="rounded-xl border border-slate-200 px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-600 hover:bg-slate-50 transition"
+          >
+            Cancel
+          </Link>
+          <AdminButton type="submit" loading={submitting} loadingText="Saving Project...">
+            {mode === "create" ? "Create Project" : "Save Changes"}
+          </AdminButton>
+        </div>
       </div>
     </form>
   );

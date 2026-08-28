@@ -48,7 +48,7 @@ export default function BenefitsSection() {
         <div className="mt-14 text-center lg:mt-16">
           <p className="text-sm text-slate-500">Have a project in mind?</p>
           <Link
-            href="/contact"
+            href="/audit"
             className="group mt-4 inline-flex items-center gap-2 text-sm font-bold text-blue-600 transition-colors hover:text-blue-700"
           >
             Get a free audit

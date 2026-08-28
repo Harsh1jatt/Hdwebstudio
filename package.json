@@ -10,7 +10,8 @@
     "seed:projects": "node --env-file=.env.local scripts/seed-projects.mjs",
     "seed:testimonials": "node --env-file=.env.local scripts/seed-testimonials.mjs",
     "seed:faqs": "node --env-file=.env.local scripts/seed-faqs.mjs",
-    "seed:pricing": "node --env-file=.env.local scripts/seed-pricing.mjs"
+    "seed:pricing": "node --env-file=.env.local scripts/seed-pricing.mjs",
+    "seed:core-services": "node --env-file=.env.local scripts/seed-initial-services.mjs"
   },
   "dependencies": {
     "@next/third-parties": "^16.2.12",

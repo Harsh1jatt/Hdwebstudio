@@ -1,6 +1,7 @@
 import AdminHeader from "@/components/Admin/layout/AdminHeader";
 import AdminSidebar from "@/components/Admin/layout/AdminSidebar";
 import AdminMobileNav from "@/components/Admin/layout/AdminMobileNav";
+import { requireAdmin } from "@/lib/auth";
 
 export const metadata = {
   title: {
@@ -14,7 +15,9 @@ export const metadata = {
   },
 };
 
-export default function AdminDashboardLayout({ children }) {
+export default async function AdminDashboardLayout({ children }) {
+  await requireAdmin();
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <div className="lg:flex lg:min-h-screen">

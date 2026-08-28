@@ -115,10 +115,10 @@ export default function DesktopNav({ links, services, pathname }) {
         transition={{ type: "spring", stiffness: 400, damping: 20 }}
       >
         <Link
-          href="/contact"
-          className="inline-flex items-center rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-blue-500/25 transition-shadow duration-200 hover:shadow-lg hover:shadow-blue-500/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          href="/audit"
+          className="inline-flex items-center rounded-full bg-blue-600 px-5 py-2 text-xs font-bold uppercase tracking-wider text-white shadow-sm transition-all duration-200 hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
         >
-          Free Audit
+          Free Website Audit
         </Link>
       </motion.div>
     </nav>

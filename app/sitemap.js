@@ -1,8 +1,9 @@
 import { absoluteUrl } from "@/config/site";
-import { getAllPublishedServiceSlugs } from "@/lib/services";
-import { getAllPublishedProjectSlugs } from "@/lib/projects";
-import { getAllPublishedPostSlugs } from "@/lib/posts";
-import { getAllPublishedStorySlugs } from "@/lib/stories";
+import connectDB from "@/lib/db";
+import Service from "@/models/Service";
+import Project from "@/models/Project";
+import Post from "@/models/Post";
+import Story from "@/models/Story";
 
 export const dynamic = "force-dynamic";
 
@@ -23,40 +24,59 @@ export default async function sitemap() {
     { path: "/thank-you", priority: 0.2, changeFrequency: "yearly" },
   ];
 
-  const serviceSlugs = await getAllPublishedServiceSlugs();
-  const serviceRoutes = serviceSlugs.map((slug) => ({
-    path: `/services/${slug}`,
-    priority: 0.9,
-    changeFrequency: "monthly",
-  }));
+  try {
+    await connectDB();
 
-  const projectSlugs = await getAllPublishedProjectSlugs();
-  const portfolioRoutes = projectSlugs.map((slug) => ({
-    path: `/portfolio/${slug}`,
-    priority: 0.8,
-    changeFrequency: "monthly",
-  }));
+    const [services, projects, posts, stories] = await Promise.all([
+      Service.find({ published: true }).select("slug updatedAt").sort({ order: 1 }).lean(),
+      Project.find({ published: true }).select("slug updatedAt").sort({ order: 1 }).lean(),
+      Post.find({ status: "published" }).select("slug updatedAt").sort({ publishedAt: -1 }).lean(),
+      Story.find({ status: "published" }).select("slug updatedAt").sort({ publishedAt: -1 }).lean(),
+    ]);
 
-  const postSlugs = await getAllPublishedPostSlugs();
-  const blogRoutes = postSlugs.map((slug) => ({
-    path: `/blog/${slug}`,
-    priority: 0.7,
-    changeFrequency: "monthly",
-  }));
+    const serviceRoutes = services.map((s) => ({
+      url: absoluteUrl(`/services/${s.slug}`),
+      lastModified: s.updatedAt || currentDate,
+      changeFrequency: "monthly",
+      priority: 0.9,
+    }));
 
-  const storySlugs = await getAllPublishedStorySlugs();
-  const storyRoutes = storySlugs.map((slug) => ({
-    path: `/stories/${slug}`,
-    priority: 0.7,
-    changeFrequency: "monthly",
-  }));
+    const portfolioRoutes = projects.map((p) => ({
+      url: absoluteUrl(`/portfolio/${p.slug}`),
+      lastModified: p.updatedAt || currentDate,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    }));
 
-  return [...staticRoutes, ...serviceRoutes, ...portfolioRoutes, ...blogRoutes, ...storyRoutes].map(
-    ({ path, priority, changeFrequency }) => ({
+    const blogRoutes = posts.map((p) => ({
+      url: absoluteUrl(`/blog/${p.slug}`),
+      lastModified: p.updatedAt || currentDate,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    }));
+
+    const storyRoutes = stories.map((s) => ({
+      url: absoluteUrl(`/stories/${s.slug}`),
+      lastModified: s.updatedAt || currentDate,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    }));
+
+    const staticMapped = staticRoutes.map(({ path, priority, changeFrequency }) => ({
       url: absoluteUrl(path),
       lastModified: currentDate,
       changeFrequency,
       priority,
-    })
-  );
+    }));
+
+    return [...staticMapped, ...serviceRoutes, ...portfolioRoutes, ...blogRoutes, ...storyRoutes];
+  } catch (error) {
+    console.error("[sitemap] Failed to fetch dynamic routes:", error);
+    return staticRoutes.map(({ path, priority, changeFrequency }) => ({
+      url: absoluteUrl(path),
+      lastModified: currentDate,
+      changeFrequency,
+      priority,
+    }));
+  }
 }

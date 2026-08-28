@@ -11,6 +11,7 @@ import RichTextEditor from "@/components/Admin/blog/RichTextEditor";
 import BlogSeoPanel from "@/components/Admin/blog/BlogSeoPanel";
 import BlogPreview from "@/components/Admin/blog/BlogPreview";
 import AiContentGenerator from "@/components/Admin/common/AiContentGenerator";
+import TagInput from "@/components/Admin/common/TagInput";
 import { slugify } from "@/lib/slugify";
 
 const emptyPost = {
@@ -274,17 +275,14 @@ export default function PostForm({
                 value={form.author}
                 onChange={(e) => updateField("author", e.target.value)}
               />
-              <AdminInput
-                id="tags"
-                label="Tags (comma-separated)"
-                value={tagsCsv}
-                onChange={(e) => {
-                  updateField(
-                    "tags",
-                    e.target.value.split(",").map((s) => s.trim()).filter(Boolean)
-                  );
-                }}
-              />
+              <div className="md:col-span-2">
+                <TagInput
+                  label="Tags"
+                  tags={Array.isArray(form.tags) ? form.tags : []}
+                  onChange={(newTags) => updateField("tags", newTags)}
+                  suggestions={["web development", "seo", "punjab", "ludhiana", "business growth", "next.js", "ecommerce"]}
+                />
+              </div>
             </div>
             <AdminInput
               id="excerpt"

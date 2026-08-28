@@ -1,13 +1,12 @@
 import { CheckCircle2, Gauge, Clock3, ShieldCheck } from "lucide-react";
 
-const trustItems = [
-  { icon: CheckCircle2, value: "3+", label: "Projects Delivered", description: "Real-world digital projects" },
-  { icon: Gauge, value: "Fast", label: "Performance Focused", description: "Built for speed and usability" },
-  { icon: Clock3, value: "7\u201314 Days", label: "Typical Launch", description: "For standard business websites" },
-  { icon: ShieldCheck, value: "100%", label: "Project Ownership", description: "Your website, content and data" },
-];
-
-export default function TrustBarSection() {
+export default function TrustBarSection({ projectCount = 0, serviceCount = 0 }) {
+  const trustItems = [
+    { icon: CheckCircle2, value: projectCount > 0 ? `${projectCount}+` : "Custom", label: "Projects Delivered", description: "Real-world digital projects" },
+    { icon: Gauge, value: "Fast", label: "Performance Focused", description: "Built for speed and usability" },
+    { icon: Clock3, value: "7\u201314 Days", label: "Typical Launch", description: "For standard business websites" },
+    { icon: ShieldCheck, value: "100%", label: "Project Ownership", description: "Your website, content and data" },
+  ];
   return (
     <section className="relative border-y border-slate-200 bg-white">
       <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 py-8">

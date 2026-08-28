@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { ExternalLink, Pencil, Plus, Trash2 } from "lucide-react";
+import { ExternalLink, Pencil, Plus, Trash2, Sparkles } from "lucide-react";
 
 import AdminButton from "@/components/Admin/common/AdminButton";
 import AdminInput from "@/components/Admin/common/AdminInput";
@@ -216,7 +216,19 @@ export default function PostsManager() {
       {!loading && !error && posts.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-12 text-center">
           <h3 className="text-lg font-semibold text-slate-900">No posts yet</h3>
-          <p className="mt-2 text-sm text-slate-500">Create your first blog post.</p>
+          <p className="mt-2 text-sm text-slate-500">Create your first blog post or let HD AI generate a draft.</p>
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <Link href="/admin/blog/new">
+              <AdminButton>Create Post</AdminButton>
+            </Link>
+            <Link
+              href={`/admin/chat?prompt=${encodeURIComponent("Write a blog post about...")}`}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition"
+            >
+              <Sparkles className="h-4 w-4 text-blue-600" />
+              Ask HD AI
+            </Link>
+          </div>
         </div>
       ) : null}
 
