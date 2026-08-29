@@ -1,14 +1,17 @@
 import { NextResponse } from "next/server";
 import { requireAdminApi } from "@/lib/auth";
-import { generateAI } from "@/lib/ai/provider";
+import connectDB from "@/lib/db";
+import { executeAiTask } from "@/lib/ai/engine";
 
 export async function POST(req) {
   try {
     const auth = await requireAdminApi(req);
     if (auth instanceof Response) return auth;
 
-    const body = await req.json();
-    const { prompt, type = "blog" } = body;
+    await connectDB();
+
+    const body = await req.json().catch(() => null);
+    const { prompt, type } = body || {};
 
     if (!prompt || typeof prompt !== "string" || prompt.trim().length < 3) {
       return NextResponse.json(
@@ -17,25 +20,56 @@ export async function POST(req) {
       );
     }
 
-    // Generate structured content using provider abstraction
-    const genResult = await generateAI(prompt.trim(), { contentType: type });
+    // Auto-detect type if not explicitly provided or if prompt explicitly requests a service
+    let resolvedType = type;
+    if (!resolvedType || resolvedType === "blog") {
+      if (/\b(?:service|services|service\s+page|seo services|local seo|google ads|web development)\b/i.test(prompt)) {
+        resolvedType = "service";
+      } else if (/\b(?:case study|project|portfolio)\b/i.test(prompt)) {
+        resolvedType = "project";
+      } else {
+        resolvedType = "blog";
+      }
+    }
 
-    let parsedContent;
-    try {
-      parsedContent = typeof genResult.text === "string" ? JSON.parse(genResult.text) : genResult.text;
-    } catch {
+    const task =
+      resolvedType === "service"
+        ? "generate_service"
+        : resolvedType === "project"
+        ? "generate_project"
+        : "generate_blog";
+
+    const adminContext = {
+      adminId: auth._id?.toString() || auth.id || "admin",
+      adminName: auth.name || "Admin",
+    };
+
+    const result = await executeAiTask({
+      task,
+      input: {
+        serviceName: prompt.trim(),
+        topic: prompt.trim(),
+        projectName: prompt.trim(),
+        prompt: prompt.trim(),
+      },
+      adminContext,
+    });
+
+    if (!result.success) {
       return NextResponse.json(
-        { success: false, error: "Failed to parse generated AI structure." },
+        { success: false, error: result.error || "Failed to generate content." },
         { status: 500 }
       );
     }
 
     return NextResponse.json({
       success: true,
-      content: parsedContent,
+      content: result.content,
+      provider: result.provider,
+      model: result.model,
     });
   } catch (error) {
-    console.error("AI generate error:", error);
+    console.error("[POST /api/admin/ai-generate] Error:", error);
     return NextResponse.json(
       { success: false, error: error.message || "Failed to generate content." },
       { status: 500 }

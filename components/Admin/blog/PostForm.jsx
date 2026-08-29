@@ -10,7 +10,11 @@ import MediaPicker from "@/components/Admin/media/MediaPicker";
 import RichTextEditor from "@/components/Admin/blog/RichTextEditor";
 import BlogSeoPanel from "@/components/Admin/blog/BlogSeoPanel";
 import BlogPreview from "@/components/Admin/blog/BlogPreview";
-import AiContentGenerator from "@/components/Admin/common/AiContentGenerator";
+import HdAiAssistant from "@/components/Admin/ai/HdAiAssistant";
+import HdAiBlogOutlineModal from "@/components/Admin/ai/HdAiBlogOutlineModal";
+import HdAiContentImprover from "@/components/Admin/ai/HdAiContentImprover";
+import HdAiQualityReviewer from "@/components/Admin/ai/HdAiQualityReviewer";
+import HdAiSectionRegenerate from "@/components/Admin/ai/HdAiSectionRegenerate";
 import TagInput from "@/components/Admin/common/TagInput";
 import QualityGateModal, { validateContentQuality } from "@/components/Admin/common/QualityGateModal";
 import { slugify } from "@/lib/slugify";
@@ -25,7 +29,7 @@ const emptyPost = {
   featuredImageAlt: "",
   category: "",
   tags: [],
-  author: "",
+  author: "Harshdeep",
   status: "draft",
   seoTitle: "",
   seoDescription: "",
@@ -34,12 +38,15 @@ const emptyPost = {
   secondaryKeywords: [],
 };
 
-function Section({ title, description, children }) {
+function Section({ title, description, action = null, children }) {
   return (
-    <section className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5">
-      <div className="mb-3">
-        <h3 className="text-base font-semibold text-slate-900">{title}</h3>
-        {description ? <p className="mt-0.5 text-xs text-slate-500">{description}</p> : null}
+    <section className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-xs">
+      <div className="mb-3 flex flex-wrap items-start justify-between gap-2">
+        <div>
+          <h3 className="text-base font-semibold text-slate-900">{title}</h3>
+          {description ? <p className="mt-0.5 text-xs text-slate-500">{description}</p> : null}
+        </div>
+        {action && <div>{action}</div>}
       </div>
       <div className="space-y-3">{children}</div>
     </section>
@@ -47,9 +54,7 @@ function Section({ title, description, children }) {
 }
 
 function draftKey(postId) {
-  // In create mode (postId is null), use a unique session key so each
-  // "Create New Blog" gets a fresh editor. Edit mode uses the actual post ID.
-  if (!postId) return null; // disable localStorage draft for unsaved new posts
+  if (!postId) return null;
   return `hdws-blog-draft-${postId}`;
 }
 
@@ -68,6 +73,7 @@ export default function PostForm({
   const [dirty, setDirty] = useState(false);
   const [autosaveStatus, setAutosaveStatus] = useState("");
   const [slugAvailable, setSlugAvailable] = useState(true);
+  const [outlineModalOpen, setOutlineModalOpen] = useState(false);
   const originalSlug = useRef(initialData?.slug || "");
   const autosaveTimer = useRef(null);
 
@@ -76,7 +82,7 @@ export default function PostForm({
     setForm({
       ...emptyPost,
       ...initialData,
-      contentFormat: initialData.contentFormat || "markdown",
+      contentFormat: initialData.contentFormat || "html",
       tags: Array.isArray(initialData.tags) ? initialData.tags : [],
       secondaryKeywords: Array.isArray(initialData.secondaryKeywords)
         ? initialData.secondaryKeywords
@@ -86,12 +92,11 @@ export default function PostForm({
     setSlugTouched(Boolean(initialData.slug));
   }, [initialData]);
 
-  // Recover local draft ONLY in edit mode (postId exists)
-  // This prevents stale data from appearing in new blog creation.
+  // Recover local draft ONLY in edit mode
   useEffect(() => {
     if (typeof window === "undefined") return;
     const key = draftKey(postId);
-    if (!key) return; // create mode — never recover drafts
+    if (!key) return;
     try {
       const saved = localStorage.getItem(key);
       if (!saved) return;
@@ -129,11 +134,11 @@ export default function PostForm({
     });
   }, [slugTouched]);
 
-  // Autosave to localStorage (debounced) — only in edit mode
+  // Autosave to localStorage (debounced) in edit mode
   useEffect(() => {
     if (!dirty) return;
     const key = draftKey(postId);
-    if (!key) return; // skip autosave for unsaved new posts
+    if (!key) return;
     if (autosaveTimer.current) clearTimeout(autosaveTimer.current);
     autosaveTimer.current = setTimeout(() => {
       try {
@@ -218,7 +223,6 @@ export default function PostForm({
       setValidationResult(val);
       setPendingPayload(payload);
 
-      // If critical errors or warnings exist, open quality review modal
       if (!val.isValid || val.warnings.length > 0) {
         setQualityGateOpen(true);
         return;
@@ -238,6 +242,43 @@ export default function PostForm({
     setDirty(true);
   }
 
+  function applyGeneratedBlog(generated, mergeOnly = false) {
+    setForm((prev) => {
+      if (mergeOnly) {
+        return {
+          ...prev,
+          title: prev.title || generated.title,
+          slug: prev.slug || generated.slug,
+          excerpt: prev.excerpt || generated.excerpt,
+          content: prev.content || generated.content,
+          category: prev.category || generated.category,
+          tags: prev.tags?.length ? prev.tags : generated.tags || [],
+          seoTitle: prev.seoTitle || generated.seoTitle,
+          seoDescription: prev.seoDescription || generated.seoDescription,
+          focusKeyword: prev.focusKeyword || generated.focusKeyword,
+          author: prev.author || generated.author || "Harshdeep",
+        };
+      }
+      return {
+        ...prev,
+        title: generated.title || prev.title,
+        slug: generated.slug || prev.slug,
+        excerpt: generated.excerpt || prev.excerpt,
+        content: generated.content || prev.content,
+        category: generated.category || prev.category,
+        tags: generated.tags || prev.tags,
+        seoTitle: generated.seoTitle || prev.seoTitle,
+        seoDescription: generated.seoDescription || prev.seoDescription,
+        focusKeyword: generated.focusKeyword || prev.focusKeyword,
+        author: generated.author || prev.author || "Harshdeep",
+      };
+    });
+    setSlugTouched(true);
+    setDirty(true);
+  }
+
+  const hasContent = Boolean(form.title || form.content || form.excerpt);
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {error ? (
@@ -256,27 +297,14 @@ export default function PostForm({
 
       <div className="grid gap-5 xl:grid-cols-[1fr_320px]">
         <div className="space-y-6">
-          {/* AI Content Generator */}
-          {!form.content && mode === "create" && (
-            <AiContentGenerator
-              onGenerated={(generated) => {
-                setForm((prev) => ({
-                  ...prev,
-                  title: generated.title || prev.title,
-                  slug: generated.slug || prev.slug,
-                  excerpt: generated.excerpt || prev.excerpt,
-                  content: generated.content || prev.content,
-                  category: generated.category || prev.category,
-                  tags: generated.tags || prev.tags,
-                  seoTitle: generated.seoTitle || prev.seoTitle,
-                  seoDescription: generated.seoDescription || prev.seoDescription,
-                  focusKeyword: generated.focusKeyword || prev.focusKeyword,
-                  author: generated.author || prev.author,
-                }));
-                setSlugTouched(true);
-              }}
-            />
-          )}
+          {/* Central HD AI Blog Generator */}
+          <HdAiAssistant
+            type="blog"
+            hasExistingContent={hasContent}
+            onOpenOutlineMode={() => setOutlineModalOpen(true)}
+            onGenerated={applyGeneratedBlog}
+          />
+
           <Section title="Post details" description="Title, URL, category, and metadata.">
             <AdminInput
               id="title"
@@ -317,13 +345,24 @@ export default function PostForm({
                 />
               </div>
             </div>
-            <AdminInput
-              id="excerpt"
-              label="Excerpt"
-              value={form.excerpt}
-              onChange={(e) => updateField("excerpt", e.target.value)}
-              helperText="Short summary for listings. Auto-generated if empty."
-            />
+
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="block text-xs font-semibold text-slate-700">Excerpt</label>
+                <HdAiContentImprover
+                  text={form.excerpt}
+                  context={`Blog title: ${form.title}`}
+                  onApply={(improved) => updateField("excerpt", improved)}
+                />
+              </div>
+              <AdminInput
+                id="excerpt"
+                value={form.excerpt}
+                onChange={(e) => updateField("excerpt", e.target.value)}
+                helperText="Short summary for listings. Auto-generated if empty."
+              />
+            </div>
+
             <div className="grid gap-4 md:grid-cols-2">
               <MediaPicker
                 label="Featured image"
@@ -342,6 +381,16 @@ export default function PostForm({
           <Section
             title="Content"
             description="Write with semantic headings. Post title is the page H1 — use H2+ in the body."
+            action={
+              <div className="flex items-center gap-2">
+                <HdAiContentImprover
+                  text={form.content}
+                  context={`Blog: ${form.title}`}
+                  label="Improve Article Copy"
+                  onApply={(improved) => updateField("content", improved)}
+                />
+              </div>
+            }
           >
             <div className="flex flex-wrap gap-1 rounded-xl border border-slate-200 bg-slate-50 p-1">
               {[
@@ -383,7 +432,28 @@ export default function PostForm({
             )}
           </Section>
 
-          <Section title="SEO metadata">
+          <Section
+            title="SEO metadata"
+            action={
+              <HdAiSectionRegenerate
+                sectionType="seo"
+                entityType="blog"
+                entityTitle={form.title}
+                fullDocumentContext={form}
+                currentData={{ seoTitle: form.seoTitle, seoDescription: form.seoDescription }}
+                label="Regenerate SEO"
+                onApply={(data) => {
+                  if (data) {
+                    setForm((prev) => ({
+                      ...prev,
+                      seoTitle: data.seoTitle || prev.seoTitle,
+                      seoDescription: data.seoDescription || prev.seoDescription,
+                    }));
+                  }
+                }}
+              />
+            }
+          >
             <div className="grid gap-4">
               <AdminInput
                 id="seoTitle"
@@ -467,16 +537,27 @@ export default function PostForm({
         </aside>
       </div>
 
-      <div className="flex flex-wrap items-center gap-3 border-t border-slate-200 pt-4">
-        <AdminButton type="submit" loading={submitting} loadingText="Saving...">
-          Save changes
-        </AdminButton>
-        <Link
-          href="/admin/blog"
-          className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50"
-        >
-          Cancel
-        </Link>
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 pt-4">
+        <div className="flex items-center gap-2">
+          <HdAiQualityReviewer
+            title={form.title}
+            content={form.content}
+            contentType="blog"
+            targetKeyword={form.focusKeyword || form.title}
+          />
+        </div>
+
+        <div className="flex flex-wrap items-center gap-3">
+          <AdminButton type="submit" loading={submitting} loadingText="Saving...">
+            Save changes
+          </AdminButton>
+          <Link
+            href="/admin/blog"
+            className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+          >
+            Cancel
+          </Link>
+        </div>
       </div>
 
       <QualityGateModal
@@ -488,6 +569,13 @@ export default function PostForm({
             executeSubmit(pendingPayload);
           }
         }}
+      />
+
+      <HdAiBlogOutlineModal
+        isOpen={outlineModalOpen}
+        onClose={() => setOutlineModalOpen(false)}
+        initialTopic={form.title || ""}
+        onApplyArticle={(article) => applyGeneratedBlog(article, false)}
       />
     </form>
   );

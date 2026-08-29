@@ -25,12 +25,13 @@ export async function PUT(req) {
   let settings = await SiteSettings.findOne();
   if (!settings) settings = new SiteSettings();
 
-  const sections = ["brand", "contact", "social", "seo", "business", "analytics", "footer", "homepage", "servicePage"];
+  const sections = ["brand", "contact", "social", "seo", "business", "analytics", "brandVoice", "footer", "homepage", "servicePage"];
   for (const section of sections) {
     if (result.data[section]) {
       if (section === "servicePage" || section === "homepage") {
         settings[section] = result.data[section];
       } else {
+        if (!settings[section]) settings[section] = {};
         for (const [key, value] of Object.entries(result.data[section])) {
           if (value !== undefined) {
             settings[section][key] = value;
@@ -47,4 +48,3 @@ export async function PUT(req) {
   const updated = settings.toObject();
   return NextResponse.json({ success: true, settings: { ...updated, id: updated._id.toString(), _id: undefined } });
 }
-

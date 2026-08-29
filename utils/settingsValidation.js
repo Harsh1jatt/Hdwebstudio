@@ -43,6 +43,16 @@ export const settingsPayloadSchema = z.object({
   analytics: z.object({
     googleAnalyticsId: optStr,
   }).optional(),
+  brandVoice: z.object({
+    tone: optStr,
+    positioning: z.string().max(1000).optional(),
+    targetAudience: z.string().max(1000).optional(),
+    coreLocations: z.array(z.string().max(100)).optional(),
+    preferredTerminology: z.array(z.string().max(100)).optional(),
+    forbiddenClaims: z.array(z.string().max(200)).optional(),
+    writingStyle: optStr,
+    aiAutoPublish: z.boolean().optional(),
+  }).optional(),
   footer: z.object({
     footerText: z.string().max(2000).optional(),
     copyrightText: z.string().max(500).optional(),

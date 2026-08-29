@@ -1,16 +1,16 @@
 import { requireAdmin } from "@/lib/auth";
-import AgentChat from "@/components/Admin/chat/AgentChat";
+import HdAiCommandCenter from "@/components/Admin/ai/HdAiCommandCenter";
 
 export const metadata = {
-  title: "AI Assistant",
+  title: "HD AI Command Center | Admin",
 };
 
 export default async function ChatPage() {
   await requireAdmin();
 
   return (
-    <div className="mx-auto h-[calc(100vh-8rem)] max-w-3xl">
-      <AgentChat />
+    <div className="mx-auto h-[calc(100vh-8rem)] max-w-4xl">
+      <HdAiCommandCenter />
     </div>
   );
 }

@@ -2,12 +2,15 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Plus, Trash2, ExternalLink, Sparkles } from "lucide-react";
+import { Plus, Trash2, ExternalLink } from "lucide-react";
 import AdminButton from "@/components/Admin/common/AdminButton";
 import AdminInput from "@/components/Admin/common/AdminInput";
 import MediaPicker from "@/components/Admin/media/MediaPicker";
 import TagInput from "@/components/Admin/common/TagInput";
-import AiContentGenerator from "@/components/Admin/common/AiContentGenerator";
+import HdAiAssistant from "@/components/Admin/ai/HdAiAssistant";
+import HdAiSectionRegenerate from "@/components/Admin/ai/HdAiSectionRegenerate";
+import HdAiContentImprover from "@/components/Admin/ai/HdAiContentImprover";
+import HdAiQualityReviewer from "@/components/Admin/ai/HdAiQualityReviewer";
 import { slugify } from "@/lib/slugify";
 
 const emptyProject = {
@@ -43,26 +46,32 @@ const emptyProject = {
   ogImage: "",
 };
 
-function Section({ title, description, children }) {
+function Section({ title, description, action = null, children }) {
   return (
     <section className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 shadow-xs">
-      <div className="mb-4">
-        <h3 className="text-base font-bold text-slate-900">{title}</h3>
-        {description ? <p className="mt-0.5 text-xs text-slate-500">{description}</p> : null}
+      <div className="mb-4 flex flex-wrap items-start justify-between gap-2">
+        <div>
+          <h3 className="text-base font-bold text-slate-900">{title}</h3>
+          {description ? <p className="mt-0.5 text-xs text-slate-500">{description}</p> : null}
+        </div>
+        {action && <div>{action}</div>}
       </div>
       <div className="space-y-4">{children}</div>
     </section>
   );
 }
 
-function TextArea({ label, id, value, onChange, rows = 4, placeholder, helperText }) {
+function TextArea({ label, id, value, onChange, rows = 4, placeholder, helperText, action = null }) {
   return (
     <div className="space-y-1.5">
-      {label && (
-        <label htmlFor={id} className="block text-xs font-semibold uppercase tracking-wider text-slate-700">
-          {label}
-        </label>
-      )}
+      <div className="flex items-center justify-between">
+        {label && (
+          <label htmlFor={id} className="block text-xs font-semibold uppercase tracking-wider text-slate-700">
+            {label}
+          </label>
+        )}
+        {action && <div>{action}</div>}
+      </div>
       <textarea
         id={id}
         value={value}
@@ -122,6 +131,8 @@ export default function ProjectForm({
     });
   }
 
+  const hasContent = Boolean(form.title || form.description || form.challenge);
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {error ? (
@@ -133,17 +144,40 @@ export default function ProjectForm({
         </div>
       ) : null}
 
-      <AiContentGenerator
+      {/* Central HD AI Project Generator */}
+      <HdAiAssistant
         type="project"
-        onGenerated={(data) => {
-          setForm((prev) => ({
-            ...prev,
-            ...data,
-            results: data.results || prev.results,
-            features: data.features || prev.features,
-            technologies: data.technologies || prev.technologies,
-            services: data.services || prev.services,
-          }));
+        hasExistingContent={hasContent}
+        onGenerated={(data, mergeOnly = false) => {
+          setForm((prev) => {
+            if (mergeOnly) {
+              return {
+                ...prev,
+                title: prev.title || data.title,
+                slug: prev.slug || data.slug,
+                client: prev.client || data.client,
+                category: prev.category || data.category,
+                industry: prev.industry || data.industry,
+                shortDescription: prev.shortDescription || data.shortDescription,
+                description: prev.description || data.description,
+                challenge: prev.challenge || data.challenge,
+                solution: prev.solution || data.solution,
+                features: prev.features?.length ? prev.features : data.features || [],
+                technologies: prev.technologies?.length ? prev.technologies : data.technologies || [],
+                results: prev.results?.length ? prev.results : data.results || [],
+                seoTitle: prev.seoTitle || data.seoTitle,
+                seoDescription: prev.seoDescription || data.seoDescription,
+              };
+            }
+            return {
+              ...prev,
+              ...data,
+              results: data.results || prev.results,
+              features: data.features || prev.features,
+              technologies: data.technologies || prev.technologies,
+              services: data.services || prev.services,
+            };
+          });
           setSlugTouched(true);
         }}
       />
@@ -227,10 +261,39 @@ export default function ProjectForm({
           onChange={(e) => updateField("description", e.target.value)}
           rows={4}
           placeholder="Detailed narrative of the project context and objectives."
+          action={
+            <HdAiContentImprover
+              text={form.description}
+              context={`Project: ${form.title}. Client: ${form.client}`}
+              onApply={(improved) => updateField("description", improved)}
+            />
+          }
         />
       </Section>
 
-      <Section title="Problem & Solution" description="Explain the core challenge and your technical approach.">
+      <Section
+        title="Problem & Solution"
+        description="Explain the core challenge and your technical approach."
+        action={
+          <HdAiSectionRegenerate
+            sectionType="challenge_solution"
+            entityType="project"
+            entityTitle={form.title}
+            fullDocumentContext={form}
+            currentData={{ challenge: form.challenge, solution: form.solution }}
+            label="Regenerate Narrative"
+            onApply={(data) => {
+              if (data) {
+                setForm((prev) => ({
+                  ...prev,
+                  challenge: data.challenge || prev.challenge,
+                  solution: data.solution || prev.solution,
+                }));
+              }
+            }}
+          />
+        }
+      >
         <div className="grid gap-4 md:grid-cols-2">
           <TextArea
             label="Client Challenge"
@@ -239,6 +302,13 @@ export default function ProjectForm({
             onChange={(e) => updateField("challenge", e.target.value)}
             rows={4}
             placeholder="What problems was the client facing with their previous website?"
+            action={
+              <HdAiContentImprover
+                text={form.challenge}
+                context={`Client challenge for ${form.title}`}
+                onApply={(improved) => updateField("challenge", improved)}
+              />
+            }
           />
           <TextArea
             label="Our Solution"
@@ -247,6 +317,13 @@ export default function ProjectForm({
             onChange={(e) => updateField("solution", e.target.value)}
             rows={4}
             placeholder="How did HD Web Studios engineer a solution to solve their challenge?"
+            action={
+              <HdAiContentImprover
+                text={form.solution}
+                context={`Engineered solution for ${form.title}`}
+                onApply={(improved) => updateField("solution", improved)}
+              />
+            }
           />
         </div>
       </Section>
@@ -270,13 +347,42 @@ export default function ProjectForm({
         </div>
       </Section>
 
-      <Section title="Outcomes & Key Features" description="Highlight measurable results and key delivered features.">
+      <Section
+        title="Outcomes & Key Features"
+        description="Highlight measurable results and key delivered features."
+        action={
+          <div className="flex items-center gap-2">
+            <HdAiSectionRegenerate
+              sectionType="features"
+              entityType="project"
+              entityTitle={form.title}
+              fullDocumentContext={form}
+              currentData={form.features}
+              label="Regenerate Features"
+              onApply={(data) => {
+                if (Array.isArray(data)) setForm((prev) => ({ ...prev, features: data }));
+              }}
+            />
+            <HdAiSectionRegenerate
+              sectionType="results"
+              entityType="project"
+              entityTitle={form.title}
+              fullDocumentContext={form}
+              currentData={form.results}
+              label="Regenerate Results"
+              onApply={(data) => {
+                if (Array.isArray(data)) setForm((prev) => ({ ...prev, results: data }));
+              }}
+            />
+          </div>
+        }
+      >
         <div className="grid gap-4 md:grid-cols-2">
           <TagInput
-            label="Key Results / Outcomes"
+            label="Key Results / Outcomes (Factual Only)"
             tags={form.results}
             onChange={(tags) => updateField("results", tags)}
-            placeholder="Type result (e.g. 100% Core Web Vitals) and press Enter..."
+            placeholder="Type result (e.g. Sub-second load times) and press Enter..."
             suggestions={["Sub-second load times", "100% Core Web Vitals", "WhatsApp lead integration"]}
           />
           <TagInput
@@ -450,6 +556,11 @@ export default function ProjectForm({
               <ExternalLink size={13} /> View Live
             </a>
           )}
+          <HdAiQualityReviewer
+            title={form.title}
+            content={form}
+            contentType="project"
+          />
         </div>
 
         <div className="flex items-center gap-3">
