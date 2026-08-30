@@ -5,6 +5,11 @@ import { getPublishedServices } from "@/lib/services";
 import { absoluteUrl, siteConfig } from "@/config/site";
 import { getSiteSettings } from "@/lib/settings";
 
+export const metadata = {
+  other: {
+    "p:domain_verify": "adeee6579afc6f3b6777e46148551f5f",
+  },
+};
 export default async function PublicLayout({ children }) {
   const [services, settings] = await Promise.all([
     getPublishedServices(),
