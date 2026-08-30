@@ -3,25 +3,22 @@ import { Code2, SearchCheck, Zap, CheckCircle2 } from "lucide-react";
 import { CONTAINER, SECTION_Y, Eyebrow, PrimaryCTA } from "./ui";
 
 const founderPrinciples = [
-  { icon: Code2, title: "Built With Purpose", desc: "Every website is designed around your business goals, audience, and customer journey." },
-  { icon: Zap, title: "Performance First", desc: "Fast-loading, responsive experiences that work smoothly across modern devices." },
-  { icon: SearchCheck, title: "SEO Ready", desc: "Clean technical foundations that give your website a strong starting point for search visibility." },
+  { icon: Code2, title: "Built With Purpose", desc: "Every website is architected around your commercial goals, audience, and customer journey." },
+  { icon: Zap, title: "Sub-Second Speed", desc: "Server-rendered Next.js performance that runs seamlessly across modern smartphones." },
+  { icon: SearchCheck, title: "Deterministic SEO", desc: "Clean technical LocalBusiness schema that earns top rankings in Google Maps." },
 ];
 
 export default function FounderSection() {
   return (
-    <section className={`relative overflow-hidden bg-slate-950 text-white ${SECTION_Y}`}>
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-1/2 top-0 h-[500px] w-[700px] -translate-x-1/2 rounded-full bg-blue-600/10 blur-3xl" />
-      </div>
-
+    <section className={`relative overflow-hidden bg-slate-50/70 border-b border-slate-200/80 ${SECTION_Y}`}>
       <div className={`relative ${CONTAINER}`}>
         <div className="grid items-center gap-14 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
+          {/* Founder Image Card */}
           <div className="relative mx-auto w-full max-w-md">
-            <div className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-white/10 bg-slate-900 shadow-2xl">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl">
               <Image
                 src="/images/founder.png"
-                alt="Harshdeep, Founder of HD Web Studios"
+                alt="Harshdeep, Lead Software Engineer and Founder of HD Web Studios"
                 fill
                 priority
                 className="object-cover"
@@ -29,80 +26,78 @@ export default function FounderSection() {
               />
             </div>
 
-            <div className="absolute -bottom-5 -right-3 rounded-2xl border border-white/10 bg-white px-5 py-4 shadow-xl sm:-right-6">
-              <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">HD Web Studios</p>
-              <p className="mt-1 text-sm font-bold text-slate-900">Built by a Developer</p>
+            <div className="absolute -bottom-5 -right-3 rounded-2xl border border-slate-200 bg-white px-5 py-4 shadow-xl sm:-right-6">
+              <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Engineering Studio</p>
+              <p className="mt-0.5 text-sm font-extrabold text-slate-950">Direct Developer Access</p>
             </div>
           </div>
 
+          {/* Founder Story Content */}
           <div>
-            <Eyebrow dark>Meet the Founder</Eyebrow>
+            <Eyebrow>Direct Developer Leadership</Eyebrow>
 
-            <h2 className="mt-4 text-3xl font-bold leading-tight tracking-[-0.035em] sm:text-4xl lg:text-5xl">
-              Building Digital Experiences
-              <span className="text-slate-400"> That Businesses Can Rely On.</span>
+            <h2 className="mt-4 text-3xl font-black leading-tight tracking-tight text-slate-950 sm:text-4xl lg:text-5xl">
+              Digital Platforms Built by Engineers,{" "}
+              <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+                Not Middlemen.
+              </span>
             </h2>
 
-            <div className="mt-7 space-y-5 text-base leading-7 text-slate-300">
+            <div className="mt-6 space-y-4 text-xs sm:text-sm leading-relaxed text-slate-600">
               <p>
-                Hi, I&apos;m <span className="font-semibold text-white">Harshdeep</span>, the founder and developer
-                behind HD Web Studios.
+                Hi, I&apos;m <strong className="text-slate-950">Harshdeep</strong>, lead software developer and founder behind HD Web Studios in Ludhiana, Punjab.
               </p>
               <p>
-                I started HD Web Studios with a simple belief: a business website should be more than just a digital
-                visiting card. It should communicate your value, build trust with your customers, and make it easier
-                for people to take action.
+                I built this studio because most agencies deliver slow, bloated WordPress templates that look decent on desktop but fail on mobile and fail to capture real client inquiries.
               </p>
               <p>
-                My approach combines modern web development, thoughtful design, performance optimization, and SEO
-                fundamentals to create websites and web applications that are built around real business
-                requirements.
+                We engineer modern Next.js web applications, high-converting ecommerce platforms, and deterministic Local SEO systems from scratch with 100% source code ownership and zero monthly plugin renewal taxes.
               </p>
               <p>
-                When you work with HD Web Studios, you&apos;re not passed between layers of account managers and
-                developers. You get direct communication with the person building your digital experience.
+                When you partner with us, you collaborate directly with the software engineer writing your code — ensuring zero lost requirements, rapid iterations, and uncompromising quality.
               </p>
             </div>
 
-            <div className="mt-9 grid gap-4 sm:grid-cols-3">
+            <div className="mt-8 grid gap-3.5 sm:grid-cols-3">
               {founderPrinciples.map((principle) => {
                 const Icon = principle.icon;
                 return (
-                  <div key={principle.title} className="rounded-2xl border border-white/10 bg-white/[0.04] p-5">
-                    <Icon className="h-5 w-5 text-blue-400" strokeWidth={1.8} />
-                    <h3 className="mt-4 text-sm font-bold text-white">{principle.title}</h3>
-                    <p className="mt-2 text-xs leading-5 text-slate-400">{principle.desc}</p>
+                  <div key={principle.title} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
+                    <Icon className="h-5 w-5 text-blue-600" strokeWidth={2} />
+                    <h3 className="mt-3 text-xs font-bold text-slate-950">{principle.title}</h3>
+                    <p className="mt-1 text-[11px] leading-relaxed text-slate-500">{principle.desc}</p>
                   </div>
                 );
               })}
             </div>
 
-            <div className="mt-8 space-y-2.5">
+            <div className="mt-7 space-y-2 text-xs text-slate-700 font-medium">
               {[
-                "Direct communication with the developer",
-                "Clear and transparent project communication",
-                "Focus on performance, usability, and long-term maintainability",
+                "Direct Slack, WhatsApp & phone communication with Harshdeep",
+                "Fixed milestone pricing with zero surprise invoices or recurring plugin fees",
+                "100% full source code and database ownership upon launch",
               ].map((item) => (
-                <div key={item} className="flex items-start gap-2.5 text-sm text-slate-300">
-                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" />
+                <div key={item} className="flex items-start gap-2.5">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
                   <span>{item}</span>
                 </div>
               ))}
             </div>
 
-            <div className="mt-9">
-              <PrimaryCTA href="/contact" dark>
-                Let&apos;s Talk About Your Project
+            <div className="mt-8">
+              <PrimaryCTA href="/contact">
+                Schedule a Discovery Call
               </PrimaryCTA>
             </div>
           </div>
         </div>
 
-        <div className="mx-auto mt-20 max-w-3xl border-t border-white/10 pt-10 text-center">
-          <p className="text-xl font-semibold leading-relaxed text-white sm:text-2xl">
-            &quot;Good websites don&apos;t just look impressive. They make it easier for the right people to trust
-            your business and take the next step.&quot;
+        {/* Founder Quote */}
+        <div className="mx-auto mt-16 max-w-3xl rounded-3xl border border-blue-100 bg-blue-50/50 p-8 text-center">
+          <p className="text-base sm:text-lg font-bold leading-relaxed text-slate-900">
+            &ldquo;A website should never be an expense on your balance sheet. When engineered properly with speed and local search authority, it is your highest-ROI sales representative.&rdquo;
           </p>
+          <span className="mt-2 block text-xs font-semibold text-blue-600">— Harshdeep, Founder &amp; Lead Engineer</span>
         </div>
       </div>
     </section>

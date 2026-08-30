@@ -4,64 +4,42 @@ import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import {
   Search,
-  Plus,
-  BookOpen,
   Sparkles,
   Layers,
-  Play,
   HelpCircle,
   MessageSquare,
   Mail,
-  BarChart3,
-  Globe,
-  RefreshCw,
-  Compass,
-  ArrowRight,
-  Link2,
-  TrendingUp,
   ImageIcon,
   DollarSign,
   Users,
   Settings,
   ExternalLink,
-  Command,
   X,
 } from "lucide-react";
 
 const COMMANDS = [
   // Creation
-  { id: "new-blog", title: "New Blog Post", category: "Create", href: "/admin/blog/new", icon: BookOpen, shortcut: "N" },
   { id: "new-service", title: "New Service", category: "Create", href: "/admin/services/new", icon: Sparkles },
-  { id: "new-project", title: "New Project / Case Study", category: "Create", href: "/admin/projects/new", icon: Layers },
-  { id: "new-story", title: "New Web Story", category: "Create", href: "/admin/stories/new", icon: Play },
+  { id: "new-project", title: "New Project / Case Study", category: "Create", href: "/admin/projects/new", icon: Layers, shortcut: "N" },
   { id: "new-faq", title: "New FAQ", category: "Create", href: "/admin/faqs/new", icon: HelpCircle },
   { id: "new-testimonial", title: "New Testimonial", category: "Create", href: "/admin/testimonials/new", icon: MessageSquare },
 
   // Navigation
   { id: "leads", title: "View Enquiries & Leads", category: "Navigation", href: "/admin/leads", icon: Mail, shortcut: "L" },
-  { id: "blogs", title: "Blog Articles Manager", category: "Navigation", href: "/admin/blog", icon: BookOpen, shortcut: "B" },
   { id: "services", title: "Services Catalog", category: "Navigation", href: "/admin/services", icon: Sparkles, shortcut: "S" },
-  { id: "projects", title: "Projects & Work Showcase", category: "Navigation", href: "/admin/projects", icon: Layers, shortcut: "P" },
-  { id: "stories", title: "Web Stories", category: "Navigation", href: "/admin/stories", icon: Play },
+  { id: "projects", title: "Projects & Case Studies", category: "Navigation", href: "/admin/projects", icon: Layers, shortcut: "P" },
   { id: "faqs", title: "FAQs", category: "Navigation", href: "/admin/faqs", icon: HelpCircle },
   { id: "testimonials", title: "Testimonials", category: "Navigation", href: "/admin/testimonials", icon: MessageSquare },
   { id: "media", title: "Media Library", category: "Navigation", href: "/admin/media", icon: ImageIcon },
   { id: "pricing", title: "Pricing Packages", category: "Navigation", href: "/admin/pricing", icon: DollarSign },
+  { id: "team", title: "Team Management", category: "Navigation", href: "/admin/team", icon: Users },
   { id: "settings", title: "Global Site Settings", category: "Navigation", href: "/admin/settings", icon: Settings },
-
-  // SEO & Growth
-  { id: "seo-dash", title: "SEO Health Dashboard", category: "SEO & Growth", href: "/admin/seo", icon: BarChart3 },
-  { id: "seo-sitemap", title: "Sitemap Manager", category: "SEO & Growth", href: "/admin/seo/sitemap", icon: Globe },
-  { id: "seo-gsc", title: "Google Search Console", category: "SEO & Growth", href: "/admin/seo/gsc", icon: Search },
-  { id: "seo-test", title: "Live SEO Diagnostics", category: "SEO & Growth", href: "/admin/seo/test", icon: Compass },
-  { id: "seo-redirects", title: "301 Redirects Manager", category: "SEO & Growth", href: "/admin/seo/redirects", icon: ArrowRight },
-  { id: "seo-backlinks", title: "Backlink CRM", category: "SEO & Growth", href: "/admin/seo/backlinks", icon: Link2 },
-  { id: "seo-keywords", title: "Keyword Tracker", category: "SEO & Growth", href: "/admin/seo/keywords", icon: TrendingUp },
 
   // Public Links
   { id: "view-site", title: "View Public Website", category: "Public Site", href: "/", icon: ExternalLink, external: true },
-  { id: "view-blog", title: "View Public Blog", category: "Public Site", href: "/blog", icon: ExternalLink, external: true },
   { id: "view-services", title: "View Public Services", category: "Public Site", href: "/services", icon: ExternalLink, external: true },
+  { id: "view-work", title: "View Public Work", category: "Public Site", href: "/work", icon: ExternalLink, external: true },
+  { id: "view-pricing", title: "View Public Pricing", category: "Public Site", href: "/pricing", icon: ExternalLink, external: true },
   { id: "view-sitemap", title: "View Live /sitemap.xml", category: "Public Site", href: "/sitemap.xml", icon: ExternalLink, external: true },
   { id: "view-llms", title: "View Live /llms.txt", category: "Public Site", href: "/llms.txt", icon: ExternalLink, external: true },
 ];
@@ -124,7 +102,7 @@ export default function CommandPalette({ isOpen, onClose }) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center bg-slate-900/60 p-4 pt-16 sm:pt-24 backdrop-blur-xs">
+    <div className="fixed inset-0 z-50 flex items-start justify-center bg-slate-900/40 p-4 pt-16 sm:pt-24 backdrop-blur-xs">
       <div className="relative w-full max-w-xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl animate-scaleUp">
         {/* Search Bar */}
         <div className="flex items-center border-b border-slate-100 px-4 py-3.5">

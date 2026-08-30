@@ -42,16 +42,6 @@ const SiteSettingsSchema = new mongoose.Schema(
     analytics: {
       googleAnalyticsId: { type: String, trim: true, default: "" },
     },
-    brandVoice: {
-      tone: { type: String, trim: true, default: "Professional, authoritative, conversion-focused, approachable" },
-      positioning: { type: String, trim: true, default: "Premium web development and digital acquisition solutions for growing businesses" },
-      targetAudience: { type: String, trim: true, default: "Small & medium businesses, startups, manufacturers, institutes, and D2C brands in Ludhiana, Punjab, Pan-India, and global clients" },
-      coreLocations: { type: [String], default: ["Ludhiana", "Punjab", "India", "Remote / Global"] },
-      preferredTerminology: { type: [String], default: ["Digital Growth", "Business Acquisition System", "Conversion-Focused", "High Performance", "Modern Stack"] },
-      forbiddenClaims: { type: [String], default: ["Guaranteed #1 Google ranking", "Instant overnight traffic", "100% free forever"] },
-      writingStyle: { type: String, trim: true, default: "Clear, commercial, benefit-driven, concise, no generic AI filler" },
-      aiAutoPublish: { type: Boolean, default: false },
-    },
     footer: {
       footerText: { type: String, trim: true, default: "" },
       copyrightText: { type: String, trim: true, default: "" },
@@ -63,7 +53,7 @@ const SiteSettingsSchema = new mongoose.Schema(
         description: {
           type: String,
           trim: true,
-          default: "Professional website development, local SEO, and digital growth solutions for businesses in Ludhiana, Punjab and across India. We help you get discovered, build trust, and get contacted.",
+          default: "Professional website development, web applications, and digital growth solutions for businesses in Ludhiana, Punjab and across India. We help you get discovered, build trust, and get contacted.",
         },
         ctaText: { type: String, trim: true, default: "Get a Free Digital Audit" },
         ctaLink: { type: String, trim: true, default: "/contact" },

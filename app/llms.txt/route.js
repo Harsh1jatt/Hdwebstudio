@@ -1,6 +1,5 @@
 import connectDB from "@/lib/db";
 import Service from "@/models/Service";
-import Post from "@/models/Post";
 import Project from "@/models/Project";
 import { siteConfig, absoluteUrl } from "@/config/site";
 
@@ -8,14 +7,12 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   let services = [];
-  let posts = [];
   let projects = [];
 
   try {
     await connectDB();
-    [services, posts, projects] = await Promise.all([
+    [services, projects] = await Promise.all([
       Service.find({ published: true }).select("title slug description category").sort({ order: 1 }).lean(),
-      Post.find({ status: "published" }).select("title slug category excerpt").sort({ publishedAt: -1 }).limit(10).lean(),
       Project.find({ published: true }).select("title slug category client").sort({ order: 1 }).limit(10).lean(),
     ]);
   } catch (err) {
@@ -23,14 +20,14 @@ export async function GET() {
   }
 
   const content = `# HD Web Studios — Machine-Readable Site Manifest & Entity Information
-> Digital Agency & Software Engineering Studio based in Ludhiana, Punjab, India.
+> High-Performance Web Development, Local SEO & Digital Growth Studio based in Ludhiana, Punjab, India.
 
 ## Studio Overview
 - Name: ${siteConfig.name}
 - Short Name: ${siteConfig.shortName}
 - Website: ${siteConfig.url}
 - Founder & Lead Developer: Harshdeep
-- Primary Location: Ludhiana, Punjab, India (PIN: 141001)
+- Primary Location: Ludhiana, Punjab, India (PIN: 141007)
 - Service Area: Ludhiana, Punjab, National (India), and Global Remote Clients
 - Contact Email: ${siteConfig.email}
 - Contact Phone: ${siteConfig.phoneDisplay}
@@ -40,7 +37,7 @@ export async function GET() {
 ## Core Architectural & Technical Principles
 - Modern Next.js App Router architecture with Server Components by default.
 - Sub-second Core Web Vitals optimization, mobile-first responsive interfaces.
-- Deterministic Schema.org structured data (Organization, LocalBusiness, Service, Article, BreadcrumbList, FAQPage).
+- Deterministic Schema.org structured data (Organization, LocalBusiness, Service, BreadcrumbList, FAQPage, CreativeWork).
 - Clean semantic HTML with accessible hierarchical headings and zero keyword stuffing.
 - Direct developer communication without intermediary sales layers.
 
@@ -53,9 +50,6 @@ ${services.length > 0 ? services.map((s) => `- [${s.title}](${absoluteUrl(`/serv
 
 ## Key Case Studies & Selected Work
 ${projects.length > 0 ? projects.map((p) => `- [${p.title}](${absoluteUrl(`/work/${p.slug}`)}): ${p.client ? `Client: ${p.client} — ` : ""}${p.category || "Case Study"}`).join("\n") : `- [Selected Work Catalog](${absoluteUrl("/work")}): Real-world web architectures and custom software deployments.`}
-
-## Technical Resources & Educational Articles
-${posts.length > 0 ? posts.map((p) => `- [${p.title}](${absoluteUrl(`/blog/${p.slug}`)}): ${p.excerpt?.slice(0, 140) || p.category}`).join("\n") : `- [HD Web Studios Knowledge Base](${absoluteUrl("/blog")}): Guides on web performance, local SEO, Next.js development, and conversion optimization.`}
 
 ## Verified Public Endpoints
 - Homepage: ${absoluteUrl("/")}

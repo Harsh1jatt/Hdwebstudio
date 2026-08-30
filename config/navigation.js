@@ -1,9 +1,5 @@
 export const navigation = [
   {
-    label: "Home",
-    href: "/",
-  },
-  {
     label: "Services",
     href: "/services",
     isServices: true,
@@ -17,11 +13,11 @@ export const navigation = [
     href: "/pricing",
   },
   {
-    label: "Blog",
-    href: "/blog",
-  },
-  {
     label: "About",
     href: "/about",
+  },
+  {
+    label: "Contact",
+    href: "/contact",
   },
 ];

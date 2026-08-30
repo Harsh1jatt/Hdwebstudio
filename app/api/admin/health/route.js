@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 import connectDB from "@/lib/db";
 import { requireAdminApi } from "@/lib/auth";
 import Contact from "@/models/Contact";
-import Post from "@/models/Post";
 import Service from "@/models/Service";
 import Project from "@/models/Project";
 import Media from "@/models/Media";
@@ -27,13 +26,11 @@ export async function GET(req) {
 
     const [
       totalLeads,
-      totalPosts,
       totalServices,
       totalProjects,
       totalMedia,
     ] = await Promise.all([
       Contact.countDocuments(),
-      Post.countDocuments(),
       Service.countDocuments(),
       Project.countDocuments(),
       Media.countDocuments(),
@@ -68,7 +65,6 @@ export async function GET(req) {
       },
       counts: {
         leads: totalLeads,
-        posts: totalPosts,
         services: totalServices,
         projects: totalProjects,
         media: totalMedia,

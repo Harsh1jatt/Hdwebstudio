@@ -1,9 +1,9 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, ExternalLink, CheckCircle2, Sparkles, Layers, ShieldCheck } from "lucide-react";
+import { ArrowLeft, ArrowRight, ExternalLink, CheckCircle2, Sparkles, Layers, ShieldCheck, MessageCircle } from "lucide-react";
 import { getProjectBySlug, getPublishedProjects } from "@/lib/projects";
-import { absoluteUrl, siteConfig } from "@/config/site";
+import { absoluteUrl, siteConfig, whatsAppUrl, defaultWhatsAppMessage } from "@/config/site";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 
 export const dynamic = "force-dynamic";
@@ -76,13 +76,13 @@ export default async function WorkDetailPage({ params }) {
   };
 
   return (
-    <div className="bg-white">
+    <div className="bg-white min-h-screen">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(creativeWorkJsonLd) }}
       />
       {/* Breadcrumb Bar */}
-      <div className="border-b border-slate-100 bg-slate-50/70 py-2">
+      <div className="border-b border-slate-200 bg-slate-50/70 py-4">
         <div className="mx-auto max-w-5xl px-5 sm:px-6">
           <Breadcrumbs
             items={[
@@ -98,36 +98,36 @@ export default async function WorkDetailPage({ params }) {
         <div className="mx-auto max-w-5xl px-5 sm:px-6">
           <div className="max-w-3xl">
             {project.category && (
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-blue-700">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-blue-700 shadow-xs">
                 <Sparkles size={12} className="text-blue-600" />
                 {project.category}
               </span>
             )}
-            <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-slate-950 sm:text-5xl">
+            <h1 className="mt-4 text-3xl font-black tracking-tight text-slate-950 sm:text-5xl">
               {project.title}
             </h1>
-            <p className="mt-4 text-base leading-7 text-slate-600 sm:text-lg">
+            <p className="mt-4 text-xs sm:text-sm leading-relaxed text-slate-600 sm:text-base">
               {project.shortDescription || project.description}
             </p>
 
             {/* Quick Meta Pills */}
-            <div className="mt-8 flex flex-wrap gap-4 border-y border-slate-100 py-4 text-xs">
+            <div className="mt-8 flex flex-wrap gap-4 border-y border-slate-200/80 py-4 text-xs">
               {project.client && (
                 <div>
                   <span className="text-slate-400 font-medium">Client: </span>
-                  <span className="font-semibold text-slate-900">{project.client}</span>
+                  <span className="font-bold text-slate-900">{project.client}</span>
                 </div>
               )}
               {project.industry && (
                 <div>
                   <span className="text-slate-400 font-medium">Industry: </span>
-                  <span className="font-semibold text-slate-900">{project.industry}</span>
+                  <span className="font-bold text-slate-900">{project.industry}</span>
                 </div>
               )}
               {project.location && (
                 <div>
                   <span className="text-slate-400 font-medium">Location: </span>
-                  <span className="font-semibold text-slate-900">{project.location}</span>
+                  <span className="font-bold text-slate-900">{project.location}</span>
                 </div>
               )}
               {project.liveUrl && (
@@ -144,7 +144,7 @@ export default async function WorkDetailPage({ params }) {
           </div>
 
           {/* Hero Media */}
-          <div className="relative mt-8 aspect-[16/9] w-full overflow-hidden rounded-2xl border border-slate-200 shadow-sm bg-slate-100">
+          <div className="relative mt-8 aspect-[16/9] w-full overflow-hidden rounded-3xl border border-slate-200 shadow-md bg-slate-100">
             <Image
               src={imageSrc}
               alt={project.title}
@@ -162,7 +162,7 @@ export default async function WorkDetailPage({ params }) {
               {project.challenge && (
                 <div>
                   <h2 className="text-xl font-bold tracking-tight text-slate-950">The Challenge</h2>
-                  <p className="mt-3 text-sm leading-7 text-slate-600 sm:text-base">
+                  <p className="mt-3 text-xs sm:text-sm leading-relaxed text-slate-600">
                     {project.challenge}
                   </p>
                 </div>
@@ -172,7 +172,7 @@ export default async function WorkDetailPage({ params }) {
               {project.solution && (
                 <div>
                   <h2 className="text-xl font-bold tracking-tight text-slate-950">Our Solution</h2>
-                  <p className="mt-3 text-sm leading-7 text-slate-600 sm:text-base">
+                  <p className="mt-3 text-xs sm:text-sm leading-relaxed text-slate-600">
                     {project.solution}
                   </p>
                 </div>
@@ -184,8 +184,8 @@ export default async function WorkDetailPage({ params }) {
                   <h2 className="text-xl font-bold tracking-tight text-slate-950">Key Deliverables</h2>
                   <ul className="mt-4 space-y-2.5">
                     {project.features.map((feature, i) => (
-                      <li key={i} className="flex items-start gap-2.5 text-sm text-slate-700">
-                        <CheckCircle2 size={16} className="mt-0.5 shrink-0 text-blue-600" />
+                      <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700">
+                        <CheckCircle2 size={16} className="mt-0.5 shrink-0 text-emerald-600" />
                         <span>{feature}</span>
                       </li>
                     ))}
@@ -199,7 +199,7 @@ export default async function WorkDetailPage({ params }) {
                   <h2 className="text-xl font-bold tracking-tight text-slate-950">Project Gallery</h2>
                   <div className="mt-4 grid gap-4 sm:grid-cols-2">
                     {project.gallery.map((img, i) => (
-                      <div key={i} className="relative aspect-[16/10] overflow-hidden rounded-xl border border-slate-200 bg-slate-100">
+                      <div key={i} className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-slate-200 bg-slate-100">
                         <Image
                           src={img}
                           alt={`${project.title} screenshot ${i + 1}`}
@@ -218,7 +218,7 @@ export default async function WorkDetailPage({ params }) {
             <div className="space-y-6">
               {/* Tech Stack */}
               {project.technologies?.length > 0 && (
-                <div className="rounded-2xl border border-slate-200 bg-slate-50/60 p-6">
+                <div className="rounded-3xl border border-slate-200 bg-slate-50/60 p-6 shadow-xs">
                   <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900">
                     Technology Stack
                   </h3>
@@ -226,7 +226,7 @@ export default async function WorkDetailPage({ params }) {
                     {project.technologies.map((t) => (
                       <span
                         key={t}
-                        className="rounded-md border border-slate-200 bg-white px-2.5 py-1 text-xs font-medium text-slate-700 shadow-xs"
+                        className="rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs font-semibold text-slate-700 shadow-xs"
                       >
                         {t}
                       </span>
@@ -236,15 +236,15 @@ export default async function WorkDetailPage({ params }) {
               )}
 
               {/* Contact Card */}
-              <div className="rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50/80 to-cyan-50/50 p-6">
+              <div className="rounded-3xl border border-blue-100 bg-gradient-to-br from-blue-50/80 to-cyan-50/50 p-6 shadow-xs">
                 <ShieldCheck className="h-8 w-8 text-blue-600" />
-                <h3 className="mt-3 text-base font-bold text-slate-950">Need a similar solution?</h3>
-                <p className="mt-2 text-xs leading-5 text-slate-600">
-                  We engineer modern digital platforms tailored specifically around your business requirements.
+                <h3 className="mt-3 text-base font-extrabold text-slate-950">Need a similar architecture?</h3>
+                <p className="mt-2 text-xs leading-relaxed text-slate-600">
+                  We engineer modern digital platforms tailored specifically around your commercial requirements.
                 </p>
                 <Link
                   href="/contact"
-                  className="mt-5 inline-flex w-full items-center justify-center rounded-full bg-blue-600 px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-sm transition hover:bg-blue-700"
+                  className="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-blue-600 px-4 py-3 text-xs font-bold uppercase tracking-wider text-white shadow-xs transition hover:bg-blue-700"
                 >
                   Start Discovery
                 </Link>

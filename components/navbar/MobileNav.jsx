@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronDown, MessageCircle, Phone } from "lucide-react";
 import { whatsAppUrl, defaultWhatsAppMessage, telUrl } from "@/config/site";
 
-export default function MobileNav({ links, services, pathname, open, onClose }) {
+export default function MobileNav({ links = [], services = [], pathname, open, onClose }) {
   const [mounted, setMounted] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
   const closeButtonRef = useRef(null);
@@ -49,7 +49,7 @@ export default function MobileNav({ links, services, pathname, open, onClose }) 
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
+            className="absolute inset-0 bg-slate-900/30 backdrop-blur-sm"
             onClick={onClose}
             aria-hidden="true"
           />
@@ -64,7 +64,7 @@ export default function MobileNav({ links, services, pathname, open, onClose }) 
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", stiffness: 300, damping: 32 }}
-            className="absolute right-0 top-0 h-full w-72 overflow-y-auto rounded-l-3xl border-l border-white/60 bg-white/90 p-6 shadow-2xl backdrop-blur-xl"
+            className="absolute right-0 top-0 h-full w-80 overflow-y-auto rounded-l-3xl border-l border-slate-200 bg-white p-6 shadow-2xl"
           >
             <div className="flex justify-end">
               <button
@@ -72,20 +72,20 @@ export default function MobileNav({ links, services, pathname, open, onClose }) 
                 type="button"
                 onClick={onClose}
                 aria-label="Close menu"
-                className="rounded-full p-2 text-slate-700 transition-all duration-200 hover:bg-slate-900/5 active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                className="rounded-full p-2 text-slate-700 transition-all duration-200 hover:bg-slate-100 active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
               >
                 <X size={22} aria-hidden="true" />
               </button>
             </div>
 
-            <nav aria-label="Mobile Navigation" className="mt-6">
+            <nav aria-label="Mobile Navigation" className="mt-4">
               <ul className="flex flex-col gap-1">
                 {links.map((link) => {
                   if (link.isServices) {
                     return (
                       <li key={link.href}>
-                        <div className="flex items-center justify-between rounded-xl text-slate-700 hover:bg-slate-900/5">
-                          <Link href={link.href} onClick={onClose} className="flex-1 px-3 py-3 font-medium">
+                        <div className="flex items-center justify-between rounded-2xl text-slate-800 hover:bg-slate-50">
+                          <Link href={link.href} onClick={onClose} className="flex-1 px-3.5 py-3 text-sm font-bold">
                             {link.label}
                           </Link>
                           <button
@@ -94,13 +94,13 @@ export default function MobileNav({ links, services, pathname, open, onClose }) 
                             aria-expanded={servicesOpen}
                             aria-controls="mobile-services-menu"
                             aria-label="Toggle services submenu"
-                            className="rounded-full p-2 mr-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                            className="rounded-full p-2 mr-1 text-slate-500 hover:text-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                           >
                             <ChevronDown
                               size={18}
                               aria-hidden="true"
                               className={`transition-transform duration-200 ${
-                                servicesOpen ? "rotate-180" : ""
+                                servicesOpen ? "rotate-180 text-blue-600" : ""
                               }`}
                             />
                           </button>
@@ -117,7 +117,7 @@ export default function MobileNav({ links, services, pathname, open, onClose }) 
                               <Link
                                 href={service.href}
                                 aria-current={pathname === service.href ? "page" : undefined}
-                                className="block rounded-lg py-2 pl-6 text-sm text-slate-600 transition-colors duration-150 hover:bg-slate-900/5 hover:text-blue-600"
+                                className="block rounded-xl py-2 pl-6 text-xs font-semibold text-slate-600 transition-colors duration-150 hover:bg-blue-50 hover:text-blue-600"
                                 onClick={onClose}
                               >
                                 {service.label}
@@ -136,10 +136,10 @@ export default function MobileNav({ links, services, pathname, open, onClose }) 
                       <Link
                         href={link.href}
                         aria-current={isActive ? "page" : undefined}
-                        className={`block rounded-xl px-3 py-3 font-medium transition-colors duration-150 ${
+                        className={`block rounded-2xl px-3.5 py-3 text-sm font-bold transition-colors duration-150 ${
                           isActive
                             ? "bg-blue-50 text-blue-600"
-                            : "text-slate-700 hover:bg-slate-900/5 hover:text-blue-600"
+                            : "text-slate-800 hover:bg-slate-50 hover:text-blue-600"
                         }`}
                         onClick={onClose}
                       >
@@ -150,21 +150,21 @@ export default function MobileNav({ links, services, pathname, open, onClose }) 
                 })}
 
                 {/* Mobile Quick Actions */}
-                <li className="mt-4 flex gap-2">
+                <li className="mt-6 flex gap-2">
                   <a
                     href={whatsAppUrl(defaultWhatsAppMessage)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-emerald-500 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-emerald-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 text-xs font-bold uppercase tracking-wider text-white shadow-xs transition hover:bg-emerald-700"
                   >
-                    <MessageCircle size={16} aria-hidden="true" />
+                    <MessageCircle size={15} aria-hidden="true" />
                     WhatsApp
                   </a>
                   <a
                     href={telUrl()}
-                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900"
+                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-100 px-4 py-3 text-xs font-bold uppercase tracking-wider text-slate-800 transition hover:bg-slate-200"
                   >
-                    <Phone size={16} aria-hidden="true" />
+                    <Phone size={15} aria-hidden="true" />
                     Call
                   </a>
                 </li>
@@ -174,7 +174,7 @@ export default function MobileNav({ links, services, pathname, open, onClose }) 
                   <Link
                     href="/audit"
                     onClick={onClose}
-                    className="inline-flex w-full items-center justify-center rounded-full bg-blue-600 px-5 py-3 text-sm font-bold uppercase tracking-wider text-white shadow-md shadow-blue-500/20 transition-all duration-200 hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                    className="inline-flex w-full items-center justify-center rounded-xl bg-blue-600 px-5 py-3.5 text-xs font-bold uppercase tracking-wider text-white shadow-md shadow-blue-600/20 transition hover:bg-blue-700"
                   >
                     Free Website Audit
                   </Link>

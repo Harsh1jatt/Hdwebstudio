@@ -2,15 +2,11 @@ import {
   Users,
   Mail,
   Phone,
-  Activity,
   ArrowUpRight,
   Plus,
-  BookOpen,
   Sparkles,
   Layers,
-  Play,
   MessageSquare,
-  FileText,
   HelpCircle,
   Inbox,
   CheckCircle2,
@@ -18,19 +14,15 @@ import {
   TrendingUp,
   Server,
   ImageIcon,
-  BarChart3,
-  Globe,
-  Search,
+  DollarSign,
   Settings,
 } from "lucide-react";
 
 import { requireAdmin } from "@/lib/auth";
 import connectDB from "@/lib/db";
 import Contact from "@/models/Contact";
-import Post from "@/models/Post";
 import Service from "@/models/Service";
 import Project from "@/models/Project";
-import Story from "@/models/Story";
 import FAQ from "@/models/FAQ";
 import Testimonial from "@/models/Testimonial";
 import LeadStatusBadge from "@/components/Admin/leads/LeadStatusBadge";
@@ -157,11 +149,8 @@ export default async function AdminDashboardPage() {
     wonLeadsCount,
     leadsThisWeek,
     recentLeads,
-    publishedPosts,
-    draftPosts,
     publishedServices,
     publishedProjects,
-    publishedStories,
     publishedFaqs,
     publishedTestimonials,
   ] = await Promise.all([
@@ -171,11 +160,8 @@ export default async function AdminDashboardPage() {
     Contact.countDocuments({ status: "won" }),
     Contact.countDocuments({ createdAt: { $gte: startOfWeek } }),
     Contact.find().sort({ createdAt: -1 }).limit(6).lean(),
-    Post.countDocuments({ status: "published" }),
-    Post.countDocuments({ status: "draft" }),
     Service.countDocuments({ published: true }),
     Project.countDocuments({ published: true }),
-    Story.countDocuments({ status: "published" }),
     FAQ.countDocuments({ published: true }),
     Testimonial.countDocuments({ published: true }),
   ]);
@@ -201,10 +187,10 @@ export default async function AdminDashboardPage() {
           </div>
           <div className="flex flex-wrap gap-2">
             <a
-              href="/admin/blog/new"
+              href="/admin/services/new"
               className="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
             >
-              <Plus className="h-4 w-4" /> New Blog Post
+              <Plus className="h-4 w-4" /> New Service
             </a>
             <a
               href="/admin/leads"
@@ -253,15 +239,7 @@ export default async function AdminDashboardPage() {
       </div>
 
       {/* Content Distribution Stats */}
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard
-          title="Published Articles"
-          value={publishedPosts}
-          subtitle={`${draftPosts} in draft`}
-          icon={BookOpen}
-          href="/admin/blog"
-          color="purple"
-        />
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         <StatCard
           title="Active Services"
           value={publishedServices}
@@ -297,17 +275,13 @@ export default async function AdminDashboardPage() {
           <span className="text-[11px] font-mono text-slate-400">Press <kbd className="font-bold bg-slate-100 px-1 py-0.5 rounded border border-slate-200">Ctrl+K</kbd> for Command Palette</span>
         </div>
         <div className="grid gap-2.5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
-          <QuickAction label="New Blog" icon={BookOpen} href="/admin/blog/new" />
           <QuickAction label="New Service" icon={Sparkles} href="/admin/services/new" />
           <QuickAction label="New Project" icon={Layers} href="/admin/projects/new" />
-          <QuickAction label="New Story" icon={Play} href="/admin/stories/new" />
           <QuickAction label="New FAQ" icon={HelpCircle} href="/admin/faqs/new" />
           <QuickAction label="New Testimonial" icon={MessageSquare} href="/admin/testimonials/new" />
           <QuickAction label="View Leads" icon={Mail} href="/admin/leads" />
           <QuickAction label="Media Library" icon={ImageIcon} href="/admin/media" />
-          <QuickAction label="SEO Health" icon={BarChart3} href="/admin/seo" />
-          <QuickAction label="Sitemap" icon={Globe} href="/admin/seo/sitemap" />
-          <QuickAction label="Search Console" icon={Search} href="/admin/seo/gsc" />
+          <QuickAction label="Pricing Plans" icon={DollarSign} href="/admin/pricing" />
           <QuickAction label="Settings" icon={Settings} href="/admin/settings" />
         </div>
       </div>
@@ -357,13 +331,6 @@ export default async function AdminDashboardPage() {
             <div className="space-y-2.5">
               {[
                 {
-                  label: "Blog Articles",
-                  published: publishedPosts,
-                  draft: draftPosts,
-                  href: "/admin/blog",
-                  icon: BookOpen,
-                },
-                {
                   label: "Services",
                   published: publishedServices,
                   href: "/admin/services",
@@ -374,12 +341,6 @@ export default async function AdminDashboardPage() {
                   published: publishedProjects,
                   href: "/admin/projects",
                   icon: Layers,
-                },
-                {
-                  label: "Web Stories",
-                  published: publishedStories,
-                  href: "/admin/stories",
-                  icon: Play,
                 },
                 {
                   label: "FAQs",
@@ -409,11 +370,6 @@ export default async function AdminDashboardPage() {
                     <span className="inline-flex items-center rounded-md bg-emerald-50 px-2 py-0.5 text-xs font-semibold text-emerald-700">
                       {item.published} active
                     </span>
-                    {item.draft !== undefined && item.draft > 0 && (
-                      <span className="inline-flex items-center rounded-md bg-amber-50 px-2 py-0.5 text-xs font-semibold text-amber-700">
-                        {item.draft} draft{item.draft !== 1 ? "s" : ""}
-                      </span>
-                    )}
                   </div>
                 </a>
               ))}

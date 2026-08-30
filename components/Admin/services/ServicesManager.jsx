@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { ExternalLink, Pencil, Plus, Trash2, Sparkles } from "lucide-react";
+import { ExternalLink, Pencil, Plus, Trash2 } from "lucide-react";
 import AdminButton from "../common/AdminButton";
 import AdminInput from "../common/AdminInput";
 import AdminLoader from "../common/AdminLoader";
@@ -200,13 +200,6 @@ export default function ServicesManager() {
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Link href="/admin/services/new">
               <AdminButton>Create Service</AdminButton>
-            </Link>
-            <Link
-              href={`/admin/chat?prompt=${encodeURIComponent("Create a new service for...")}`}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition"
-            >
-              <Sparkles className="h-4 w-4 text-blue-600" />
-              Ask HD AI
             </Link>
           </div>
         </div>

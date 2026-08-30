@@ -6,217 +6,185 @@ import {
   LineChart,
   MonitorSmartphone,
   Sparkles,
+  Zap,
+  ShieldCheck,
+  Search,
+  Activity,
 } from "lucide-react";
-
-const heroServices = [
-  { icon: MonitorSmartphone, label: "Websites" },
-  { icon: Code2, label: "Software" },
-  { icon: LineChart, label: "Growth" },
-];
+import { whatsAppUrl, defaultWhatsAppMessage } from "@/config/site";
 
 export default function HeroSection({ settings = {} }) {
   const hero = settings.homepage?.hero || {};
-  const heroHeading1 = hero.heading1 || "We Build Websites That";
-  const heroHeading2 = hero.heading2 || "Grow Businesses.";
-  const heroDescription = hero.description || "Professional website development, custom Next.js web applications, and Local SEO solutions for businesses in Ludhiana, Punjab and across India. Engineered for speed, mobile UX, and customer acquisition.";
+  const heroHeading1 = hero.heading1 || "Turn Your Digital Presence Into a";
+  const heroHeading2 = hero.heading2 || "Client Acquisition System";
+  const heroDescription =
+    hero.description ||
+    "We engineer custom Next.js websites, high-conversion web applications, and Google Local SEO engines for businesses, manufacturers, and startups in Ludhiana, Punjab, and across India.";
   const heroCtaText = hero.ctaText || "Get Free Website Audit";
   const heroCtaLink = hero.ctaLink || "/audit";
-  const heroSecondaryText = hero.secondaryText || "View Our Work";
-  const heroSecondaryLink = hero.secondaryLink || "/work";
+
   return (
-    <section className="relative isolate overflow-hidden bg-white">
-      {/* Background */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute left-1/2 top-[-180px] h-[500px] w-[700px] -translate-x-1/2 rounded-full bg-blue-100/60 blur-3xl" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#f1f5f9_1px,transparent_1px),linear-gradient(to_bottom,#f1f5f9_1px,transparent_1px)] bg-[size:64px_64px] opacity-40 [mask-image:linear-gradient(to_bottom,black,transparent_75%)]" />
+    <section className="relative isolate overflow-hidden bg-slate-50/50 py-16 sm:py-24 lg:py-28 border-b border-slate-200/80">
+      {/* Background Soft Glow & Grid */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute left-1/2 top-[-140px] h-[480px] w-[750px] -translate-x-1/2 rounded-full bg-gradient-to-tr from-blue-200/60 via-cyan-100/50 to-indigo-100/50 blur-[100px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.07)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.07)_1px,transparent_1px)] bg-[size:48px_48px]" />
       </div>
 
-      <div className="mx-auto max-w-7xl px-5 pb-20 pt-16 sm:px-6 sm:pb-24 sm:pt-20 lg:px-8 lg:pb-28 lg:pt-28">
-        <div className="grid items-center gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
-          {/* Left Content */}
+      <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+        <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
+          {/* Left Hero Content */}
           <div className="max-w-3xl">
-            {/* Eyebrow */}
-            <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3.5 py-2 text-sm font-medium text-slate-700 shadow-sm backdrop-blur">
-                <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-blue-500 opacity-60" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-blue-600" />
-                </span>
-                Website Development Company in Ludhiana &middot; Local SEO &middot; Web Apps
-              </div>
+            {/* Live Sprint Badge */}
+            <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white/90 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-blue-700 shadow-xs backdrop-blur-md">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-blue-500 opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-blue-600" />
+              </span>
+              Ludhiana Studio &middot; Next.js 16 App Router &middot; Full Code Ownership
             </div>
 
-            {/* Heading */}
-            <h1 className="mt-7 text-4xl font-bold tracking-[-0.04em] text-slate-950 sm:text-5xl lg:text-6xl xl:text-7xl">
+            {/* Main Headline */}
+            <h1 className="mt-6 text-4xl font-black tracking-tight text-slate-950 sm:text-5xl lg:text-6xl xl:text-7xl leading-[1.08]">
               {heroHeading1}{" "}
-              <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-600 bg-clip-text text-transparent">
                 {heroHeading2}
               </span>
             </h1>
 
             {/* Description */}
-            <p className="mt-6 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg sm:leading-8">
+            <p className="mt-6 text-base leading-relaxed text-slate-600 sm:text-lg sm:leading-8 max-w-2xl">
               {heroDescription}
             </p>
 
             {/* CTAs */}
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-8 flex flex-col sm:flex-row gap-3.5">
               <Link
                 href={heroCtaLink}
-                className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-slate-950 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-slate-950/10 transition-all duration-200 hover:-translate-y-0.5 hover:bg-blue-600 hover:shadow-blue-600/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-7 py-3.5 text-xs font-extrabold uppercase tracking-wider text-white shadow-lg shadow-blue-600/25 transition-all duration-200 hover:-translate-y-0.5 hover:bg-blue-700"
               >
                 {heroCtaText}
-                <ArrowRight
-                  size={18}
-                  className="transition-transform duration-200 group-hover:translate-x-1"
-                />
+                <ArrowRight size={16} className="transition-transform duration-200 group-hover:translate-x-1" />
               </Link>
 
               <Link
-                href={heroSecondaryLink}
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-800 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-slate-400 focus-visible:outline-offset-2"
+                href="/work"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-6 py-3.5 text-xs font-bold uppercase tracking-wider text-slate-800 shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:bg-slate-50"
               >
-                {heroSecondaryText}
+                View Case Studies
               </Link>
             </div>
 
-            {/* Trust Points */}
-            <div className="mt-9 flex flex-wrap gap-x-5 gap-y-3 text-sm text-slate-600">
+            {/* Engineering Guarantees */}
+            <div className="mt-9 flex flex-wrap gap-x-6 gap-y-2.5 text-xs font-semibold text-slate-700">
               <div className="flex items-center gap-2">
-                <CheckCircle2 size={17} className="text-blue-600" />
-                Performance-focused
+                <CheckCircle2 size={16} className="text-emerald-600" />
+                <span>Sub-0.8s LCP Speed</span>
               </div>
               <div className="flex items-center gap-2">
-                <CheckCircle2 size={17} className="text-blue-600" />
-                Mobile-first
+                <CheckCircle2 size={16} className="text-emerald-600" />
+                <span>100% Code Ownership</span>
               </div>
               <div className="flex items-center gap-2">
-                <CheckCircle2 size={17} className="text-blue-600" />
-                SEO-ready
+                <CheckCircle2 size={16} className="text-emerald-600" />
+                <span>Google Maps 3-Pack SEO</span>
               </div>
             </div>
-
-            {/* Supporting Copy */}
-            <p className="mt-6 max-w-2xl text-sm leading-6 text-slate-500">
-              Web development, local SEO, and digital growth solutions for
-              businesses in Ludhiana, Punjab and across India.
-            </p>
           </div>
 
-          {/* Right Visual */}
-          <div className="relative mx-auto w-full max-w-xl lg:ml-auto">
-            {/* Main Card */}
-            <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-4 shadow-2xl shadow-slate-900/10 sm:p-5">
-              {/* Top Bar */}
+          {/* Right Visual: 3D Telemetry HUD (Full Light Theme) */}
+          <div className="relative mx-auto w-full max-w-lg lg:ml-auto">
+            <div className="relative overflow-hidden rounded-3xl border border-slate-200/90 bg-white p-5 sm:p-6 shadow-2xl shadow-slate-900/[0.08] backdrop-blur-xl">
+              {/* Browser Top Chrome */}
               <div className="flex items-center justify-between border-b border-slate-100 pb-4">
                 <div className="flex items-center gap-2">
                   <div className="flex gap-1.5">
-                    <span className="h-2.5 w-2.5 rounded-full bg-slate-200" />
-                    <span className="h-2.5 w-2.5 rounded-full bg-slate-200" />
-                    <span className="h-2.5 w-2.5 rounded-full bg-slate-200" />
+                    <span className="h-3 w-3 rounded-full bg-rose-400" />
+                    <span className="h-3 w-3 rounded-full bg-amber-400" />
+                    <span className="h-3 w-3 rounded-full bg-emerald-400" />
                   </div>
-                  <span className="ml-2 text-xs font-medium text-slate-400">
-                    hdwebstudios.in
+                  <span className="ml-2 text-xs font-mono font-medium text-slate-500">
+                    hdwebstudios.in/engine
                   </span>
                 </div>
-                <div className="flex items-center gap-1.5 text-xs font-medium text-emerald-600">
-                  <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                  Live
+                <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  100% Score
                 </div>
               </div>
 
-              {/* Visual Content */}
-              <div className="relative mt-5 overflow-hidden rounded-2xl bg-slate-950 p-5 sm:p-7">
-                <div aria-hidden="true" className="absolute -right-20 -top-20 h-48 w-48 rounded-full bg-blue-600/30 blur-3xl" />
-                <div aria-hidden="true" className="absolute -bottom-20 -left-20 h-48 w-48 rounded-full bg-violet-600/20 blur-3xl" />
-
-                <div className="relative">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-xs font-medium text-slate-400">
-                        DIGITAL GROWTH SYSTEM
-                      </p>
-                      <h2 className="mt-2 text-xl font-semibold tracking-tight text-white sm:text-2xl">
-                        Build. Launch. Grow.
-                      </h2>
-                    </div>
-                    <div className="rounded-xl border border-white/10 bg-white/5 p-3">
-                      <Sparkles size={20} className="text-blue-400" />
-                    </div>
+              {/* Telemetry Display Box */}
+              <div className="mt-5 rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50/50 via-white to-cyan-50/40 p-5 sm:p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-blue-600">
+                      Core Web Vitals Telemetry
+                    </span>
+                    <h3 className="mt-1 text-xl font-extrabold text-slate-950">
+                      Production Speed Benchmarks
+                    </h3>
                   </div>
-
-                  {/* Service Cards */}
-                  <div className="mt-7 grid grid-cols-3 gap-2.5 sm:gap-3">
-                    {heroServices.map((service) => {
-                      const Icon = service.icon;
-                      return (
-                        <div
-                          key={service.label}
-                          className="rounded-xl border border-white/10 bg-white/[0.06] p-3 backdrop-blur-sm sm:p-4"
-                        >
-                          <Icon size={19} className="text-blue-400" />
-                          <p className="mt-3 text-xs font-medium text-slate-200 sm:text-sm">
-                            {service.label}
-                          </p>
-                        </div>
-                      );
-                    })}
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm">
+                    <Activity size={20} />
                   </div>
+                </div>
 
-                  {/* Growth Bar */}
-                  <div className="mt-5 rounded-xl border border-white/10 bg-white/[0.05] p-4">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs text-slate-400">
-                        Business Growth
-                      </span>
-                      <span className="text-xs font-semibold text-emerald-400">
-                        Optimized
-                      </span>
-                    </div>
-                    <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10">
-                      <div className="h-full w-[82%] rounded-full bg-gradient-to-r from-blue-500 to-violet-500" />
-                    </div>
+                {/* Metric Telemetry Grid */}
+                <div className="mt-5 grid grid-cols-3 gap-3 text-center">
+                  <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-xs">
+                    <span className="text-[11px] font-semibold text-slate-500 block">LCP Speed</span>
+                    <span className="mt-1 text-lg font-black text-emerald-600 block">0.6s</span>
+                    <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">Optimal</span>
+                  </div>
+                  <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-xs">
+                    <span className="text-[11px] font-semibold text-slate-500 block">Mobile UX</span>
+                    <span className="mt-1 text-lg font-black text-blue-600 block">100/100</span>
+                    <span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded">Verified</span>
+                  </div>
+                  <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-xs">
+                    <span className="text-[11px] font-semibold text-slate-500 block">CLS Shift</span>
+                    <span className="mt-1 text-lg font-black text-emerald-600 block">0.00</span>
+                    <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">Zero Shift</span>
+                  </div>
+                </div>
+
+                {/* Progress Bar */}
+                <div className="mt-4 rounded-xl border border-slate-200 bg-white p-3.5">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-semibold text-slate-700">Client Acquisition Velocity</span>
+                    <span className="font-bold text-blue-600">3.4x Faster Funnel</span>
+                  </div>
+                  <div className="mt-2 h-2 overflow-hidden rounded-full bg-slate-100">
+                    <div className="h-full w-[92%] rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500" />
                   </div>
                 </div>
               </div>
 
-              {/* Bottom Stats */}
-              <div className="grid grid-cols-3 divide-x divide-slate-100 pt-5">
-                <div className="px-3 text-center">
-                  <p className="text-lg font-bold text-slate-950">Fast</p>
-                  <p className="mt-1 text-[11px] text-slate-500 sm:text-xs">
-                    Performance
-                  </p>
+              {/* Bottom Quick Features */}
+              <div className="mt-4 grid grid-cols-3 divide-x divide-slate-100 pt-3 text-center">
+                <div className="px-2">
+                  <p className="text-xs font-bold text-slate-900">Next.js 16</p>
+                  <p className="text-[11px] text-slate-500">React 19 Server</p>
                 </div>
-                <div className="px-3 text-center">
-                  <p className="text-lg font-bold text-slate-950">SEO</p>
-                  <p className="mt-1 text-[11px] text-slate-500 sm:text-xs">
-                    Ready
-                  </p>
+                <div className="px-2">
+                  <p className="text-xs font-bold text-slate-900">Local SEO</p>
+                  <p className="text-[11px] text-slate-500">JSON-LD Schema</p>
                 </div>
-                <div className="px-3 text-center">
-                  <p className="text-lg font-bold text-slate-950">Scale</p>
-                  <p className="mt-1 text-[11px] text-slate-500 sm:text-xs">
-                    Focused
-                  </p>
+                <div className="px-2">
+                  <p className="text-xs font-bold text-slate-900">WhatsApp</p>
+                  <p className="text-[11px] text-slate-500">Instant Lead Funnel</p>
                 </div>
               </div>
             </div>
 
-            {/* Floating Badge */}
-            <div className="absolute -bottom-5 -left-3 hidden rounded-2xl border border-slate-200 bg-white p-3 shadow-xl shadow-slate-900/10 sm:block sm:-left-6">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50">
-                  <CheckCircle2 size={20} className="text-blue-600" />
-                </div>
-                <div>
-                  <p className="text-xs font-semibold text-slate-900">
-                    Built for business
-                  </p>
-                  <p className="mt-0.5 text-[11px] text-slate-500">
-                    Not just another website
-                  </p>
-                </div>
+            {/* Floating Client Trust Badge */}
+            <div className="absolute -bottom-5 -left-4 hidden rounded-2xl border border-slate-200 bg-white p-3.5 shadow-xl sm:flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                <ShieldCheck size={20} />
+              </div>
+              <div>
+                <p className="text-xs font-bold text-slate-900">Full IP Ownership</p>
+                <p className="text-[11px] text-slate-500">Zero Agency Lock-in</p>
               </div>
             </div>
           </div>

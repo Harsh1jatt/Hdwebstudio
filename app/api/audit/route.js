@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { auditWebsite } from "@/lib/ai/websiteAudit";
+import { auditWebsite } from "@/lib/websiteAudit";
 
 // Rate limiter: 10 audits per IP per hour
 const ipMap = new Map();

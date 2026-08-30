@@ -1,49 +1,47 @@
 @import "tailwindcss";
 
-/* ─── Design System: HD Web Studios ───────────────────────────────────────── */
+/* ─── Design System: HD Web Studios (Full Light Theme) ───────────────────────── */
 
 :root {
-  /* Brand Colors */
+  /* Brand Palette */
   --color-primary: #2563eb;
   --color-primary-dark: #1d4ed8;
   --color-primary-light: #3b82f6;
-  --color-secondary: #0891b2;
-  --color-accent: #06b6d4;
+  --color-cyan: #06b6d4;
+  --color-cyan-dark: #0891b2;
+  --color-navy: #020617;
+  --color-navy-light: #0f172a;
 
-  /* Neutrals */
+  /* Surfaces & Canvas (Full Light Only) */
   --color-background: #f8fafc;
   --color-surface: #ffffff;
-  --color-text: #0f172a;
-  --color-text-secondary: #475569;
-  --color-text-muted: #94a3b8;
+  --color-surface-muted: #f1f5f9;
+  --color-surface-hover: #f8fafc;
+
+  /* Typography */
+  --color-text-primary: #020617;
+  --color-text-secondary: #334155;
+  --color-text-muted: #64748b;
   --color-border: #e2e8f0;
+  --color-border-subtle: #f1f5f9;
 
-  /* Semantic */
-  --color-success: #10b981;
-  --color-warning: #f59e0b;
-  --color-error: #ef4444;
+  /* Semantic Highlights */
+  --color-success: #059669;
+  --color-success-bg: #ecfdf5;
+  --color-warning: #d97706;
+  --color-warning-bg: #fffbeb;
+  --color-error: #dc2626;
+  --color-error-bg: #fef2f2;
 
-  /* Typography Scale */
+  /* Typography */
   --font-display: 'Inter', system-ui, -apple-system, sans-serif;
   --font-body: 'Inter', system-ui, -apple-system, sans-serif;
 
-  /* Spacing */
-  --space-container: 1280px;
-  --space-section-y: 6rem;
-  --space-section-y-sm: 4rem;
-
-  /* Border Radius */
-  --radius-sm: 0.5rem;
-  --radius-md: 0.75rem;
-  --radius-lg: 1rem;
-  --radius-xl: 1.5rem;
-  --radius-full: 9999px;
-
-  /* Shadows */
-  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
-  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.04);
-  --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.08), 0 8px 10px -6px rgba(0,0,0,0.04);
+  /* Elevation Shadows */
+  --shadow-subtle: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -2px rgba(15, 23, 42, 0.04);
+  --shadow-card-hover: 0 20px 30px -4px rgba(37, 99, 235, 0.08), 0 8px 12px -3px rgba(15, 23, 42, 0.05);
+  --shadow-modal: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
 }
 
 /* ─── Base Styles ────────────────────────────────────────────────────────── */
@@ -54,29 +52,75 @@ html {
 
 body {
   font-family: var(--font-body);
-  background-color: var(--color-background);
-  color: var(--color-text);
+  background-color: #f8fafc;
+  color: #0f172a;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ─── Focus States ───────────────────────────────────────────────────────── */
+/* ─── Selection & Focus States ───────────────────────────────────────────── */
+
+::selection {
+  background-color: #2563eb;
+  color: #ffffff;
+}
 
 *:focus-visible {
-  outline: 2px solid var(--color-primary);
+  outline: 2px solid #2563eb;
   outline-offset: 2px;
-  border-radius: var(--radius-sm);
+  border-radius: 0.5rem;
 }
 
-/* ─── Animations ─────────────────────────────────────────────────────────── */
+/* ─── 3D Perspective & Layout Engine ─────────────────────────────────────── */
 
-@keyframes slideDown {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+.perspective-1000 {
+  perspective: 1000px;
 }
 
-.animate-slideDown {
-  animation: slideDown 0.3s ease-out;
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.card-3d {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-3d:hover {
+  transform: translateY(-4px) rotateX(1.5deg) rotateY(-1deg);
+  box-shadow: var(--shadow-card-hover);
+}
+
+/* ─── Ambient Light Backgrounds ──────────────────────────────────────────── */
+
+.bg-radial-subtle {
+  background-image: radial-gradient(ellipse at top, rgba(37, 99, 235, 0.05) 0%, transparent 60%);
+}
+
+.bg-grid-subtle {
+  background-size: 40px 40px;
+  background-image:
+    linear-gradient(to right, rgba(148, 163, 184, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+}
+
+/* ─── Keyframe Animations ────────────────────────────────────────────────── */
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.04); }
+}
+
+.animate-pulseGlow {
+  animation: pulseGlow 6s ease-in-out infinite;
+}
+
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+.animate-floatSlow {
+  animation: floatSlow 5s ease-in-out infinite;
 }
 
 /* ─── Reduced Motion ─────────────────────────────────────────────────────── */
@@ -92,34 +136,26 @@ body {
   }
 }
 
-/* ─── Utility Classes ────────────────────────────────────────────────────── */
+/* ─── Container ─────────────────────────────────────────────────────────── */
 
-.container-optimized {
+.container-custom {
   margin-left: auto;
   margin-right: auto;
-  max-width: var(--space-container);
+  max-width: 1280px;
   padding-left: 1.25rem;
   padding-right: 1.25rem;
 }
 
 @media (min-width: 640px) {
-  .container-optimized {
+  .container-custom {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
   }
 }
 
 @media (min-width: 1024px) {
-  .container-optimized {
+  .container-custom {
     padding-left: 2rem;
     padding-right: 2rem;
   }
 }
-
-/* ─── Admin UI Helpers ───────────────────────────────────────────────────── */
-/* Keep existing admin utility classes */
-.bg-white\/2 { background-color: rgba(255,255,255,0.02); }
-.bg-white\/3 { background-color: rgba(255,255,255,0.03); }
-.bg-white\/4 { background-color: rgba(255,255,255,0.04); }
-.border-white\/6 { border-color: rgba(255,255,255,0.06); }
-.border-white\/8 { border-color: rgba(255,255,255,0.08); }

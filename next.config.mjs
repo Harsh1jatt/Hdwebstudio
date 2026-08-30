@@ -7,6 +7,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "res.cloudinary.com",
       },
+      {
+        protocol: "https",
+        hostname: "**.cloudinary.com",
+      },
     ],
   },
   async headers() {
@@ -58,6 +62,26 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      {
+        source: "/blog",
+        destination: "/work",
+        permanent: true,
+      },
+      {
+        source: "/blog/:slug*",
+        destination: "/work",
+        permanent: true,
+      },
+      {
+        source: "/stories",
+        destination: "/work",
+        permanent: true,
+      },
+      {
+        source: "/stories/:slug*",
+        destination: "/work",
+        permanent: true,
+      },
       {
         source: "/services/create-srvice-for-business-website-development",
         destination: "/services/business-website-development",
@@ -113,4 +137,3 @@ const nextConfig = {
 };
 
 export default nextConfig;
-

@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { requireAdminApi } from "@/lib/auth";
 import connectDB from "@/lib/db";
 import Service from "@/models/Service";
-import Post from "@/models/Post";
 import Project from "@/models/Project";
 import FAQ from "@/models/FAQ";
 import Testimonial from "@/models/Testimonial";
@@ -25,13 +24,9 @@ export async function GET(req) {
     const escaped = q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     const regex = new RegExp(escaped, "i");
 
-    const [services, posts, projects, faqs, testimonials, leads, team] = await Promise.all([
+    const [services, projects, faqs, testimonials, leads, team] = await Promise.all([
       Service.find({ $or: [{ title: regex }, { tagline: regex }, { description: regex }, { category: regex }] })
         .select("title slug category published")
-        .limit(8)
-        .lean(),
-      Post.find({ $or: [{ title: regex }, { excerpt: regex }, { category: regex }, { tags: regex }] })
-        .select("title slug category status")
         .limit(8)
         .lean(),
       Project.find({ $or: [{ title: regex }, { description: regex }, { client: regex }, { category: regex }] })
@@ -58,7 +53,6 @@ export async function GET(req) {
 
     const results = [
       ...services.map((s) => ({ id: s._id.toString(), type: "service", title: s.title, subtitle: `Category: ${s.category || "General"}`, url: `/admin/services/${s._id}`, publicUrl: `/services/${s.slug}`, status: s.published ? "published" : "draft" })),
-      ...posts.map((p) => ({ id: p._id.toString(), type: "blog", title: p.title, subtitle: `Category: ${p.category || "General"}`, url: `/admin/blog/${p._id}`, publicUrl: `/blog/${p.slug}`, status: p.status })),
       ...projects.map((pr) => ({ id: pr._id.toString(), type: "project", title: pr.title, subtitle: `Client: ${pr.client || "Confidential"}`, url: `/admin/projects/${pr._id}`, publicUrl: `/work/${pr.slug}`, status: pr.published ? "published" : "draft" })),
       ...faqs.map((f) => ({ id: f._id.toString(), type: "faq", title: f.question, subtitle: `FAQ (${f.category || "General"})`, url: `/admin/faqs/${f._id}` })),
       ...testimonials.map((t) => ({ id: t._id.toString(), type: "testimonial", title: t.name, subtitle: `${t.company || "Client"} (${t.rating}★)`, url: `/admin/testimonials/${t._id}` })),

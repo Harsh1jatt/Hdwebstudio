@@ -4,8 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import AdminButton from "../common/AdminButton";
 import AdminInput from "../common/AdminInput";
-import HdAiContentImprover from "@/components/Admin/ai/HdAiContentImprover";
-import { Sparkles, Loader2 } from "lucide-react";
 
 const defaults = {
   question: "",
@@ -20,15 +18,12 @@ function FieldLabel({ children }) {
   return <label className="mb-2 block text-[13px] font-semibold text-slate-700">{children}</label>;
 }
 
-function Section({ title, description, action = null, children }) {
+function Section({ title, description, children }) {
   return (
     <section className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 shadow-xs">
-      <div className="mb-5 flex flex-wrap items-start justify-between gap-2">
-        <div>
-          <h3 className="text-lg font-semibold text-slate-900">{title}</h3>
-          {description ? <p className="mt-1 text-sm text-slate-500">{description}</p> : null}
-        </div>
-        {action && <div>{action}</div>}
+      <div className="mb-5">
+        <h3 className="text-lg font-semibold text-slate-900">{title}</h3>
+        {description ? <p className="mt-1 text-sm text-slate-500">{description}</p> : null}
       </div>
       <div className="space-y-4">{children}</div>
     </section>
@@ -37,8 +32,6 @@ function Section({ title, description, action = null, children }) {
 
 export default function FAQForm({ initialData = {}, onSubmit, loading, error }) {
   const [form, setForm] = useState({ ...defaults, ...initialData });
-  const [aiLoading, setAiLoading] = useState(false);
-  const [aiError, setAiError] = useState("");
 
   function updateField(key, value) {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -49,66 +42,15 @@ export default function FAQForm({ initialData = {}, onSubmit, loading, error }) 
     onSubmit(form);
   }
 
-  async function handleGenerateAnswer() {
-    if (!form.question?.trim()) {
-      setAiError("Enter a question first to generate an answer.");
-      return;
-    }
-
-    setAiLoading(true);
-    setAiError("");
-
-    try {
-      const res = await fetch("/api/admin/ai", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          task: "generate_faq",
-          input: {
-            topic: form.question,
-            contextType: form.category || "General",
-            count: 1,
-          },
-        }),
-      });
-
-      const data = await res.json();
-      if (!res.ok || !data.success) throw new Error(data.error || "Failed to generate FAQ answer.");
-
-      const generated = Array.isArray(data.faqs) ? data.faqs[0] : data.faqs;
-      if (generated?.a) {
-        updateField("answer", generated.a);
-      }
-    } catch (err) {
-      setAiError(err.message || "Generation failed.");
-    } finally {
-      setAiLoading(false);
-    }
-  }
-
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {error ? (
         <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div>
       ) : null}
-      {aiError ? (
-        <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">{aiError}</div>
-      ) : null}
 
       <Section
         title="FAQ content"
         description="The question and answer pair."
-        action={
-          <button
-            type="button"
-            onClick={handleGenerateAnswer}
-            disabled={aiLoading || !form.question?.trim()}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-bold text-blue-700 hover:bg-blue-100 transition disabled:opacity-40"
-          >
-            {aiLoading ? <Loader2 size={12} className="animate-spin" /> : <Sparkles size={12} />}
-            Generate Answer with HD AI
-          </button>
-        }
       >
         <div>
           <FieldLabel>Question</FieldLabel>
@@ -122,14 +64,7 @@ export default function FAQForm({ initialData = {}, onSubmit, loading, error }) 
           />
         </div>
         <div>
-          <div className="flex items-center justify-between mb-2">
-            <FieldLabel>Answer</FieldLabel>
-            <HdAiContentImprover
-              text={form.answer}
-              context={`FAQ: ${form.question}`}
-              onApply={(improved) => updateField("answer", improved)}
-            />
-          </div>
+          <FieldLabel>Answer</FieldLabel>
           <textarea
             id="answer"
             value={form.answer}

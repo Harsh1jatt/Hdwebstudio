@@ -5,10 +5,6 @@ import Link from "next/link";
 import { Plus, Trash2 } from "lucide-react";
 import AdminButton from "../common/AdminButton";
 import AdminInput from "../common/AdminInput";
-import HdAiAssistant from "@/components/Admin/ai/HdAiAssistant";
-import HdAiSectionRegenerate from "@/components/Admin/ai/HdAiSectionRegenerate";
-import HdAiContentImprover from "@/components/Admin/ai/HdAiContentImprover";
-import HdAiQualityReviewer from "@/components/Admin/ai/HdAiQualityReviewer";
 import MediaPicker from "@/components/Admin/media/MediaPicker";
 import { slugify } from "@/lib/slugify";
 import { availableIconNames } from "@/lib/icons";
@@ -61,17 +57,14 @@ function TextArea({ id, value, onChange, rows = 4, placeholder }) {
   );
 }
 
-function Section({ title, description, action = null, children }) {
+function Section({ title, description, children }) {
   return (
     <section className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 shadow-xs">
-      <div className="mb-5 flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h3 className="text-lg font-semibold text-slate-900">{title}</h3>
-          {description ? (
-            <p className="mt-1 text-sm text-slate-500">{description}</p>
-          ) : null}
-        </div>
-        {action && <div>{action}</div>}
+      <div className="mb-5">
+        <h3 className="text-lg font-semibold text-slate-900">{title}</h3>
+        {description ? (
+          <p className="mt-1 text-sm text-slate-500">{description}</p>
+        ) : null}
       </div>
       <div className="space-y-4">{children}</div>
     </section>
@@ -205,8 +198,6 @@ export default function ServiceForm({
     await onSubmit(payload);
   }
 
-  const hasContent = Boolean(form.title || form.description || form.tagline);
-
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {error ? (
@@ -221,85 +212,10 @@ export default function ServiceForm({
         </div>
       ) : null}
 
-      {/* Central HD AI Service Generator */}
-      <HdAiAssistant
-        type="service"
-        hasExistingContent={hasContent}
-        onGenerated={(data, mergeOnly = false) => {
-          setForm((prev) => {
-            if (mergeOnly) {
-              return {
-                ...prev,
-                title: prev.title || data.title,
-                eyebrow: prev.eyebrow || data.eyebrow,
-                tagline: prev.tagline || data.tagline,
-                description: prev.description || data.description,
-                shortDescription: prev.shortDescription || data.shortDescription,
-                category: prev.category || data.category,
-                accent: prev.accent || data.accent,
-                slug: prev.slug || data.slug,
-                seoTitle: prev.seoTitle || data.seoTitle,
-                seoDescription: prev.seoDescription || data.seoDescription,
-                heroStats: prev.heroStats?.length ? prev.heroStats : data.heroStats || [],
-                overview: {
-                  heading: prev.overview?.heading || data.overview?.heading || "",
-                  paragraphs: prev.overview?.paragraphs?.some((p) => p.trim())
-                    ? prev.overview.paragraphs
-                    : data.overview?.paragraphs || [""],
-                  highlights: prev.overview?.highlights?.length
-                    ? prev.overview.highlights
-                    : data.overview?.highlights || [],
-                },
-                whatYouGet: prev.whatYouGet?.length ? prev.whatYouGet : data.whatYouGet || [],
-                faq: prev.faq?.length ? prev.faq : data.faq || [],
-              };
-            }
-            return {
-              ...prev,
-              ...data,
-              overview: {
-                ...prev.overview,
-                ...(data.overview || {}),
-                paragraphs:
-                  data.overview?.paragraphs?.length > 0
-                    ? data.overview.paragraphs
-                    : prev.overview.paragraphs,
-                highlights: data.overview?.highlights || prev.overview.highlights,
-              },
-              whatYouGet: data.whatYouGet || prev.whatYouGet,
-              faq: data.faq || prev.faq,
-              heroStats: data.heroStats || prev.heroStats,
-            };
-          });
-          setSlugTouched(true);
-        }}
-      />
-
       {/* Basic information */}
       <Section
         title="Basic information"
         description="Core service identity shown on listings and the hero section."
-        action={
-          <HdAiSectionRegenerate
-            sectionType="hero"
-            entityType="service"
-            entityTitle={form.title || form.eyebrow}
-            fullDocumentContext={form}
-            currentData={{ title: form.title, tagline: form.tagline, shortDescription: form.shortDescription, heroStats: form.heroStats }}
-            label="Regenerate Hero"
-            onApply={(data) => {
-              if (data) {
-                setForm((prev) => ({
-                  ...prev,
-                  title: data.title || prev.title,
-                  tagline: data.tagline || prev.tagline,
-                  shortDescription: data.shortDescription || prev.shortDescription,
-                  heroStats: data.heroStats || prev.heroStats,
-                }));
-              }
-            }}
-          />
-        }
       >
         <div className="grid gap-4 md:grid-cols-2">
           <AdminInput
@@ -339,14 +255,7 @@ export default function ServiceForm({
         />
 
         <div>
-          <div className="flex items-center justify-between mb-2">
-            <FieldLabel>Full description</FieldLabel>
-            <HdAiContentImprover
-              text={form.description}
-              context={`Service: ${form.title || form.eyebrow}. Category: ${form.category}`}
-              onApply={(improved) => updateField("description", improved)}
-            />
-          </div>
+          <FieldLabel>Full description</FieldLabel>
           <TextArea
             id="description"
             value={form.description}
@@ -453,46 +362,6 @@ export default function ServiceForm({
       <Section
         title="Overview"
         description="Main overview narrative explaining the business problem and engineered solution."
-        action={
-          <div className="flex items-center gap-2">
-            <HdAiSectionRegenerate
-              sectionType="overview"
-              entityType="service"
-              entityTitle={form.title || form.eyebrow}
-              fullDocumentContext={form}
-              currentData={form.overview}
-              label="Regenerate Narrative"
-              onApply={(data) => {
-                if (data) {
-                  setForm((prev) => ({
-                    ...prev,
-                    overview: {
-                      ...prev.overview,
-                      heading: data.heading || prev.overview.heading,
-                      paragraphs: data.paragraphs || prev.overview.paragraphs,
-                    },
-                  }));
-                }
-              }}
-            />
-            <HdAiSectionRegenerate
-              sectionType="highlights"
-              entityType="service"
-              entityTitle={form.title || form.eyebrow}
-              fullDocumentContext={form}
-              currentData={form.overview?.highlights}
-              label="Regenerate 3 Highlights"
-              onApply={(data) => {
-                if (Array.isArray(data)) {
-                  setForm((prev) => ({
-                    ...prev,
-                    overview: { ...prev.overview, highlights: data },
-                  }));
-                }
-              }}
-            />
-          </div>
-        }
       >
         <AdminInput
           id="overview-heading"
@@ -506,14 +375,7 @@ export default function ServiceForm({
           <FieldLabel>Overview paragraphs</FieldLabel>
           {form.overview.paragraphs.map((paragraph, index) => (
             <div key={index} className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-500 font-semibold">Paragraph {index + 1}</span>
-                <HdAiContentImprover
-                  text={paragraph}
-                  context={`Service overview: ${form.title || form.eyebrow}`}
-                  onApply={(improved) => updateParagraph(index, improved)}
-                />
-              </div>
+              <span className="text-xs text-slate-500 font-semibold">Paragraph {index + 1}</span>
               <div className="flex gap-2">
                 <TextArea
                   id={`paragraph-${index}`}
@@ -642,21 +504,6 @@ export default function ServiceForm({
       <Section
         title="What you get"
         description="Deliverables and concrete feature cards."
-        action={
-          <HdAiSectionRegenerate
-            sectionType="deliverables"
-            entityType="service"
-            entityTitle={form.title || form.eyebrow}
-            fullDocumentContext={form}
-            currentData={form.whatYouGet}
-            label="Regenerate Deliverables"
-            onApply={(data) => {
-              if (Array.isArray(data)) {
-                setForm((prev) => ({ ...prev, whatYouGet: data }));
-              }
-            }}
-          />
-        }
       >
         {form.whatYouGet.map((item, index) => (
           <div key={index} className="grid gap-3 rounded-xl border border-slate-100 bg-slate-50 p-4 md:grid-cols-4">
@@ -719,21 +566,6 @@ export default function ServiceForm({
       <Section
         title="FAQs"
         description="Service-specific frequently asked questions."
-        action={
-          <HdAiSectionRegenerate
-            sectionType="faqs"
-            entityType="service"
-            entityTitle={form.title || form.eyebrow}
-            fullDocumentContext={form}
-            currentData={form.faq}
-            label="Regenerate FAQs"
-            onApply={(data) => {
-              if (Array.isArray(data)) {
-                setForm((prev) => ({ ...prev, faq: data }));
-              }
-            }}
-          />
-        }
       >
         {form.faq.map((item, index) => (
           <div key={index} className="space-y-3 rounded-xl border border-slate-100 bg-slate-50 p-4">
@@ -803,25 +635,6 @@ export default function ServiceForm({
       <Section
         title="SEO"
         description="Search engine and social sharing metadata."
-        action={
-          <HdAiSectionRegenerate
-            sectionType="seo"
-            entityType="service"
-            entityTitle={form.title || form.eyebrow}
-            fullDocumentContext={form}
-            currentData={{ seoTitle: form.seoTitle, seoDescription: form.seoDescription }}
-            label="Regenerate SEO"
-            onApply={(data) => {
-              if (data) {
-                setForm((prev) => ({
-                  ...prev,
-                  seoTitle: data.seoTitle || prev.seoTitle,
-                  seoDescription: data.seoDescription || prev.seoDescription,
-                }));
-              }
-            }}
-          />
-        }
       >
         <AdminInput
           id="seoTitle"
@@ -845,28 +658,17 @@ export default function ServiceForm({
         />
       </Section>
 
-      {/* Action Buttons with Quality Reviewer */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 pt-5">
-        <div className="flex items-center gap-2">
-          <HdAiQualityReviewer
-            title={form.title || form.eyebrow}
-            content={form}
-            contentType="service"
-            targetKeyword={form.title || form.eyebrow}
-          />
-        </div>
-
-        <div className="flex flex-wrap items-center gap-3">
-          <AdminButton type="submit" loading={submitting} loadingText="Saving...">
-            {mode === "create" ? "Create service" : "Save changes"}
-          </AdminButton>
-          <Link
-            href="/admin/services"
-            className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50"
-          >
-            Cancel
-          </Link>
-        </div>
+      {/* Action Buttons */}
+      <div className="flex flex-wrap items-center justify-end gap-3 border-t border-slate-200 pt-5">
+        <Link
+          href="/admin/services"
+          className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+        >
+          Cancel
+        </Link>
+        <AdminButton type="submit" loading={submitting} loadingText="Saving...">
+          {mode === "create" ? "Create service" : "Save changes"}
+        </AdminButton>
       </div>
     </form>
   );

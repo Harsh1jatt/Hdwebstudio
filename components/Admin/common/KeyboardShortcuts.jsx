@@ -33,10 +33,7 @@ export default function KeyboardShortcuts() {
       // Single letter shortcuts
       if (e.key === "n" || e.key === "N") {
         e.preventDefault();
-        router.push("/admin/blog/new");
-      } else if (e.key === "b" || e.key === "B") {
-        e.preventDefault();
-        router.push("/admin/blog");
+        router.push("/admin/projects/new");
       } else if (e.key === "s" || e.key === "S") {
         e.preventDefault();
         router.push("/admin/services");
@@ -65,7 +62,7 @@ export default function KeyboardShortcuts() {
 
       {/* Keyboard Shortcuts Helper Guide */}
       {helpOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-xs">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4 backdrop-blur-xs">
           <div className="relative w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl animate-scaleUp">
             <button
               onClick={() => setHelpOpen(false)}
@@ -88,8 +85,7 @@ export default function KeyboardShortcuts() {
               {[
                 { key: "Ctrl/Cmd + K", label: "Open Global Command Palette" },
                 { key: "/", label: "Focus Search & Command Palette" },
-                { key: "N", label: "New Blog Post" },
-                { key: "B", label: "Blog Dashboard" },
+                { key: "N", label: "New Project / Case Study" },
                 { key: "S", label: "Services Catalog" },
                 { key: "P", label: "Projects & Work" },
                 { key: "L", label: "View Leads" },
@@ -112,7 +108,7 @@ export default function KeyboardShortcuts() {
               <button
                 type="button"
                 onClick={() => setHelpOpen(false)}
-                className="rounded-xl bg-slate-950 px-5 py-2 text-xs font-bold text-white shadow-xs hover:bg-slate-800"
+                className="rounded-xl bg-blue-600 px-5 py-2 text-xs font-bold text-white shadow-xs hover:bg-blue-700"
               >
                 Got it
               </button>

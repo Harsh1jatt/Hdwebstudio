@@ -8,11 +8,8 @@ import adminNavGroups from "@/config/admin-nav";
 const pageDescriptions = {
   "/admin": "Overview of your website, leads, and content.",
   "/admin/leads": "Manage enquiries submitted through your website.",
-  "/admin/seo": "SEO health score and actionable content analysis.",
-  "/admin/blog": "Create and manage blog articles.",
   "/admin/services": "Manage your service offerings.",
   "/admin/projects": "Manage portfolio projects and case studies.",
-  "/admin/stories": "Create and publish web stories.",
   "/admin/testimonials": "Manage client testimonials.",
   "/admin/faqs": "Manage frequently asked questions.",
   "/admin/pricing": "Manage pricing plans.",

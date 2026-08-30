@@ -107,7 +107,7 @@ export default function DesktopNav({ links, services, pathname }) {
         })}
       </ul>
 
-      <span className="mx-3 h-6 w-px bg-slate-900/10" aria-hidden="true" />
+      <span className="mx-3 h-6 w-px bg-slate-200" aria-hidden="true" />
 
       <motion.div
         whileHover={{ scale: 1.04, y: -2 }}

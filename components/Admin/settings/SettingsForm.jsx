@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import AdminInput from "@/components/Admin/common/AdminInput";
 import AdminButton from "@/components/Admin/common/AdminButton";
 import MediaPicker from "@/components/Admin/media/MediaPicker";
-import { Save, Building2, Phone, Globe, BarChart3, FileText, Sparkles, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import { Save, Building2, Phone, Globe, BarChart3, FileText } from "lucide-react";
 
-function SectionHeader({ icon: Icon, title, description, action = null }) {
+function SectionHeader({ icon: Icon, title, description }) {
   return (
     <div className="flex items-center justify-between border-b border-slate-200 pb-3">
       <div className="flex items-center gap-3">
@@ -18,7 +18,6 @@ function SectionHeader({ icon: Icon, title, description, action = null }) {
           {description && <p className="text-xs text-slate-500">{description}</p>}
         </div>
       </div>
-      {action && <div>{action}</div>}
     </div>
   );
 }
@@ -29,8 +28,6 @@ export default function SettingsForm() {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  const [testingAi, setTestingAi] = useState(false);
-  const [aiTestResult, setAiTestResult] = useState(null);
 
   useEffect(() => {
     fetch("/api/admin/settings")
@@ -70,24 +67,6 @@ export default function SettingsForm() {
     }
   }
 
-  async function handleTestAi() {
-    setTestingAi(true);
-    setAiTestResult(null);
-    try {
-      const res = await fetch("/api/admin/ai", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ task: "test_connection" }),
-      });
-      const data = await res.json();
-      setAiTestResult(data);
-    } catch (err) {
-      setAiTestResult({ status: "error", error: err.message, provider: "unknown" });
-    } finally {
-      setTestingAi(false);
-    }
-  }
-
   if (loading) {
     return <div className="py-12 text-center text-sm text-slate-500">Loading settings...</div>;
   }
@@ -96,15 +75,13 @@ export default function SettingsForm() {
     return <div className="py-12 text-center text-sm text-red-600">{error || "Failed to load settings."}</div>;
   }
 
-  const brandVoice = settings.brandVoice || {};
-
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-blue-600">Configuration</p>
           <h2 className="mt-1 text-xl font-semibold text-slate-900">Site Settings</h2>
-          <p className="mt-0.5 text-sm text-slate-500">Manage your brand, contact info, AI voice grounding, and site defaults.</p>
+          <p className="mt-0.5 text-sm text-slate-500">Manage your brand, contact info, social links, and site defaults.</p>
         </div>
         <AdminButton onClick={handleSave} loading={saving} loadingText="Saving...">
           <Save className="h-4 w-4" /> Save settings
@@ -137,94 +114,6 @@ export default function SettingsForm() {
             value={settings.brand?.favicon || ""}
             onChange={(url) => updateField("brand", "favicon", url)}
           />
-        </div>
-      </div>
-
-      {/* HD AI & Brand Voice Grounding */}
-      <div className="rounded-xl border border-blue-200/80 bg-blue-50/20 p-5 space-y-4">
-        <SectionHeader
-          icon={Sparkles}
-          title="HD AI & Brand Voice Grounding"
-          description="Positioning and voice constraints used by the central AI engine for generation and reviews."
-          action={
-            <button
-              type="button"
-              onClick={handleTestAi}
-              disabled={testingAi}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-blue-200 bg-white px-3 py-1.5 text-xs font-bold text-blue-700 hover:bg-blue-50 transition shadow-2xs disabled:opacity-50"
-            >
-              {testingAi ? <Loader2 size={12} className="animate-spin" /> : <Sparkles size={12} />}
-              <span>Test AI Connection</span>
-            </button>
-          }
-        />
-
-        {aiTestResult && (
-          <div
-            className={`flex items-center justify-between rounded-xl border p-3 text-xs ${
-              aiTestResult.status === "success"
-                ? "bg-emerald-50/80 border-emerald-200 text-emerald-900"
-                : "bg-red-50/80 border-red-200 text-red-900"
-            }`}
-          >
-            <div className="flex items-center gap-2">
-              {aiTestResult.status === "success" ? (
-                <CheckCircle2 size={15} className="text-emerald-600 shrink-0" />
-              ) : (
-                <AlertCircle size={15} className="text-red-600 shrink-0" />
-              )}
-              <span>
-                <strong>Provider:</strong> {aiTestResult.provider} &nbsp;|&nbsp; <strong>Model:</strong>{" "}
-                {aiTestResult.model} &nbsp;|&nbsp; <strong>Status:</strong> {aiTestResult.status}
-              </span>
-            </div>
-          </div>
-        )}
-        <div className="space-y-4">
-          <AdminInput
-            id="bvPositioning"
-            label="Brand Positioning & Mission"
-            value={brandVoice.positioning || ""}
-            onChange={(e) => updateField("brandVoice", "positioning", e.target.value)}
-            helperText="Defines agency specialization (e.g. Next.js engineering and digital growth partner for growing businesses)."
-          />
-          <AdminInput
-            id="bvTone"
-            label="Brand Tone & Voice"
-            value={brandVoice.tone || ""}
-            onChange={(e) => updateField("brandVoice", "tone", e.target.value)}
-            helperText="e.g. Knowledgeable, commercial, clear, authoritative, practical, and conversion-oriented"
-          />
-          <AdminInput
-            id="bvAudience"
-            label="Target Audience"
-            value={brandVoice.targetAudience || ""}
-            onChange={(e) => updateField("brandVoice", "targetAudience", e.target.value)}
-            helperText="e.g. Small & medium businesses, manufacturers in Punjab, educational institutes, D2C brands, global clients"
-          />
-          <AdminInput
-            id="bvWritingStyle"
-            label="Writing Style & Mandates"
-            value={brandVoice.writingStyle || ""}
-            onChange={(e) => updateField("brandVoice", "writingStyle", e.target.value)}
-            helperText="e.g. Clear, commercial, benefit-driven, concise, zero AI filler"
-          />
-          <div className="grid gap-4 md:grid-cols-2">
-            <AdminInput
-              id="bvLocations"
-              label="Core Service Locations (comma-separated)"
-              value={Array.isArray(brandVoice.coreLocations) ? brandVoice.coreLocations.join(", ") : brandVoice.coreLocations || ""}
-              onChange={(e) => updateField("brandVoice", "coreLocations", e.target.value.split(",").map((s) => s.trim()).filter(Boolean))}
-              helperText="e.g. Ludhiana, Punjab, India, Remote / Global"
-            />
-            <AdminInput
-              id="bvForbidden"
-              label="Forbidden Claims / Blacklist (comma-separated)"
-              value={Array.isArray(brandVoice.forbiddenClaims) ? brandVoice.forbiddenClaims.join(", ") : brandVoice.forbiddenClaims || ""}
-              onChange={(e) => updateField("brandVoice", "forbiddenClaims", e.target.value.split(",").map((s) => s.trim()).filter(Boolean))}
-              helperText="e.g. Guaranteed #1 Google ranking, 100% free forever"
-            />
-          </div>
         </div>
       </div>
 
@@ -291,7 +180,7 @@ export default function SettingsForm() {
         <AdminInput id="copyrightText" label="Copyright Text" value={settings.footer?.copyrightText || ""} onChange={(e) => updateField("footer", "copyrightText", e.target.value)} helperText="Defaults to © {year} {brand name}" />
       </div>
 
-      {/* Save at bottom too */}
+      {/* Save at bottom */}
       <div className="flex justify-end">
         <AdminButton onClick={handleSave} loading={saving} loadingText="Saving...">
           <Save className="h-4 w-4" /> Save settings
